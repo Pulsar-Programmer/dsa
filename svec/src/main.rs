@@ -2,14 +2,6 @@ fn main() {
     println!("Hello, world!");
 }
 
-
-
-
-fn main() {
-    println!("Hello, world!");
-    
-}
-
 #[test]
 fn stack_test(){
     assert!(parse_expression("{[544{[12234+hhhhh55]}]235}(){}[]".into()));
@@ -103,7 +95,9 @@ impl<T> std::ops::Deref for Stack<T>{
     }
 }
 
+// struct Stack{
 
+// }
 
 
 
