@@ -189,7 +189,14 @@ fn infix_to_postfix(mut s: String){
                 expr.push_str(&val);
             }
         } else if todo!("is_operator"){
-            
+            loop{
+                let Some(val) = stack.pop() else { break };
+                if todo!("not_operator") && todo!("lower_precedence") {
+                    stack.push(i.to_string());
+                    break
+                }
+                expr.push_str(&val);
+            }
         }
     }
 }
