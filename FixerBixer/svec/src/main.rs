@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 fn main() {
     println!("Hello, world!");
 }
@@ -199,4 +201,83 @@ fn infix_to_postfix(mut s: String){
             }
         }
     }
+}
+
+
+// #[derive(Eq, PartialEq, Debug)]
+struct WeirdQueue<T>{
+    inner: HashMap<isize, T>,
+    min: isize, // used to save time
+    max: isize, // used to save time
+}
+impl<T> WeirdQueue<T>{
+    fn new() -> Self{
+        Self { inner: HashMap::new(), min: 1, max: 0 }
+    }
+    fn add(&mut self, elem: T){
+        self.inner.insert(self.min - 1, elem);
+        self.min -= 1;
+    }
+    fn remove(&mut self) -> T{
+        let val = self.inner.remove(&self.max).unwrap();
+        self.max -= 1;
+        val
+    }
+    fn peek(&self) -> &T{
+        &self.inner[&self.max]
+    }
+    fn size(&self) -> isize{
+        self.max - self.min
+    }
+    fn is_empty(&self) -> bool{
+        self.size() == 0
+    }
+}
+impl<T> Default for WeirdQueue<T> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+#[test]
+fn test_queue(){
+    let n = 5;
+    let mut queue = WeirdQueue::new();
+    queue.add("1".to_string());
+    for i in 0..n{
+        let output = queue.remove();
+        println!("{output}");
+        queue.add(output.to_string() + "0");
+        queue.add(output.to_string() + "1");
+    }
+}
+
+#[test]
+fn mirror(){
+    let mut q = WeirdQueue::new();
+    q.add(5);
+    q.add(56);
+    q.add(31);
+    q.add(3);
+    q.add(4);
+
+    let mut s = Stack::new();
+    let size = q.size();
+    for _ in 0..size{
+        s.push(q.remove());
+    }
+    for _ in 0..size{
+        q.add(s.pop().unwrap_or_default());
+    }
+
+    println!("{:?}", q.inner);
+
+    let mut q2 = WeirdQueue::new();
+    q2.add(4);
+    q2.add(3);
+    q2.add(31);
+    q2.add(56);
+    q2.add(5);
+
+    // assert_eq!(q, q2)
 }

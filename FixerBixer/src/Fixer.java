@@ -31,9 +31,39 @@ public class Fixer {
         this.post = infix_to_postfix(expr);
     }
 
-    private static String infix_to_postfix(String infix){
-        //TODO
-        return "";
+    /** Converts an infix expression to postfix.*/
+    public static String infix_to_postfix(String infix){ // Note: change to private
+        String expr = new String();
+        Stack<String> stack = new Stack<>();
+        for(var _i = 0; _i < infix.length(); _i++){
+            var i = infix.charAt(_i);
+            if(i == ' ') continue;
+            if(i == '('){
+                stack.push(Character.toString(i));
+            } else if(is_operand(i)){
+                expr += i;
+            } else if(i == ')'){
+                while(true){
+                    if(!stack.isEmpty()) break;
+                    final var val = stack.pop();
+                    if(val == "(") break;
+                    expr += val;
+                }
+            } else if(is_operator(i)){
+                while(true){
+                    if(!stack.isEmpty()) break;
+                    final var val = stack.pop();
+
+                    if(!is_operator(val.charAt(0)) || precedence_of(i) >= precedence_of(val.charAt(0))){
+                        stack.push(Character.toString(i));
+                        break;
+                    }
+                    expr += val;
+                }
+            }
+        }
+        for(var elem : stack) expr += elem;
+        return expr;
     }
 
     private static String infix_to_prefix(String infix){
@@ -54,7 +84,7 @@ public class Fixer {
 
 
 
-
+    
     /** Returns whether the character is an operator or not. */
     private static boolean is_operator(char operator){
         return operator == '+' ||
