@@ -16,8 +16,10 @@ public class Driver {
             ///We request the user ask if they want to see the demos of the evaluation.
             System.out.println("Would you like to show demos of the evaluation? State `true` or `false`.");
             final var show_demo = scanner.nextBoolean(); scanner.nextLine();
-            System.out.println("Prefix Evaluation: " + fixer.evaluate_pre(show_demo));
-            System.out.println("Postfix Evaluation: " + fixer.evaluate_post(show_demo));
+            System.out.println("------------------Prefix Evaluation------------------");
+            System.out.println("Final: " + fixer.evaluate_pre(show_demo));
+            System.out.println("------------------Postfix Evaluation------------------");
+            System.out.println("Final: " + fixer.evaluate_post(show_demo));
             
             System.out.println("> Verify all is correct, and then press enter to test again. Alternatively, write `stop` to stop.");
             if(scanner.nextLine().equals("stop")) break;

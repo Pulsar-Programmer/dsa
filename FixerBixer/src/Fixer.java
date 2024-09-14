@@ -23,7 +23,7 @@ public class Fixer {
 
     @Override
     public String toString() {
-        return "Fixer [post=" + post + ", pre=" + pre + "]";
+        return "Fixer {Postfix Expression: " + post + ", Prefix Expression: " + pre + "}";
     }
 
     /** Creates an instance of the Fixer class by converting the infix expression to both prefix and postfix. */
@@ -126,35 +126,16 @@ public class Fixer {
 
     /** Evaluates an expression in prefix. */
     int evaluate_pre(boolean show_demo){
-        ///We get our stack and two slots ready.
-        var stack = new Stack<Character>();
-        
-        Optional<Double> slot_a = Optional.empty();
-        Optional<Double> slot_b = Optional.empty();
-
-        ///We loop through each symbol.
-        for(var symbol : this.pre.toCharArray()){
+        var stack = new Stack<Double>();
+        ///We loop through each symbol in reverse.
+        for(var i = this.pre.length() - 1; i >= 0; i--){
+            var symbol = this.pre.charAt(i);
             if(is_operator(symbol)){
-                ///We push the operator on the stack for later processing.
-                stack.push(symbol);
-            } else if(is_operand(symbol)){
-                ///If a does not exist, we initialize it.
-                if(!slot_a.isPresent()){
-                    slot_a = Optional.of(Double.parseDouble(Character.toString(symbol)));
-                    break;
-                }
-                ///If b does not exist, we intialize it. This time, we can carry on since we now have both initialized.
-                if(!slot_b.isPresent()){
-                    slot_b = Optional.of(Double.parseDouble(Character.toString(symbol)));
-                }
-
-                ///At last, we get the two values and our operator.
-                final Double a = slot_a.get();
-                final Double b = slot_b.get();
-                final var operator = stack.pop();
-
+                final var a = stack.pop();
+                final var b = stack.pop();
+                //yessss!!! finally!! match expressions from Rust!!!!
                 ///We match on each operator and give the result.
-                final var result = switch(operator){
+                final var result = switch(symbol){
                     case '+' -> { yield a + b; }
                     case '-' -> { yield a - b; }
                     case '*' -> { yield a * b; }
@@ -163,14 +144,13 @@ public class Fixer {
                     case '^' -> { yield Math.pow(a, b); }
                     default -> { yield 0; }
                 };
-                ///`a` has now been used up but is used to store our result.
-                slot_a = Optional.of(result);
-                ///`b` has now been used up and is empty.
-                slot_b = Optional.empty();
+                stack.push(result);
+            } else if(is_operand(symbol)){
+                ///We place the operand or literal on the stack for later processing.
+                stack.push(Double.parseDouble(Character.toString(symbol)));
             }
         }
-
-        return slot_a.get().intValue();
+        return stack.pop().intValue();
     }
   
     /** Returns whether the character is an operator or not. */
