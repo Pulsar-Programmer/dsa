@@ -1,4 +1,3 @@
-import java.util.Optional;
 import java.util.Stack;
 
 public class Fixer {
@@ -110,7 +109,7 @@ public class Fixer {
                     case '+' -> { yield a + b; }
                     case '-' -> { yield a - b; }
                     case '*' -> { yield a * b; }
-                    case '/' -> { yield (double)a / b; }
+                    case '/' -> { yield (double)(a.intValue() / b.intValue()); }
                     case '%' -> { yield a % b; }
                     case '^' -> { yield Math.pow(a, b); }
                     default -> { yield 0; }
@@ -120,6 +119,7 @@ public class Fixer {
                 ///We place the operand or literal on the stack for later processing.
                 stack.push(Double.parseDouble(Character.toString(symbol)));
             }
+            if(show_demo) System.out.println("Scanned Symbol: " + symbol + ", Stack: " + stack);
         }
         return stack.pop().intValue();
     }
@@ -139,7 +139,7 @@ public class Fixer {
                     case '+' -> { yield a + b; }
                     case '-' -> { yield a - b; }
                     case '*' -> { yield a * b; }
-                    case '/' -> { yield (double)a / b; }
+                    case '/' -> { yield (double)(a.intValue() / b.intValue()); }
                     case '%' -> { yield a % b; }
                     case '^' -> { yield Math.pow(a, b); }
                     default -> { yield 0; }
@@ -149,6 +149,7 @@ public class Fixer {
                 ///We place the operand or literal on the stack for later processing.
                 stack.push(Double.parseDouble(Character.toString(symbol)));
             }
+            if(show_demo) System.out.println("Scanned Symbol: " + symbol + ", Stack: " + stack);
         }
         return stack.pop().intValue();
     }
