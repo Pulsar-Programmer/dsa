@@ -32,37 +32,42 @@ public class Fixer {
     }
 
     /** Converts an infix expression to postfix.*/
-    public static String infix_to_postfix(String infix){ // Note: change to private
+    private static String infix_to_postfix(String infix){
+        ///We create an expression and stack.
         String expr = new String();
-        Stack<String> stack = new Stack<>();
+        Stack<Character> stack = new Stack<>();
+        ///We loop through each symbol.
         for(var _i = 0; _i < infix.length(); _i++){
             var i = infix.charAt(_i);
-            if(i == ' ') continue;
+            ///We check which symbol it is.
             if(i == '('){
-                stack.push(Character.toString(i));
+                ///We simply push to the stack if it is a parentheses.
+                stack.push(i);
             } else if(is_operand(i)){
+                ///We simply add the literal to the expression.
                 expr += i;
             } else if(i == ')'){
-                while(true){
-                    if(!stack.isEmpty()) break;
+                ///We pop everything until we end the stack or encounter a beginning to the end and add to the expression.
+                while(!stack.isEmpty()){
                     final var val = stack.pop();
-                    if(val == "(") break;
+                    if(val == '(') break;
                     expr += val;
                 }
             } else if(is_operator(i)){
-                while(true){
-                    if(!stack.isEmpty()) break;
+                ///The operator is only welcome to be checked and later placed in the expression if the stack has contents and that contents is an operator.
+                final var is_welcome = !stack.isEmpty() && is_operator(stack.peek());
+                ///The operator on the stack must have greater than or equal precedence to the one we are seeing now and qualify as welcome.
+                if(is_welcome && precedence_of(stack.peek()) >= precedence_of(i)){
+                    ///We then can pop the value on the stack and add it to the expression.
                     final var val = stack.pop();
-
-                    if(!is_operator(val.charAt(0)) || precedence_of(i) >= precedence_of(val.charAt(0))){
-                        stack.push(Character.toString(i));
-                        break;
-                    }
                     expr += val;
                 }
+                ///We add the operator to the stack.
+                stack.push(i);
             }
         }
-        for(var elem : stack) expr += elem;
+        ///We add all the stack items onto the expression.
+        for(var _i = 0; _i < stack.size(); _i++) expr += stack.pop();
         return expr;
     }
 
@@ -91,6 +96,7 @@ public class Fixer {
         operator == '-' ||
         operator == '*' ||
         operator == '/' ||
+        operator == '%' ||
         operator == '^';
     }
 
@@ -111,6 +117,7 @@ public class Fixer {
 
             case '*':
             case '/':
+            case '%':
             {
                 return 1;
             }
