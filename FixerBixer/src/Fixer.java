@@ -1,3 +1,4 @@
+import java.util.Optional;
 import java.util.Stack;
 
 public class Fixer {
@@ -27,69 +28,151 @@ public class Fixer {
 
     /** Creates an instance of the Fixer class by converting the infix expression to both prefix and postfix. */
     public Fixer(String expr){
-        this.pre = infix_to_prefix(expr);
         this.post = infix_to_postfix(expr);
+        this.pre = postfix_to_prefix(this.post);
     }
 
-    /** Converts an infix expression to postfix.*/
+    /** Converts an infix expression to postfix. */
     private static String infix_to_postfix(String infix){
         ///We create an expression and stack.
         String expr = new String();
         Stack<Character> stack = new Stack<>();
         ///We loop through each symbol.
-        for(var _i = 0; _i < infix.length(); _i++){
-            var i = infix.charAt(_i);
+        for(var symbol : infix.toCharArray()){
             ///We check which symbol it is.
-            if(i == '('){
+            if(symbol == '('){
                 ///We simply push to the stack if it is a parentheses.
-                stack.push(i);
-            } else if(is_operand(i)){
+                stack.push(symbol);
+            } else if(is_operand(symbol)){
                 ///We simply add the literal to the expression.
-                expr += i;
-            } else if(i == ')'){
+                expr += symbol;
+            } else if(symbol == ')'){
                 ///We pop everything until we end the stack or encounter a beginning to the end and add to the expression.
                 while(!stack.isEmpty()){
                     final var val = stack.pop();
                     if(val == '(') break;
                     expr += val;
                 }
-            } else if(is_operator(i)){
+            } else if(is_operator(symbol)){
                 ///The operator is only welcome to be checked and later placed in the expression if the stack has contents and that contents is an operator.
                 final var is_welcome = !stack.isEmpty() && is_operator(stack.peek());
                 ///The operator on the stack must have greater than or equal precedence to the one we are seeing now and qualify as welcome.
-                if(is_welcome && precedence_of(stack.peek()) >= precedence_of(i)){
+                if(is_welcome && precedence_of(stack.peek()) >= precedence_of(symbol)){
                     ///We then can pop the value on the stack and add it to the expression.
                     final var val = stack.pop();
                     expr += val;
                 }
                 ///We add the operator to the stack.
-                stack.push(i);
+                stack.push(symbol);
             }
         }
         ///We add all the stack items onto the expression.
-        for(var _i = 0; _i < stack.size(); _i++) expr += stack.pop();
+        while(!stack.isEmpty()) expr += stack.pop();
         return expr;
     }
 
-    private static String infix_to_prefix(String infix){
-        //TODO
-        return "";
-    }
+    /** Converts Postfix to Prefix. */
+    private static String postfix_to_prefix(String postfix){
+        ///We ready our expression and stack.
+        var expr = new String();
+        Stack<String> stack = new Stack<>();
 
+        ///We loop through each symbol.
+        for(var symbol : postfix.toCharArray()){
+            if(is_operand(symbol)){
+                ///We push operands.
+                stack.push(Character.toString(symbol));
+            } else if(is_operator(symbol)){
+                ///We use the operator to create a union of a pocket of prefix to be used in later compositions.
+                var b = stack.pop();
+                var a = stack.pop();
+                String pre = symbol + a + b;
+                stack.push(pre);
+            }
+        }
+
+        ///We add all the stack items onto the expression.
+        while(!stack.isEmpty()) expr += stack.pop();
+        return expr;
+    }
+    
+    /** Evaluates an expression in postfix. */
     int evaluate_post(boolean show_demo){
-        return 0;
+        var stack = new Stack<Double>();
+        ///We loop through each symbol.
+        for(var symbol : this.post.toCharArray()){
+            if(is_operator(symbol)){
+                final var b = stack.pop();
+                final var a = stack.pop();
+                //yessss!!! finally!! match expressions from Rust!!!!
+                ///We match on each operator and give the result.
+                final var result = switch(symbol){
+                    case '+' -> { yield a + b; }
+                    case '-' -> { yield a - b; }
+                    case '*' -> { yield a * b; }
+                    case '/' -> { yield (double)a / b; }
+                    case '%' -> { yield a % b; }
+                    case '^' -> { yield Math.pow(a, b); }
+                    default -> { yield 0; }
+                };
+                stack.push(result);
+            } else if(is_operand(symbol)){
+                ///We place the operand or literal on the stack for later processing.
+                stack.push(Double.parseDouble(Character.toString(symbol)));
+            }
+        }
+        return stack.pop().intValue();
     }
 
+    /** Evaluates an expression in prefix. */
     int evaluate_pre(boolean show_demo){
-        return 0;
+        ///We get our stack and two slots ready.
+        var stack = new Stack<Character>();
+        
+        Optional<Double> slot_a = Optional.empty();
+        Optional<Double> slot_b = Optional.empty();
+
+        ///We loop through each symbol.
+        for(var symbol : this.pre.toCharArray()){
+            if(is_operator(symbol)){
+                ///We push the operator on the stack for later processing.
+                stack.push(symbol);
+            } else if(is_operand(symbol)){
+                ///If a does not exist, we initialize it.
+                if(!slot_a.isPresent()){
+                    slot_a = Optional.of(Double.parseDouble(Character.toString(symbol)));
+                    break;
+                }
+                ///If b does not exist, we intialize it. This time, we can carry on since we now have both initialized.
+                if(!slot_b.isPresent()){
+                    slot_b = Optional.of(Double.parseDouble(Character.toString(symbol)));
+                }
+
+                ///At last, we get the two values and our operator.
+                final Double a = slot_a.get();
+                final Double b = slot_b.get();
+                final var operator = stack.pop();
+
+                ///We match on each operator and give the result.
+                final var result = switch(operator){
+                    case '+' -> { yield a + b; }
+                    case '-' -> { yield a - b; }
+                    case '*' -> { yield a * b; }
+                    case '/' -> { yield (double)a / b; }
+                    case '%' -> { yield a % b; }
+                    case '^' -> { yield Math.pow(a, b); }
+                    default -> { yield 0; }
+                };
+                ///`a` has now been used up but is used to store our result.
+                slot_a = Optional.of(result);
+                ///`b` has now been used up and is empty.
+                slot_b = Optional.empty();
+            }
+        }
+
+        return slot_a.get().intValue();
     }
-    
-
-    
-
-
-
-    
+  
     /** Returns whether the character is an operator or not. */
     private static boolean is_operator(char operator){
         return operator == '+' ||
@@ -126,7 +209,6 @@ public class Fixer {
             {
                 return 2;
             }
-
         }
     }
 }
