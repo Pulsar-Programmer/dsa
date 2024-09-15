@@ -53,13 +53,15 @@ public class Fixer {
                     expr += val;
                 }
             } else if(is_operator(symbol)){
-                ///The operator is only welcome to be checked and later placed in the expression if the stack has contents and that contents is an operator.
-                final var is_welcome = !stack.isEmpty() && is_operator(stack.peek());
-                ///The operator on the stack must have greater than or equal precedence to the one we are seeing now and qualify as welcome.
-                if(is_welcome && precedence_of(stack.peek()) >= precedence_of(symbol)){
+                
+                while (
+                    ///The operator is only welcome to be checked and later placed in the expression if the stack has contents and that contents is an operator.
+                    !stack.isEmpty() && is_operator(stack.peek()) &&
+                    ///The operator on the stack must have greater than or equal precedence to the one we are seeing now and qualify as welcome.
+                    precedence_of(stack.peek()) >= precedence_of(symbol)
+                ) {
                     ///We then can pop the value on the stack and add it to the expression.
-                    final var val = stack.pop();
-                    expr += val;
+                    expr += stack.pop();
                 }
                 ///We add the operator to the stack.
                 stack.push(symbol);
