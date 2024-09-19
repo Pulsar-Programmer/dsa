@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, rc::Rc};
 
 fn main() {
     println!("Hello, world!");
@@ -203,7 +203,7 @@ fn infix_to_postfix(mut s: String){
 }
 
 
-// #[derive(Eq, PartialEq, Debug)]
+#[derive(Eq, PartialEq, Debug)]
 struct WeirdQueue<T>{
     inner: HashMap<isize, T>,
     min: isize, // used to save time
@@ -279,4 +279,23 @@ fn mirror(){
     q2.add(5);
 
     // assert_eq!(q, q2)
+}
+
+
+
+
+
+
+
+struct LinkedList<T> {
+    head: T,
+    rest: Rc<LinkedList<T>>,
+}
+impl<T> LinkedList<T>{
+    fn insert(&mut self, index: usize){
+        let mut rc_ref = self.rest.clone();
+        for _ in 0..=index{
+            
+        }
+    }
 }
