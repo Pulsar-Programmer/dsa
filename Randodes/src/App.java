@@ -21,9 +21,12 @@ class Node<T>{
         this.next = next;
     }
 
-    public static Node zipNodes(Node n1, Node n2){
+    public static Node interlace(Node n1, Node n2){
         
         Node construction = n1.clone();
+
+        Node head = construction;
+
         Node runner_1 = n1;
         Node runner_2 = n2;
         
@@ -32,26 +35,22 @@ class Node<T>{
         while (true)
         {
             if(turn && runner_1.next != null){
-                
-                // construction = 
+
+                construction.next = runner_1.clone();
                 runner_1 = runner_1.next;
-                
 
+            } else if (!turn && runner_2.next != null) {
 
-
-            } else if (turn && runner_2.next != null) {
-
+                construction.next = runner_2.clone();
                 runner_2 = runner_2.next;
 
             } else {
                 break;
             }
+            turn = !turn;
         }
 
-
-
-
-        return construction;
+        return head;
     }
 
     public T getData() {
@@ -69,4 +68,15 @@ class Node<T>{
     public void setNext(Node next) {
         this.next = next;
     }
+
+
+
+
+    // public static Node reverse(Node original){
+    //     Node construction = new Node(null, null);
+
+        
+
+
+    // }
 }
