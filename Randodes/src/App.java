@@ -6,7 +6,7 @@ public class App {
 
 class Node<T>{
     T data;
-    Node next;
+    Node<T> next;
 
     // public Node<T>{
     //     data = null
@@ -72,11 +72,23 @@ class Node<T>{
 
 
 
-    // public static Node reverse(Node original){
-    //     Node construction = new Node(null, null);
+    public static <T> Node<T> reverse(Node<T> original){
+        Node<T> prev = null;
+        Node<T> current = original;
 
-        
+        while (current != null) {
+            // Store next node
+            Node<T> nextNode = current.next;
 
+            // Reverse link
+            current.next = prev;
 
-    // }
+            // Move forward
+            prev = current;
+            current = nextNode;
+        }
+
+        // At this point, 'prev' is the new head of the reversed list
+        return prev;
+    }
 }
