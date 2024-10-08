@@ -62,7 +62,25 @@ public class Snake {
         this.next = p;
     }
 
-    ///Returns if the snake is alive or not after the command.
+    @Override
+    public String toString() {
+        
+        // TODO Auto-generated method stub
+        return super.toString();
+    }
+
+    /**Returns if the snake is alive or not after the command. */
+    boolean update(String commands){
+        var commandsGood = commands.toCharArray();
+        for (var c : commandsGood){
+            if(!update(c)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**Returns if the snake is alive or not after the command. */
     boolean update(char command){
         switch(command) {
             case 'U' : {
@@ -95,8 +113,8 @@ public class Snake {
                     next_pos.x >= 10||
                     next_pos.y <= -1||
                     next_pos.y >= 10 ;
-                final boolean found_snake = 
-                    next_pos
+                // final boolean found_snake = 
+                //     next_pos
 
             } break;
             case 'F' : {
