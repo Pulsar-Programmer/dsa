@@ -36,5 +36,10 @@ public class Body {
         this.location = location;
         this.next = next;
     }
+
+    public Body(int row, int col, Body p){
+        this.location = new Point(row, col);
+        this.next = p;
+    }
     
 }
