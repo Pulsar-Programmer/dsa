@@ -2,13 +2,8 @@
 
 
 
-
-
-F – ate a fruit eating a fruit will result in the next Move command moving the Snake and
-inserting a new Body piece where the Head piece was
-
 ·Increase Board Size with Borders
-·Implement Eating Stack
+
 
 
 IMPORTANT!

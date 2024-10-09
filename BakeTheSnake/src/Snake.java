@@ -1,4 +1,6 @@
 import java.awt.Point;
+import java.util.Optional;
+import java.util.Stack;
 
 public class Snake {
 
@@ -7,7 +9,7 @@ public class Snake {
     private Body next;
     private char[][] board;
     boolean is_alive;
-    // Stack eating_stack;
+    boolean eating_stack;
 
     public boolean isIs_alive() {
         return is_alive;
@@ -61,12 +63,13 @@ public class Snake {
         is_alive = true;
     }
 
-    public Snake(int direction, Point head, Body next, char[][] board, boolean is_alive) {
+    public Snake(int direction, Point head, Body next, char[][] board, boolean is_alive, boolean eating_stack) {
         this.direction = direction;
         this.head = head;
         this.next = next;
         this.board = board;
         this.is_alive = is_alive;
+        this.eating_stack = eating_stack;
     }
 
     public Snake(int dir, int row, int col, Body p){
@@ -138,8 +141,10 @@ public class Snake {
             } break;
             //#endregion
 
-
             case 'M' : {
+
+                //#region Collision
+
                 ///We find the next position that there is to be explored.
                 final Point next_pos = advanced(head, direction);
                 ///If that next point equals the wall, then we detect a wall.
@@ -158,6 +163,34 @@ public class Snake {
                     is_alive = false;
                     return false;
                 }
+
+                //#endregion
+
+                //#region Eating Stack
+
+                ///Before we can start moving, we must introduce the next from the eating stack.
+
+                ///If we ate something, we must grow while moving.
+                if(eating_stack){
+                    ///We find the point to add from the previous fruit.
+                    final Point to_add = head;
+
+                    ///We move up head.
+                    head = next_pos;
+
+                    ///We snip off the first body.
+                    final Body snipped = next;
+
+                    ///We add a body in the place the head used to be.
+                    next = new Body(to_add, snipped);
+
+                    ///We finish the move operation.
+                    return true;
+                }
+
+                //#endregion
+
+                //#region Moving
                 
                 ///We start by snipping and storing the first element.
                 Body snipped = next;
@@ -186,9 +219,12 @@ public class Snake {
                 runner.setNext(snipped);
                 ///Finally we change what head connects to.
                 next = snipped;
+
+                //#endregion
+
             } break;
             case 'F' : {
-
+                eating_stack = true;
             } break;
             case 'E' : {
                 ///We get the next element and leave the previous one in the dark.
@@ -205,7 +241,6 @@ public class Snake {
                 }
             } break;
         }
-        //TODO
         ledraw();
         return true;
     }
@@ -318,6 +353,14 @@ public class Snake {
     /** Takes a point and clamps it to the standard size of the board. */
     private static Point clamped(Point p){
         return new Point(Math.max(Math.min(p.x, 9), 0), Math.max(Math.min(p.y, 9), 0));
+    }
+
+    public boolean isEating_stack() {
+        return eating_stack;
+    }
+
+    public void setEating_stack(boolean eating_stack) {
+        this.eating_stack = eating_stack;
     }
 
 }
