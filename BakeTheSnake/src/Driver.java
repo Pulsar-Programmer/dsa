@@ -16,8 +16,19 @@ public class Driver {
     final static char DEATH = 'X';
 
     public static void main(String[] args) throws Exception {
-        Snake snake_0 = new Snake(0, 0, 0, null);		
-        snake_0.update("FMDFMLFMUMRMDMLMUMM");	
-        System.out.println(snake_0);
+        Snake glider = new Snake();
+        glider.update("FMLFMUMMMMMM");
+        System.out.println(glider.debug());
+        System.out.println(glider);
+        
+        Snake egg = new Snake();
+        egg.update("FMFMFMFMFMEEE");
+        System.out.println(egg.debug());
+        System.out.println(egg);
+
+        Snake sanke = new Snake();
+        sanke.update("RMUMLMFDM");
+        System.out.println(sanke.debug());
+        System.out.println(sanke);
     }
 }

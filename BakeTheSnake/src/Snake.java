@@ -1,5 +1,8 @@
 import java.awt.Point;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.Stack;
 
 public class Snake {
@@ -8,8 +11,8 @@ public class Snake {
     private Point head;
     private Body next;
     private char[][] board;
-    boolean is_alive;
-    boolean eating_stack;
+    private boolean is_alive;
+    private boolean eating_stack;
 
     public boolean isEating_stack() {
         return eating_stack;
@@ -67,8 +70,8 @@ public class Snake {
         direction = 3;
         head = new Point(4, 4);
         next = new Body(new Point(4, 3), new Body(4, 2));
-        clear_board();
         is_alive = true;
+        ledraw();
     }
 
     public Snake(int direction, Point head, Body next, char[][] board, boolean is_alive, boolean eating_stack) {
@@ -84,8 +87,8 @@ public class Snake {
         this.direction = dir;
         this.head = new Point(row, col);
         this.next = p;
-        clear_board();
         is_alive = true;
+        ledraw();
     }
 
     /** Returns a depiction of the board containing the Snake. */
@@ -106,20 +109,27 @@ public class Snake {
         return pusher;
     }
 
+    
+
     /** Returns if the snake is alive or not after the command and executes the series of commands given by String. */
     boolean update(String commands){
         var commandsGood = commands.toCharArray();
         for (var c : commandsGood){
-            System.out.println("Starting next command!");
+            // System.out.println("Starting next command!");
             if(!update(c)){
                 return false;
             }
-            System.out.println(toString()); //TODO
+            // System.out.println(toString());
         }
         return true;
     }
 
-    // /**Returns if the snake is alive or not after the command and executes the command preesented. */
+    /**Demonstrates other relevant fields of the Sanke. */
+    public String debug() {
+        return "Snake [direction=" + direction + ", head=" + head + ", next=" + next + ", is_alive=" + is_alive + ", eating_stack=" + eating_stack + "]";
+    }
+
+    /**Returns if the snake is alive or not after the command and executes the command preesented. */
     boolean update(char command){
         switch(command) {
             ///We set the direction to each case.
@@ -144,12 +154,12 @@ public class Snake {
                 direction = 2;
             } break;
             case 'D' : {
-                System.out.println("Doing D");
+                // System.out.println("Doing D");
                 if ((direction + 2) % 4 == 3){
                     return true;
                 }
                 direction = 3;
-                System.out.println("Doing D2");
+                // System.out.println("Doing D2");
             } break;
             //#endregion
 
@@ -162,7 +172,11 @@ public class Snake {
                 ///If that next point is out of the bounds, then we detect a wall.
                 final boolean found_wall = 
                     !next_pos.equals(clamped(next_pos));
-                    // board[next_pos.y][next_pos.x] == Driver.WALL;
+                ///If we find any of these, the snake perishes.
+                if(found_wall){
+                    is_alive = false;
+                    return false;
+                }
                 ///We detect a snake only if there is a snake in two other places around it. If there is only one snake then that must be the tail.
                 final boolean found_snake = 
                     board[next_pos.y][next_pos.x] == Driver.SNAKE && (
@@ -172,9 +186,7 @@ public class Snake {
                         (char_cmp(Driver.SNAKE, try_get(advanced(next_pos, 3))) ? 1 : 0)
                     >= 2);
                 ///If we find any of these, the snake perishes.
-                if(found_snake || found_wall){
-                    System.out.println("Snake" + found_snake);
-                    System.out.println("WAll" + found_wall);
+                if(found_snake){
                     is_alive = false;
                     return false;
                 }
@@ -193,15 +205,15 @@ public class Snake {
                     ///We move up head.
                     head = next_pos;
 
-                    ///We snip off the first body and clone the next element.
-                    final Body snipped = to_owned(next);
+                    ///We snip off the first body.
+                    final Body snipped = next;
 
                     ///We add a body in the place the head used to be.
                     next = new Body(to_add, snipped);
 
                     ///We finish the move operation.
                     eating_stack = false;
-                    return true;
+                    break;
                 }
 
                 //#endregion
@@ -210,32 +222,29 @@ public class Snake {
                 
                 ///We start by snipping and storing the first element.
                 Body snipped = next;
-                ///We store a runner to go to last place.
-                Body runner = next;
+
+
+                ///We store runners to go to last and second-to-last place.
+                Body prev = null;
+                Body last = next;
+
                 ///As long as the next link is present...
-                while(runner.getNext() != null){
-                    ///If we are currently on the second to last...
-                    if(runner.getNext().getNext() == null){
-                        ///We store temporarily the last element.
-                        Body temp_link = runner.getNext();
-                        ///We snip the connection between the second to last and the last.
-                        runner.setNext(null);
-                        ///We make our runner the last element.
-                        runner = temp_link;
-                        break;
-                    }
-                    ///We then proceed to the next link.
-                    runner = runner.getNext();
+                while(last.getNext() != null){
+                    prev = last;
+                    last = last.getNext();
                 }
-                ///Runner now represents the last node.
+                ///We snip the connection between the second to last and the last.
+                prev.setNext(null);
+
+
                 ///We must first change the location.
-                runner.setLocation(head);
+                last.setLocation(head);
                 ///Now we can advance head.
                 head = next_pos;
                 ///Now, with the location changed, we can relink it.
-                runner.setNext(snipped);
+                last.setNext(snipped);
                 ///Finally we change what head connects to.
-                next = snipped;
+                next = last;
 
                 //#endregion
                 
@@ -244,17 +253,35 @@ public class Snake {
                 eating_stack = true;
             } break;
             case 'E' : {
-                ///We get the next element and leave the previous one in the dark.
+
+                ///We keep track of a runner and create a Queue to put all the locations in.
+                Body location_getter = next;
+                Queue<Point> locations = new LinkedList<Point>();
+                while(location_getter != null){
+                    ///We fill the queue with the locations, half of which are not to be used.
+                    locations.add(location_getter.getLocation());
+                    location_getter = location_getter.getNext();
+                }
+
+                if(next == null) break;
+                ///We get the next element and leave the previous one in the dark and store the previous location.
                 next = next.getNext();
+                if(next == null) break;
+                next.setLocation(locations.poll());
+
                 ///We make a runner that goes into the future gangsters.
                 Body runner = next;
-                ///As long as we haven't gone too far out...
-                while(runner != null){
-                    Point dying_node_location = runner.getNext().getLocation();
-                    ///We set the next node to be the one after the current next.
+                while(runner.getNext() != null){
+                    ///We set the next node such that it skips the dead node.
                     runner.setNext(runner.getNext().getNext());
+
+                    ///We go to the node after the skipped one.
+                    runner = runner.getNext();
+                    if(runner == null){
+                        break;
+                    }
                     ///We set the node's location to the previous, now dying, node's location.
-                    runner.setLocation(dying_node_location);
+                    runner.setLocation(locations.poll());
                 }
             } break;
         }
@@ -382,10 +409,11 @@ public class Snake {
         }
     }
 
-    public static Body to_owned(Body b) {
-        if(b == null) return null;
-        return new Body(b.getLocation(), b.getNext());
-    }
+    // ///Creates a clone of the node.
+    // public static Body to_owned(Body b) {
+    //     if(b == null) return null;
+    //     return new Body(b.getLocation(), b.getNext());
+    // }
 
     public static boolean char_cmp(Character lhs, Character rhs){
         if(lhs == null || rhs == null){
