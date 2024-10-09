@@ -13,6 +13,8 @@ public class Driver {
     final static char UP = '^';
     final static char DOWN = 'v';
 
+    final static char DEATH = 'X';
+
     public static void main(String[] args) throws Exception {
         
     }

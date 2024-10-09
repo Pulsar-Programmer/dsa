@@ -1,36 +1,20 @@
-You should have a class called Snake which will have the direction and integer coordinates
-(corresponding to a 2D plane with 0,0 being the top left) as well as the reference to the next
-Body piece.
-The Body piece would just have the location and reference to the next Body. Which will be
-structured like a linked list of Locations. Do not use the LinkedList built by java but instead
-create your own.
-The default snake will start at 4,4 and will have body pieces on 4,3 and 4,2 facing South
-Make sure to create an all parameter constructor too
-The Snake class will also have to be able to have the following methods
-boolean update(String commands) returns whether or not the snake is still alive based on the
-commands given. The commands will be
 
-M – move in the direction you’re facing
-U – change the direction to be Up same for (D,L,R)
+
+
+
+
+
 F – ate a fruit eating a fruit will result in the next Move command moving the Snake and
 inserting a new Body piece where the Head piece was
-E – ate an egg eating an egg would remove every other body starting with the first Body piece
-with the other body pieces filling the void one by 1. (I made this one up so enjoy)
 
-
-
-
-
-boolean update(char c) - executes a single command
-int getSize() – returns the size of the snake including the head
 boolean isAlive() returns if the snake is still alive
-void reverse() flips the snake so that the tail becomes the head and all the nodes change
-pointers. Should be the opposite direction.
 String toString() will draw the snake in a 2D board. If the snake is dead you should draw the
 final state of the snake
+
+·Increase Board Size with Borders
+·Implement Eating Stack
+·Implement isAlive
 
 IMPORTANT!
 Finally create a Tester BEFORE BUILDING THE CODE. Which will have expected output results.
 Include 3 test scenarios for each. Submit that first.
-
-·Check Size of Board

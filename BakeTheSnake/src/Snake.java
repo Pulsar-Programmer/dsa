@@ -7,6 +7,8 @@ public class Snake {
     private Point head;
     private Body next;
     private char[][] board;
+    // boolean is_alive;
+    // Stack eating_stack;
 
     public char[][] getBoard() {
         return board;
@@ -66,6 +68,9 @@ public class Snake {
         String pusher = "";
         for(char[] i: this.board){
             for(char j: i){
+                // if(j == Driver.SNAKE && !is_alive) {
+
+                // }
                 pusher += j;
                 pusher += ' ';
             }
@@ -74,7 +79,7 @@ public class Snake {
         return pusher;
     }
 
-    /**Returns if the snake is alive or not after the command. */
+    /** Returns if the snake is alive or not after the command and executes the series of commands given by String. */
     boolean update(String commands){
         var commandsGood = commands.toCharArray();
         for (var c : commandsGood){
@@ -85,7 +90,7 @@ public class Snake {
         return true;
     }
 
-    // /**Returns if the snake is alive or not after the command. */
+    // /**Returns if the snake is alive or not after the command and executes the command preesented. */
     boolean update(char command){
         switch(command) {
             ///We set the direction to each case.
@@ -169,7 +174,18 @@ public class Snake {
 
             } break;
             case 'E' : {
-
+                ///We get the next element and leave the previous one in the dark.
+                next = next.getNext();
+                ///We make a runner that goes into the future gangsters.
+                Body runner = next;
+                ///As long as we haven't gone too far out...
+                while(runner != null){
+                    Point dying_node_location = runner.getNext().getLocation();
+                    ///We set the next node to be the one after the current next.
+                    runner.setNext(runner.getNext().getNext());
+                    ///We set the node's location to the previous, now dying, node's location.
+                    runner.setLocation(dying_node_location);
+                }
             } break;
         }
         //TODO
@@ -177,6 +193,7 @@ public class Snake {
         return true;
     }
 
+    /** Uses the direction to find the character to use when drawing the head. */
     private char direction_char() {
         return switch(direction){
             case 0 -> {
@@ -197,6 +214,7 @@ public class Snake {
         };
     }
 
+    /** Takes a point and finds its advanced version based on the direction. */
     private static Point advanced(Point current, int direction){
         return switch(direction){
             case 0 -> {
@@ -217,8 +235,41 @@ public class Snake {
         };
     }
 
+    /** Flips the snake so that the tail becomes the head and all the nodes change pointers to the node before them. Should be the opposite direction. */
     public void reverse(){
-        
+        ///We start with a previous following a current node.
+        Body prev = null;
+        Body current = next;
+
+        while (current != null) {
+            ///We temporarily store a transfer portal.
+            Body nextNode = current.getNext();
+
+            ///We reverse the link.
+            current.setNext(prev);
+
+            ///We can use our portal to move forward in both variables.
+            prev = current;
+            current = nextNode;
+        }
+
+        ///We now snip the link on the previously first element from the head.
+        ///This makes it now the previous which is the new head.
+        next = prev;
+        ///Finally, we switch the direction of the head.
+        direction += 2;
+        direction %= 4;
+    }
+
+    /** Returns the size of the snake. */
+    public int getSize(){
+        int counter = 1;
+        Body runner = next;
+        while(runner != null){
+            runner = runner.getNext();
+            counter += 1;
+        }
+        return counter;
     }
 
     /** Draws the board based on the Snake's position. */
@@ -247,6 +298,7 @@ public class Snake {
         }
     }
 
+    /** Takes a point and clamps it to the standard size of the board. */
     private static Point clamped(Point p){
         return new Point(Math.max(Math.min(p.x, 9), 0), Math.max(Math.min(p.y, 9), 0));
     }
