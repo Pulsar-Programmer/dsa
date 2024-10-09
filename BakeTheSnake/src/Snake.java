@@ -114,6 +114,7 @@ public class Snake {
                 return false;
             }
         }
+        System.out.println(this); //TODO
         return true;
     }
 
@@ -155,9 +156,10 @@ public class Snake {
 
                 ///We find the next position that there is to be explored.
                 final Point next_pos = advanced(head, direction);
-                ///If that next point equals the wall, then we detect a wall.
+                ///If that next point is out of the bounds, then we detect a wall.
                 final boolean found_wall = 
-                    board[next_pos.y][next_pos.x] == Driver.WALL;
+                    !next_pos.equals(clamped(next_pos));
+                    // board[next_pos.y][next_pos.x] == Driver.WALL;
                 ///We detect a snake only if there is a snake in two other places around it. If there is only one snake then that must be the tail.
                 final boolean found_snake = 
                     board[next_pos.y][next_pos.x] == Driver.SNAKE && (
@@ -351,16 +353,16 @@ public class Snake {
 
     /** Clears the board */
     private void clear_board(){
-        board = new char[12][12];
-        for(var i = 0; i < 12; i++){
-            for(var j = 0; j < 12; j++){
-                board[i][j] = i == 0 || j == 0 || i==11 || j==11 ? Driver.WALL : Driver.EMPTY;
+        board = new char[10][10];
+        for(var i = 0; i < 10; i++){
+            for(var j = 0; j < 10; j++){
+                board[i][j] = Driver.EMPTY;
             }
         }
     }
 
     /** Takes a point and clamps it to the standard size of the board. */
     private static Point clamped(Point p){
-        return new Point(Math.max(Math.min(p.x, 11), 0), Math.max(Math.min(p.y, 11), 0));
+        return new Point(Math.max(Math.min(p.x, 9), 0), Math.max(Math.min(p.y, 9), 0));
     }
 }

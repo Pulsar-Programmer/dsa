@@ -16,6 +16,8 @@ public class Driver {
     final static char DEATH = 'X';
 
     public static void main(String[] args) throws Exception {
-        
+        Snake snake_0 = new Snake(0, 0, 0, null);		
+        snake_0.update("FMDFMLFMUMRMDMLMUMM");	
+        System.out.println(snake_0);
     }
 }
