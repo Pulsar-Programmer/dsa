@@ -11,6 +11,14 @@ public class Snake {
     boolean is_alive;
     boolean eating_stack;
 
+    public boolean isEating_stack() {
+        return eating_stack;
+    }
+
+    public void setEating_stack(boolean eating_stack) {
+        this.eating_stack = eating_stack;
+    }
+
     public boolean isIs_alive() {
         return is_alive;
     }
@@ -154,9 +162,9 @@ public class Snake {
                 final boolean found_snake = 
                     board[next_pos.y][next_pos.x] == Driver.SNAKE && (
                         (board[next_pos.y + 1][next_pos.x] == Driver.SNAKE ? 1 : 0) +
-                        (board[next_pos.y + 1][next_pos.x] == Driver.SNAKE ? 1 : 0) +
-                        (board[next_pos.y + 1][next_pos.x] == Driver.SNAKE ? 1 : 0) +
-                        (board[next_pos.y + 1][next_pos.x] == Driver.SNAKE ? 1 : 0)
+                        (board[next_pos.y][next_pos.x + 1] == Driver.SNAKE ? 1 : 0) +
+                        (board[next_pos.y][next_pos.x - 1] == Driver.SNAKE ? 1 : 0) +
+                        (board[next_pos.y - 1][next_pos.x] == Driver.SNAKE ? 1 : 0)
                     >= 2);
                 ///If we find any of these, the snake perishes.
                 if(found_snake || found_wall){
@@ -185,6 +193,7 @@ public class Snake {
                     next = new Body(to_add, snipped);
 
                     ///We finish the move operation.
+                    eating_stack = false;
                     return true;
                 }
 
@@ -342,25 +351,16 @@ public class Snake {
 
     /** Clears the board */
     private void clear_board(){
-        board = new char[10][10];
-        for(var i = 0; i < 10; i++){
-            for(var j = 0; j < 10; j++){
-                board[i][j] = i == 0 || j == 0 || i==9 || j==9 ? Driver.WALL : Driver.EMPTY;
+        board = new char[12][12];
+        for(var i = 0; i < 12; i++){
+            for(var j = 0; j < 12; j++){
+                board[i][j] = i == 0 || j == 0 || i==11 || j==11 ? Driver.WALL : Driver.EMPTY;
             }
         }
     }
 
     /** Takes a point and clamps it to the standard size of the board. */
     private static Point clamped(Point p){
-        return new Point(Math.max(Math.min(p.x, 9), 0), Math.max(Math.min(p.y, 9), 0));
+        return new Point(Math.max(Math.min(p.x, 11), 0), Math.max(Math.min(p.y, 11), 0));
     }
-
-    public boolean isEating_stack() {
-        return eating_stack;
-    }
-
-    public void setEating_stack(boolean eating_stack) {
-        this.eating_stack = eating_stack;
-    }
-
 }
