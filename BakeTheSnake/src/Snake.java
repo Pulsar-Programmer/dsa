@@ -110,11 +110,12 @@ public class Snake {
     boolean update(String commands){
         var commandsGood = commands.toCharArray();
         for (var c : commandsGood){
+            System.out.println("Starting next command!");
             if(!update(c)){
                 return false;
             }
+            System.out.println(toString()); //TODO
         }
-        System.out.println(this); //TODO
         return true;
     }
 
@@ -143,10 +144,12 @@ public class Snake {
                 direction = 2;
             } break;
             case 'D' : {
+                System.out.println("Doing D");
                 if ((direction + 2) % 4 == 3){
                     return true;
                 }
                 direction = 3;
+                System.out.println("Doing D2");
             } break;
             //#endregion
 
@@ -163,13 +166,15 @@ public class Snake {
                 ///We detect a snake only if there is a snake in two other places around it. If there is only one snake then that must be the tail.
                 final boolean found_snake = 
                     board[next_pos.y][next_pos.x] == Driver.SNAKE && (
-                        (board[next_pos.y + 1][next_pos.x] == Driver.SNAKE ? 1 : 0) +
-                        (board[next_pos.y][next_pos.x + 1] == Driver.SNAKE ? 1 : 0) +
-                        (board[next_pos.y][next_pos.x - 1] == Driver.SNAKE ? 1 : 0) +
-                        (board[next_pos.y - 1][next_pos.x] == Driver.SNAKE ? 1 : 0)
+                        (char_cmp(Driver.SNAKE, try_get(advanced(next_pos, 0))) ? 1 : 0) +
+                        (char_cmp(Driver.SNAKE, try_get(advanced(next_pos, 1))) ? 1 : 0) +
+                        (char_cmp(Driver.SNAKE, try_get(advanced(next_pos, 2))) ? 1 : 0) +
+                        (char_cmp(Driver.SNAKE, try_get(advanced(next_pos, 3))) ? 1 : 0)
                     >= 2);
                 ///If we find any of these, the snake perishes.
                 if(found_snake || found_wall){
+                    System.out.println("Snake" + found_snake);
+                    System.out.println("WAll" + found_wall);
                     is_alive = false;
                     return false;
                 }
@@ -183,13 +188,13 @@ public class Snake {
                 ///If we ate something, we must grow while moving.
                 if(eating_stack){
                     ///We find the point to add from the previous fruit.
-                    final Point to_add = head;
+                    final Point to_add = new Point(head.x, head.y);
 
                     ///We move up head.
                     head = next_pos;
 
-                    ///We snip off the first body.
-                    final Body snipped = next;
+                    ///We snip off the first body and clone the next element.
+                    final Body snipped = to_owned(next);
 
                     ///We add a body in the place the head used to be.
                     next = new Body(to_add, snipped);
@@ -217,6 +222,7 @@ public class Snake {
                         runner.setNext(null);
                         ///We make our runner the last element.
                         runner = temp_link;
+                        break;
                     }
                     ///We then proceed to the next link.
                     runner = runner.getNext();
@@ -232,7 +238,7 @@ public class Snake {
                 next = snipped;
 
                 //#endregion
-
+                
             } break;
             case 'F' : {
                 eating_stack = true;
@@ -281,19 +287,19 @@ public class Snake {
     private static Point advanced(Point current, int direction){
         return switch(direction){
             case 0 -> {
-                yield new Point(current.x - 1, current.y);
-            }
-            case 1 -> {
-                yield new Point(current.x, current.y + 1);
-            }
-            case 2 -> {
                 yield new Point(current.x + 1, current.y);
             }
-            case 3 -> {
+            case 1 -> {
                 yield new Point(current.x, current.y - 1);
             }
-            default -> {
+            case 2 -> {
                 yield new Point(current.x - 1, current.y);
+            }
+            case 3 -> {
+                yield new Point(current.x, current.y + 1);
+            }
+            default -> {
+                yield new Point(current.x, current.y + 1);
             }
         };
     }
@@ -348,6 +354,7 @@ public class Snake {
         while(runner != null){
             final Point clamped = clamped(runner.getLocation());
             board[clamped.y][clamped.x] = Driver.SNAKE;
+            runner = runner.getNext();
         }
     }
 
@@ -364,5 +371,26 @@ public class Snake {
     /** Takes a point and clamps it to the standard size of the board. */
     private static Point clamped(Point p){
         return new Point(Math.max(Math.min(p.x, 9), 0), Math.max(Math.min(p.y, 9), 0));
+    }
+
+    /** Tries to get an element on the board but returns null if it cannot. */
+    private Character try_get(Point p){
+        try {
+            return board[p.y][p.x];
+        } catch (Exception _e) {
+            return null;
+        }
+    }
+
+    public static Body to_owned(Body b) {
+        if(b == null) return null;
+        return new Body(b.getLocation(), b.getNext());
+    }
+
+    public static boolean char_cmp(Character lhs, Character rhs){
+        if(lhs == null || rhs == null){
+            return false;
+        }
+        return lhs.equals(rhs);
     }
 }
