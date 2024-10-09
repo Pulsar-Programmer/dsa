@@ -1,5 +1,4 @@
 import java.awt.Point;
-import java.util.Arrays;
 
 public class Snake {
 
@@ -7,8 +6,20 @@ public class Snake {
     private Point head;
     private Body next;
     private char[][] board;
-    // boolean is_alive;
+    boolean is_alive;
     // Stack eating_stack;
+
+    public boolean isIs_alive() {
+        return is_alive;
+    }
+
+    public boolean isAlive(){
+        return isIs_alive();
+    }
+
+    public void setIs_alive(boolean is_alive) {
+        this.is_alive = is_alive;
+    }
 
     public char[][] getBoard() {
         return board;
@@ -47,13 +58,15 @@ public class Snake {
         head = new Point(4, 4);
         next = new Body(new Point(4, 3), new Body(4, 2));
         clear_board();
+        is_alive = true;
     }
 
-    public Snake(int direction, Point head, Body next, char[][] board) {
+    public Snake(int direction, Point head, Body next, char[][] board, boolean is_alive) {
         this.direction = direction;
         this.head = head;
         this.next = next;
         this.board = board;
+        this.is_alive = is_alive;
     }
 
     public Snake(int dir, int row, int col, Body p){
@@ -61,19 +74,22 @@ public class Snake {
         this.head = new Point(row, col);
         this.next = p;
         clear_board();
+        is_alive = true;
     }
 
+    /** Returns a depiction of the board containing the Snake. */
     @Override
     public String toString() {
+        ///We have a pusher String.
         String pusher = "";
         for(char[] i: this.board){
             for(char j: i){
-                // if(j == Driver.SNAKE && !is_alive) {
-
-                // }
-                pusher += j;
+                ///We push the string. If it is a Snake and the Snake is dead, we print Xs instead.
+                pusher += j == Driver.SNAKE && !is_alive ? Driver.DEATH : j;
+                ///We push whitespace for readability.
                 pusher += ' ';
             }
+            ///We push the new line corresponding to the next row.
             pusher += '\n';
         }
         return pusher;
@@ -139,6 +155,7 @@ public class Snake {
                     >= 2);
                 ///If we find any of these, the snake perishes.
                 if(found_snake || found_wall){
+                    is_alive = false;
                     return false;
                 }
                 
