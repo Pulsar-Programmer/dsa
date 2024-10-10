@@ -3,9 +3,20 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Queue;
-import java.util.Stack;
 
 public class Snake {
+
+    // final static String APPLE = "🟥";
+    final static char WALL = '#'; //🟦
+    final static char EMPTY = '.'; //⬛️
+    final static char SNAKE = '■'; //🟩
+    
+    final static char LEFT = '<';
+    final static char RIGHT = '>';
+    final static char UP = '^';
+    final static char DOWN = 'v';
+
+    final static char DEATH = 'X';
 
     private int direction;
     private Point head;
@@ -85,7 +96,7 @@ public class Snake {
 
     public Snake(int dir, int row, int col, Body p){
         this.direction = dir;
-        this.head = new Point(row, col);
+        this.head = new Point(col, row);
         this.next = p;
         is_alive = true;
         ledraw();
@@ -99,7 +110,7 @@ public class Snake {
         for(char[] i: this.board){
             for(char j: i){
                 ///We push the string. If it is a Snake and the Snake is dead, we print Xs instead.
-                pusher += j == Driver.SNAKE && !is_alive ? Driver.DEATH : j;
+                pusher += j == SNAKE && !is_alive ? DEATH : j;
                 ///We push whitespace for readability.
                 pusher += ' ';
             }
@@ -129,7 +140,7 @@ public class Snake {
         return "Snake [direction=" + direction + ", head=" + head + ", next=" + next + ", is_alive=" + is_alive + ", eating_stack=" + eating_stack + "]";
     }
 
-    /**Returns if the snake is alive or not after the command and executes the command preesented. */
+    /**Returns if the snake is alive or not after the command and executes the command presented. */
     boolean update(char command){
         switch(command) {
             ///We set the direction to each case.
@@ -177,14 +188,16 @@ public class Snake {
                     is_alive = false;
                     return false;
                 }
+                ///We find the amount of snakes around the next position.
+                final int snakes = 
+                    (char_cmp(SNAKE, try_get(advanced(next_pos, 0))) ? 1 : 0) +
+                    (char_cmp(SNAKE, try_get(advanced(next_pos, 1))) ? 1 : 0) +
+                    (char_cmp(SNAKE, try_get(advanced(next_pos, 2))) ? 1 : 0) +
+                    (char_cmp(SNAKE, try_get(advanced(next_pos, 3))) ? 1 : 0);
                 ///We detect a snake only if there is a snake in two other places around it. If there is only one snake then that must be the tail.
                 final boolean found_snake = 
-                    board[next_pos.y][next_pos.x] == Driver.SNAKE && (
-                        (char_cmp(Driver.SNAKE, try_get(advanced(next_pos, 0))) ? 1 : 0) +
-                        (char_cmp(Driver.SNAKE, try_get(advanced(next_pos, 1))) ? 1 : 0) +
-                        (char_cmp(Driver.SNAKE, try_get(advanced(next_pos, 2))) ? 1 : 0) +
-                        (char_cmp(Driver.SNAKE, try_get(advanced(next_pos, 3))) ? 1 : 0)
-                    >= 2);
+                    board[next_pos.y][next_pos.x] == SNAKE &&
+                    snakes >= 2;
                 ///If we find any of these, the snake perishes.
                 if(found_snake){
                     is_alive = false;
@@ -198,8 +211,15 @@ public class Snake {
                 ///Before we can start moving, we must introduce the next from the eating stack.
 
                 ///If we ate something, we must grow while moving.
-                if(eating_stack){
-                    ///We find the point to add from the previous fruit.
+                if(
+                    eating_stack && !
+                    ///We must first make sure that it is safe to add such a node here.
+                    ///If, within the next place to move, there is one snake, it is the tail and thus will cause the snake to grow into itself.
+                    (board[next_pos.y][next_pos.x] == SNAKE && snakes == 1)
+                    ///Therefore, we just ignore the request for F since it physically cannot be done and do a regular move.
+                ){
+                    
+                    ///We find the point to add from the previous head location.
                     final Point to_add = new Point(head.x, head.y);
 
                     ///We move up head.
@@ -284,6 +304,7 @@ public class Snake {
                     runner.setLocation(locations.poll());
                 }
             } break;
+            default: break;
         }
         ledraw();
         return true;
@@ -293,19 +314,19 @@ public class Snake {
     private char direction_char() {
         return switch(direction){
             case 0 -> {
-                yield Driver.RIGHT;
+                yield RIGHT;
             }
             case 1 -> {
-                yield Driver.UP;
+                yield UP;
             }
             case 2 -> {
-                yield Driver.LEFT;
+                yield LEFT;
             }
             case 3 -> {
-                yield Driver.DOWN;
+                yield DOWN;
             }
             default -> {
-                yield Driver.DOWN;
+                yield DOWN;
             }
         };
     }
@@ -380,7 +401,7 @@ public class Snake {
         Body runner = this.next;
         while(runner != null){
             final Point clamped = clamped(runner.getLocation());
-            board[clamped.y][clamped.x] = Driver.SNAKE;
+            board[clamped.y][clamped.x] = SNAKE;
             runner = runner.getNext();
         }
     }
@@ -390,7 +411,7 @@ public class Snake {
         board = new char[10][10];
         for(var i = 0; i < 10; i++){
             for(var j = 0; j < 10; j++){
-                board[i][j] = Driver.EMPTY;
+                board[i][j] = EMPTY;
             }
         }
     }
