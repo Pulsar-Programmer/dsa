@@ -1,4 +1,4 @@
-use std::{collections::LinkedList, mem::{ManuallyDrop, MaybeUninit}, ops::Deref, rc::{Rc, Weak}};
+use std::{borrow::Borrow, collections::LinkedList, mem::{ManuallyDrop, MaybeUninit}, ops::Deref, rc::{Rc, Weak}, sync::{RwLock, RwLockReadGuard}};
 
 fn main() {
     println!("Hello, world!");
@@ -155,10 +155,32 @@ impl<T> SinglyLinkedListNode<'_, T>{
 
 
 
-#[derive(Default)]
-struct StackLinkedList<T>{
-    inner: LinkedList<T>,
-}
-impl<T> StackLinkedList<T>{
+// #[derive(Default)]
+// struct StackLinkedList<T>{
+//     inner: LinkedList<T>,
+// }
+// impl<T> StackLinkedList<T>{
     
+// }
+
+
+
+
+
+struct JRc<T>{
+    inner: Rc<RwLock<T>>
+}
+impl<T> JRc<T>{
+
+}
+
+type LinkerNext<T> = Option<JRc<Node<T>>>;
+struct LinkerNode<T>{
+    value: T,
+    next: Next<T>,
+}
+impl<T> LinkerNode<T>{
+    fn new(t: T) -> Self{
+        Self { value: t, next: None }
+    }
 }
