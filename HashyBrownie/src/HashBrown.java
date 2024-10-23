@@ -1,3 +1,3 @@
-public class HashBrown<T> {
-    
+public class HashBrown<K,V> {
+    Entry<K,V>[] entries;
 }
