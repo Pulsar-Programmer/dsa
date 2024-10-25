@@ -29,29 +29,29 @@ impl<K: Hash + Eq,V: Clone> HashBrown<K,V>{
         //check for reahashing
         self.entries[index] = Some(e);
     }
-    pub fn get(&self, key: K) -> Option<V>{
-        let mut index = hash(&key) as usize % self.entries.len();
+    // pub fn get(&self, key: K) -> Option<V>{
+    //     let mut index = hash(&key) as usize % self.entries.len();
         
-        if self.entries[index].is_none() {
-            return None;
-        }
+    //     if self.entries[index].is_none() {
+    //         return None;
+    //     }
 
-        while let Some(entry) = &self.entries[index]{
-            if entry.key == key{
-                return Some(entry.value.clone());
-            }
-            index += 1;
-            index %= self.entries.len();
-        }
-        None
-    }
-    pub fn with_capacity(cap: usize) -> Self{
-        let mut vec = Vec::new();
-        for i in 0..cap{
-            vec.push(None);
-        }
-        Self { entries : vec }
-    }
+    //     while let Some(entry) = &self.entries[index]{
+    //         if entry.key == key{
+    //             return Some(entry.value.clone());
+    //         }
+    //         index += 1;
+    //         index %= self.entries.len();
+    //     }
+    //     None
+    // }
+    // pub fn with_capacity(cap: usize) -> Self{
+    //     let mut vec = Vec::new();
+    //     for i in 0..cap{
+    //         vec.push(None);
+    //     }
+    //     Self { entries : vec }
+    // }
 }
 
 
@@ -59,4 +59,127 @@ impl<K: Hash + Eq,V: Clone> HashBrown<K,V>{
 struct Entry<K, V>{
     key: K,
     value: V,
+}
+
+
+
+
+
+
+
+
+
+
+
+fn linear_probing(index: usize) -> usize{
+    index + 1
+}
+// fn quadratic_probing(index: usize) -> usize{
+    
+// }
+
+
+
+enum InsertResult{
+    Ok,
+    ContentFull,
+}
+
+//there are so many ways to implement a HashMap ... how can we make it as modular as possible
+
+///A HashMap which cannot rehash and can reach max capacity.
+struct CappedHashMap<K,V>{
+    next: Box<dyn FnMut(usize) -> usize>,
+    hasher: Box<dyn FnMut(K) -> usize>,
+    entries: Vec<EntryContainer<Entry<K, V>>>,
+}
+impl<K,V> CappedHashMap<K,V>{
+    fn with_capacity(capacity: usize, next_method: Box<dyn FnMut(usize) -> usize>, hasher: Box<dyn FnMut(K) -> usize>) -> Self{
+        Self { next: next_method, hasher, entries: Vec::with_capacity(capacity) }
+    }
+}
+
+
+enum EntryContainer<T>{
+    Val(T),
+    Tombstone,
+    None,
+}
+// impl<T> EntryContainer<T>{
+//     fn initialize(&mut self, k: K, v: V){
+//         self = Val(())
+//     }
+// }
+use EntryContainer::{Val, Tombstone, None};
+
+
+
+struct LinearProbingHashMap<K: Hash, V>{
+    entries: Vec<EntryContainer<Entry<K, V>>>,
+}
+impl<K: Hash + Eq, V> LinearProbingHashMap<K, V>{
+    fn with_capacity(capacity: usize) -> Self{
+        Self { entries: Vec::with_capacity(capacity) }
+    }
+
+    fn new() -> Self{
+        Self { entries: Vec::new() }
+    }
+
+    fn attempt_rehash(&mut self){
+        if self.entries.capacity() as f64 / self.entries.len() as f64 >= 0.75 {
+            todo!()
+        }
+    }
+
+    fn insert(&mut self, key: K, value: V){
+        let mut index = hash(&key)  as usize % self.entries.capacity();
+        loop{
+            match self.entries.get(index){
+                Some(entry) => {
+                    match entry {
+                        Val(..) => {
+                            index += 1;
+                            index %= self.entries.capacity();
+                            continue
+                        },
+                        _ => {}
+                    }
+                },
+                _ => {}
+            }
+            break;
+        }
+        self.entries[index] = Val(Entry{key, value});
+        self.attempt_rehash();
+    }
+
+    fn get(&self, key: &K) -> Option<&V>{
+        let mut index = hash(&key)  as usize % self.entries.capacity();
+        loop{
+            match self.entries.get(index){
+                Some(entry) => {
+                    match entry {
+                        Val(entry) => {
+                            if &entry.key == key{
+                                Some(&entry.value)
+                            } else {
+                                index += 1;
+                                index %= self.entries.capacity();
+                                continue
+                            }
+                        },
+                        Tombstone => Option::None,
+                        None => Option::None,
+                        
+                    }
+                },
+                _ => Option::None
+            }
+        }
+    }
+
+    fn remove(&mut self, key: K) -> V{
+        todo!()
+    }
 }
