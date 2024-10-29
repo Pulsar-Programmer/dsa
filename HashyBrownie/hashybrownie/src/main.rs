@@ -178,7 +178,7 @@ impl<K: Hash + Eq, V> LinearProbingHashMap<K, V>{
             }
         }
     }
-
+    //NOTE: TOMBSTONE SHOULD KEEPS KEY - MAKE NOTE OF THIS
     fn remove(&mut self, key: K) -> Option<V>{
         let mut index = hash(&key)  as usize % self.entries.capacity();
         let mut val = Option::None;
