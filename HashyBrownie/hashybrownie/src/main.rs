@@ -131,7 +131,7 @@ impl<K: Hash + Eq, V> LinearProbingHashMap<K, V>{
             todo!()
         }
     }
-
+    
     fn insert(&mut self, key: K, value: V){
         let mut index = hash(&key)  as usize % self.entries.capacity();
         loop{
@@ -161,25 +161,65 @@ impl<K: Hash + Eq, V> LinearProbingHashMap<K, V>{
                 Some(entry) => {
                     match entry {
                         Val(entry) => {
-                            if &entry.key == key{
-                                Some(&entry.value)
+                            if &entry.key == key{ //&& &entry.value == val  ADD THIS IF YOU NEED IT with param
+                                return Some(&entry.value)
                             } else {
                                 index += 1;
                                 index %= self.entries.capacity();
                                 continue
                             }
                         },
-                        Tombstone => Option::None,
-                        None => Option::None,
+                        Tombstone => return Option::None,
+                        None => return Option::None,
                         
                     }
                 },
-                _ => Option::None
+                _ => return Option::None
             }
         }
     }
 
-    fn remove(&mut self, key: K) -> V{
-        todo!()
+    fn remove(&mut self, key: K) -> Option<V>{
+        let mut index = hash(&key)  as usize % self.entries.capacity();
+        let mut val = Option::None;
+
+        loop{
+            match self.entries.get_mut(index){
+                Some(entry) => {
+                    match &entry{
+                        Val(..) => {
+                            val = {
+                                let Val(val) = std::mem::replace(entry, Tombstone) else { return Option::None };
+                                Some(val.value)
+                            };
+                        },
+                        Tombstone => {
+                            index += 1;
+                            index %= self.entries.capacity();
+                            continue
+                        },
+                        None => return Option::None,
+                    }
+                },
+                _ => {}
+            }
+            break;
+        }
+        self.attempt_rehash();
+        val
+    }
+
+}
+
+impl<K: Hash,V> IntoIterator for LinearProbingHashMap<K,V>{
+    type Item = Entry<K,V>;
+
+    type IntoIter = <Vec<Self::Item> as IntoIterator>::IntoIter;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.entries.into_iter().filter_map(|val|match val {
+            Val(v) => Some(v),
+            _ => Option::None,
+        }).collect::<Vec<Entry<K,V>>>().into_iter()
     }
 }
