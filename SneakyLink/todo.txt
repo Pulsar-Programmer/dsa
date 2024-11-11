@@ -8,26 +8,17 @@ in this data set. The function must be easy enough to perform by a human with a 
 The CustomHashMap will have the following methods:
 put(Entry&lt;Key,Value&gt;)
 get(Key)
-
 remove(Key)
+put(i, Entry&lt;Key,Value&gt;) //places the Entry into a specific spot to demonstrate collision
+loadFactor()
 rehash()
+
 toString (will provide a summary of the elements and load factor)
 loadFromFile(File)
-loadFactor()
-equals(Entry&lt;Key&gt;)
-hashCode()
-put(i, Entry&lt;Key,Value&gt;) //places the Entry into a specific spot to demonstrate collision
+
+
+
 
 The collisions will be handled with a linked list
 Create A Driver that will load in the file and have an interface from the user to get, put, and remove
 elements from the data base. If the put creates a collision OUTPUT THAT ON THE ON SCREEN.
-
-Free Data Sources in CSV
-https://www.kaggle.com/datasets
-
-https://github.com/awesomedata/awesome-public-datasets
-
-https://www.gapminder.org/data/
-
-
-Constructors?
