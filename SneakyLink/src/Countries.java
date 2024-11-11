@@ -29,7 +29,7 @@ public class Countries {
     /** This creates a new HashMap from a CSV File */
     public static Countries loadFromFile(File file) throws FileNotFoundException {
         ///We create our Countries HashMap.
-        Countries countries = Countries.with_capacity(250);
+        Countries countries = Countries.with_capacity(1001);
         ///We create a scanner from the file.
         Scanner scanner = new Scanner(file);
         scanner.nextLine(); ///Once to remove name.

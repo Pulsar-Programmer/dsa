@@ -1,7 +1,2 @@
 Create a hashcode function that minimizes collision and demonstrate that fewer than 10 collisions occur
 in this data set. The function must be easy enough to perform by a human with a calculator.
-
-toString (will provide a summary of the elements)
-
-Have an interface from the user to get, put, and remove
-elements from the data base. If the put creates a collision OUTPUT THAT ON THE ON SCREEN.
