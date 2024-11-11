@@ -13,8 +13,7 @@ put(i, Entry&lt;Key,Value&gt;) //places the Entry into a specific spot to demons
 loadFactor()
 rehash()
 
-toString (will provide a summary of the elements and load factor)
-loadFromFile(File)
+toString (will provide a summary of the elements)
 
 
 

@@ -29,7 +29,7 @@ public class Countries {
     public static Countries loadFromFile(File file) throws FileNotFoundException {
         ///We create our Countries HashMap.
         Countries countries = Countries.with_capacity(250);
-
+        System.out.println(countries.len());
         ///We create a scanner from the file.
         Scanner scanner = new Scanner(file);
         scanner.nextLine(); ///Once to remove name.
@@ -43,16 +43,25 @@ public class Countries {
 
             ///Now, we deposit all of the entries into our map.
             Key key = new Key(second.next());
-            Value value = new Value(second.next(), second.next(), second.nextInt(), second.nextInt(), second.next(), second.next(), second.next(), second.next(), second.next(), second.next(), second.next(), second.nextInt(), second.next(), second.nextInt(), second.nextFloat(), second.nextFloat(), second.next(), second.next());
+            Value value = new Value(second.next(), second.next(), second.nextInt(), second.nextInt(), second.next(), second.next(), second.next(), second.next(), second.next(), second.next(), second.next(), second.nextInt(), second.next(), second.nextInt(), capture_unit(second), second.nextFloat(), second.nextFloat(), second.next(), second.next());
             Entry entry = new Entry(key, value);
 
             countries.put(entry);
+            System.out.println(countries.len());
 
             second.close();
         }
         scanner.close();
 
         return countries;
+    }
+
+    private static String capture_unit(Scanner scanner){
+        String value = scanner.next();
+        if(value.contains("\"")){
+            return value + scanner.next();
+        }
+        return value;
     }
 
     /** This returns the capacity of the HashMap. */
@@ -62,9 +71,12 @@ public class Countries {
 
     /** This finds the amount of filled slots. */
     public int len(){
+
         var counter = 0;
         for (LinkedList<Entry> collist : entries) {
-            counter += collist.isEmpty() ? 0 : 1;
+            if (collist != null && !collist.isEmpty()) {
+                counter++;
+            }
         }
         return counter;
     }
@@ -82,7 +94,8 @@ public class Countries {
 
     /** This inserts a value disregarding load factor. */
     private void unchecked_put(Entry entry){
-        final var index = entry.key.hashCode() % cap();
+        ///We use this weird index method because sussy Java implements % to be `rem` not `rem_euclid`.
+        final var index = (entry.key.hashCode() % cap() + cap()) % cap();
         entries[index].add(entry);
     }
 
@@ -95,7 +108,7 @@ public class Countries {
     /** This gets a value from the HashMap given a Key. */
     public Optional<Value> get(Key key){
         ///We get the index, find the entry, then look in the list for a matching key.
-        final var index = key.hashCode() % cap();
+        final var index = (key.hashCode() % cap() + cap()) % cap();
         for (Entry entry : entries[index]) {
             if(key.equals(entry.key)){
                 return Optional.of(entry.value);
@@ -108,7 +121,7 @@ public class Countries {
     /** This removes a KV pair from the HashMap given it's key and returns it, or returns nothing if nothing is present. */
     public Optional<Value> remove(Key key){
         ///We track the index, find the entry, then look in the list for a matching key.
-        final var index = key.hashCode() % cap();
+        final var index = (key.hashCode() % cap() + cap()) % cap();
         Integer removed_idx = null;
         final var list = entries[index];
         ///We loop through the list and find the index mathcing the key.
@@ -124,8 +137,8 @@ public class Countries {
 
     /** This attempts to rehash if the load_factor requirement is met. */
     public void try_rehash(){
-        ///We only rehash if the load_factor is greater than or equal to 0.75, but since there is only PartialEq, we use `>`.
-        if(loadFactor() > 0.75){
+        ///We only rehash if the load_factor is greater than or equal to 0.75.
+        if(Double.valueOf(loadFactor()).compareTo(0.75) >= 0){
             rehash();
         }
     }

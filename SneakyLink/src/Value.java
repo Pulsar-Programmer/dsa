@@ -1,11 +1,12 @@
 public class Value {
-    public String iso3, iso2, capital, currency, currency_name, currency_symbol, tld, lang, region, subregion, emoji, emojiU;
+    public String iso3, iso2, capital, currency, currency_name, currency_symbol, tld, lang, region, subregion, nationality, emoji, emojiU;
     public int numeric_code, phone_code, region_id, subregion_id;
     public float latitude, longitude;
     
     public Value(String iso3, String iso2, int numeric_code, int phone_code, 
             String capital, String currency, String currency_name,
-            String currency_symbol, String tld, String lang, String region, int region_id, String subregion, int subregion_id, 
+            String currency_symbol, String tld, String lang, String region, int region_id, String subregion, int subregion_id,
+            String nationality, 
             float latitude, float longitude, 
             String emoji, String emojiU) {
         
@@ -27,6 +28,7 @@ public class Value {
         this.subregion_id = subregion_id;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.nationality = nationality;
     }
 
     
