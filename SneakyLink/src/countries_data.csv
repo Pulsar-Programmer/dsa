@@ -8,7 +8,7 @@ American Samoa,ASM,AS,16,1,Pago Pago,USD,US Dollar,$,.as,American Samoa,Oceania,
 Andorra,AND,AD,20,376,Andorra la Vella,EUR,Euro,€,.ad,Andorra,Europe,4,Southern Europe,16,Andorran,42.50000000,1.50000000,🇦🇩,U+1F1E6 U+1F1E9
 Angola,AGO,AO,24,244,Luanda,AOA,Angolan kwanza,Kz,.ao,Angola,Africa,1,Middle Africa,2,Angolan,-12.50000000,18.50000000,🇦🇴,U+1F1E6 U+1F1F4
 Anguilla,AIA,AI,660,1,The Valley,XCD,East Caribbean dollar,$,.ai,Anguilla,Americas,2,Caribbean,7,Anguillan,18.25000000,-63.16666666,🇦🇮,U+1F1E6 U+1F1EE
-Antarctica,ATA,AQ,10,672,,AAD,Antarctican dollar,$,.aq,Antarctica,Polar,6,,,Antarctic,-74.65000000,4.48000000,🇦🇶,U+1F1E6 U+1F1F6
+Antarctica,ATA,AQ,10,672,None,AAD,Antarctican dollar,$,.aq,Antarctica,Polar,6,None,0,Antarctic,-74.65000000,4.48000000,🇦🇶,U+1F1E6 U+1F1F6
 Antigua and Barbuda,ATG,AG,28,1,St. John's,XCD,Eastern Caribbean dollar,$,.ag,Antigua and Barbuda,Americas,2,Caribbean,7,Antiguan or Barbudan,17.05000000,-61.80000000,🇦🇬,U+1F1E6 U+1F1EC
 Argentina,ARG,AR,32,54,Buenos Aires,ARS,Argentine peso,$,.ar,Argentina,Americas,2,South America,8,Argentine,-34.00000000,-64.00000000,🇦🇷,U+1F1E6 U+1F1F7
 Armenia,ARM,AM,51,374,Yerevan,AMD,Armenian dram,֏,.am,Հայաստան,Asia,3,Western Asia,11,Armenian,40.00000000,45.00000000,🇦🇲,U+1F1E6 U+1F1F2
@@ -29,7 +29,7 @@ Bolivia,BOL,BO,68,591,Sucre,BOB,Bolivian boliviano,Bs.,.bo,Bolivia,Americas,2,So
 Bonaire Sint Eustatius and Saba,BES,BQ,535,599,Kralendijk,USD,United States dollar,$,.an,Caribisch Nederland,Americas,2,Caribbean,7,Bonaire,12.15000000,-68.26666700,🇧🇶,U+1F1E7 U+1F1F6
 Bosnia and Herzegovina,BIH,BA,70,387,Sarajevo,BAM,Bosnia and Herzegovina convertible mark,KM,.ba,Bosna i Hercegovina,Europe,4,Southern Europe,16,Bosnian or Herzegovinian,44.00000000,18.00000000,🇧🇦,U+1F1E7 U+1F1E6
 Botswana,BWA,BW,72,267,Gaborone,BWP,Botswana pula,P,.bw,Botswana,Africa,1,Southern Africa,5,"Motswana, Botswanan",-22.00000000,24.00000000,🇧🇼,U+1F1E7 U+1F1FC
-Bouvet Island,BVT,BV,74,55,,NOK,Norwegian Krone,ko,.bv,Bouvetøya,,,,,Bouvet Island,-54.43333333,3.40000000,🇧🇻,U+1F1E7 U+1F1FB
+Bouvet Island,BVT,BV,74,55,,NOK,Norwegian Krone,ko,.bv,Bouvetøya,None,0,None,0,Bouvet Island,-54.43333333,3.40000000,🇧🇻,U+1F1E7 U+1F1FB
 Brazil,BRA,BR,76,55,Brasilia,BRL,Brazilian real,R$,.br,Brasil,Americas,2,South America,8,Brazilian,-10.00000000,-55.00000000,🇧🇷,U+1F1E7 U+1F1F7
 British Indian Ocean Territory,IOT,IO,86,246,Diego Garcia,USD,United States dollar,$,.io,British Indian Ocean Territory,Africa,1,Eastern Africa,4,BIOT,-6.00000000,71.50000000,🇮🇴,U+1F1EE U+1F1F4
 Brunei,BRN,BN,96,673,Bandar Seri Begawan,BND,Brunei dollar,B$,.bn,Negara Brunei Darussalam,Asia,3,South-Eastern Asia,13,Bruneian,4.50000000,114.66666666,🇧🇳,U+1F1E7 U+1F1F3
@@ -95,7 +95,7 @@ Guinea,GIN,GN,324,224,Conakry,GNF,Guinean franc,FG,.gn,Guinée,Africa,1,Western 
 Guinea-Bissau,GNB,GW,624,245,Bissau,XOF,West African CFA franc,CFA,.gw,Guiné-Bissau,Africa,1,Western Africa,3,Bissau-Guinean,12.00000000,-15.00000000,🇬🇼,U+1F1EC U+1F1FC
 Guyana,GUY,GY,328,592,Georgetown,GYD,Guyanese dollar,$,.gy,Guyana,Americas,2,South America,8,Guyanese,5.00000000,-59.00000000,🇬🇾,U+1F1EC U+1F1FE
 Haiti,HTI,HT,332,509,Port-au-Prince,HTG,Haitian gourde,G,.ht,Haïti,Americas,2,Caribbean,7,Haitian,19.00000000,-72.41666666,🇭🇹,U+1F1ED U+1F1F9
-Heard Island and McDonald Islands,HMD,HM,334,672,,AUD,Australian dollar,$,.hm,Heard Island and McDonald Islands,,,,,Heard Island or McDonald Islands,-53.10000000,72.51666666,🇭🇲,U+1F1ED U+1F1F2
+Heard Island and McDonald Islands,HMD,HM,334,672,,AUD,Australian dollar,$,.hm,Heard Island and McDonald Islands,None,0,None,0,Heard Island or McDonald Islands,-53.10000000,72.51666666,🇭🇲,U+1F1ED U+1F1F2
 Honduras,HND,HN,340,504,Tegucigalpa,HNL,Honduran lempira,L,.hn,Honduras,Americas,2,Central America,9,Honduran,15.00000000,-86.50000000,🇭🇳,U+1F1ED U+1F1F3
 Hong Kong S.A.R.,HKG,HK,344,852,Hong Kong,HKD,Hong Kong dollar,$,.hk,香港,Asia,3,Eastern Asia,12,"Hong Kong, Hong Kongese",22.25000000,114.16666666,🇭🇰,U+1F1ED U+1F1F0
 Hungary,HUN,HU,348,36,Budapest,HUF,Hungarian forint,Ft,.hu,Magyarország,Europe,4,Eastern Europe,15,"Hungarian, Magyar",47.00000000,20.00000000,🇭🇺,U+1F1ED U+1F1FA

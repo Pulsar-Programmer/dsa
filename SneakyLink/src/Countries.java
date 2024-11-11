@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Scanner;
@@ -21,7 +20,9 @@ public class Countries {
     public static Countries with_capacity(int cap) {
         ///We first create a new set of entries and fill them with new Lists.
         LinkedList<Entry>[] entries = new LinkedList[cap];
-        Arrays.fill(entries, new LinkedList<Entry>());
+        for(var i = 0; i < entries.length; i++){
+            entries[i] = new LinkedList();
+        }
         return new Countries(entries);
     }
 
@@ -42,7 +43,7 @@ public class Countries {
 
             ///Now, we deposit all of the entries into our map.
             Key key = new Key(second.next());
-            Value value = new Value(second.next(), second.next(), second.nextInt(), second.nextInt(), second.next(), second.next(), second.next(), second.next(), second.next(), second.next(), second.next(), second.nextInt(), second.next(), second.nextInt(), capture_unit(second), second.nextFloat(), second.nextFloat(), second.next(), second.next());
+            Value value = new Value(second.next(), second.next(), second.nextInt(), second.nextInt(), capture_unit(second), second.next(), second.next(), second.next(), second.next(), second.next(), second.next(), second.nextInt(), second.next(), second.nextInt(), capture_unit(second), second.nextFloat(), second.nextFloat(), second.next(), second.next());
             Entry entry = new Entry(key, value);
 
             countries.put(entry);
@@ -56,8 +57,14 @@ public class Countries {
 
     private static String capture_unit(Scanner scanner){
         String value = scanner.next();
-        if(value.contains("\"")){
-            return value + scanner.next();
+        if (value.contains("\"")) {
+            while (true) {
+                final var temp = scanner.next();
+                value += temp;
+                if(temp.contains("\"")){
+                    break;
+                }
+            }
         }
         return value;
     }
