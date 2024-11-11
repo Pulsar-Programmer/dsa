@@ -5,10 +5,10 @@ Create a hashcode function that minimizes collision and demonstrate that fewer t
 in this data set. The function must be easy enough to perform by a human with a calculator.
 
 
-Use Key, Value Entry classes to organize the data in the HashMap
-The CustomHashMap will have a private array of tables of buckets and the following methods
+The CustomHashMap will have the following methods:
 put(Entry&lt;Key,Value&gt;)
 get(Key)
+
 remove(Key)
 rehash()
 toString (will provide a summary of the elements and load factor)
