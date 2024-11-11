@@ -29,7 +29,6 @@ public class Countries {
     public static Countries loadFromFile(File file) throws FileNotFoundException {
         ///We create our Countries HashMap.
         Countries countries = Countries.with_capacity(250);
-        System.out.println(countries.len());
         ///We create a scanner from the file.
         Scanner scanner = new Scanner(file);
         scanner.nextLine(); ///Once to remove name.
@@ -47,7 +46,6 @@ public class Countries {
             Entry entry = new Entry(key, value);
 
             countries.put(entry);
-            System.out.println(countries.len());
 
             second.close();
         }
