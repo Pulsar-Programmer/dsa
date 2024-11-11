@@ -28,19 +28,7 @@ public class Key {
             code *= BigInteger.valueOf(elem).pow(Math.max(0, value)).mod(BigInteger.valueOf(2_147_483_647)).intValue();
         }
 
-        return (int)code;
-    }
-
-    private static String bytesToHex(byte[] hash) {
-        StringBuilder hexString = new StringBuilder(2 * hash.length);
-        for (int i = 0; i < hash.length; i++) {
-            String hex = Integer.toHexString(0xff & hash[i]);
-            if(hex.length() == 1) {
-                hexString.append('0');
-            }
-            hexString.append(hex);
-        }
-        return hexString.toString();
+        return (int)(code);
     }
 
     @Override

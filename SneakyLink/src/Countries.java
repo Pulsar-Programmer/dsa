@@ -184,12 +184,11 @@ public class Countries {
         
 
         return MessageFormat.format(
-            "Countries [ load_factor={0}, size={1}, capacity={2}, collisions={3}, first_ten={4} ]", 
+            "Countries [ load_factor={0}, size={1}, capacity={2}, collisions={3} ]", 
             loadFactor(),
             len(),
             cap(),
             collisions()
-            // first_ten
         );
     }
 }
