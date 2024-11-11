@@ -1,23 +1,7 @@
-Find a data set which requires continuous access to its elements using non-index keys with at least 100
-elements.
-
 Create a hashcode function that minimizes collision and demonstrate that fewer than 10 collisions occur
 in this data set. The function must be easy enough to perform by a human with a calculator.
 
-
-The CustomHashMap will have the following methods:
-put(Entry&lt;Key,Value&gt;)
-get(Key)
-remove(Key)
-put(i, Entry&lt;Key,Value&gt;) //places the Entry into a specific spot to demonstrate collision
-loadFactor()
-rehash()
-
 toString (will provide a summary of the elements)
 
-
-
-
-The collisions will be handled with a linked list
-Create A Driver that will load in the file and have an interface from the user to get, put, and remove
+Have an interface from the user to get, put, and remove
 elements from the data base. If the put creates a collision OUTPUT THAT ON THE ON SCREEN.

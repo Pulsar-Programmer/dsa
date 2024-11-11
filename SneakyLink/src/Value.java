@@ -31,5 +31,15 @@ public class Value {
         this.nationality = nationality;
     }
 
+    @Override
+    public String toString() {
+        return "Value [iso3=" + iso3 + ", iso2=" + iso2 + ", capital=" + capital + ", currency=" + currency
+                + ", currency_name=" + currency_name + ", currency_symbol=" + currency_symbol + ", tld=" + tld
+                + ", lang=" + lang + ", region=" + region + ", subregion=" + subregion + ", nationality=" + nationality
+                + ", emoji=" + emoji + ", emojiU=" + emojiU + ", numeric_code=" + numeric_code + ", phone_code="
+                + phone_code + ", region_id=" + region_id + ", subregion_id=" + subregion_id + ", latitude=" + latitude
+                + ", longitude=" + longitude + "]";
+    }
+
     
 }

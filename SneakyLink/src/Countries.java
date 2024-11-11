@@ -86,22 +86,33 @@ public class Countries {
         return counter;
     }
 
+    /** This finds the amount of colliding slots. */
+    public int collisions(){
+        var counter = 0;
+        for (LinkedList<Entry> collist : entries) {
+            counter += Math.max(0, collist.size()-1);
+        }
+        return counter;
+    }
+
     /** Returns the Load Factor which is simply just the length divided by the capacity. */
     public double loadFactor(){
         return (double)len() / (double)cap();
     }
 
-    /** This inserts a value into the HashMap given a Key-Value pair. */
-    public void put(Entry entry){
-        unchecked_put(entry);
+    /** This inserts a value into the HashMap given a Key-Value pair. Returns whether it collided or not. */
+    public boolean put(Entry entry){
+        var bool = unchecked_put(entry);
         try_rehash();
+        return bool;
     }
 
-    /** This inserts a value disregarding load factor. */
-    private void unchecked_put(Entry entry){
+    /** This inserts a value disregarding load factor. Returns whether it collided or not. */
+    private boolean unchecked_put(Entry entry){
         ///We use this weird index method because sussy Java implements % to be `rem` not `rem_euclid`.
         final var index = (entry.key.hashCode() % cap() + cap()) % cap();
         entries[index].add(entry);
+        return entries[index].size() >= 2;
     }
 
     /** This inserts a value into the HashMap given both a KV Pair and the intended index. */
@@ -121,6 +132,11 @@ public class Countries {
         }
         ///If a matching key exists, we return it, but if it does not, we return an empty Optional type (I REALLY don't like `null`.).
         return Optional.empty();
+    }
+
+    /** This gets the bucket from the HashMap given an index only. */
+    public LinkedList get(int index){
+        return entries[index];
     }
 
     /** This removes a KV pair from the HashMap given it's key and returns it, or returns nothing if nothing is present. */
@@ -168,10 +184,11 @@ public class Countries {
         
 
         return MessageFormat.format(
-            "Countries [ load_factor={0}, size={1}, capacity={2}, first_ten={3} ]", 
+            "Countries [ load_factor={0}, size={1}, capacity={2}, collisions={3}, first_ten={4} ]", 
             loadFactor(),
             len(),
-            cap()
+            cap(),
+            collisions()
             // first_ten
         );
     }
