@@ -26,3 +26,84 @@ struct GrowableInteger{
     sign: bool,
     natural: Natural,
 }
+
+
+
+
+
+
+
+struct Hello<T> {
+    ptr: *mut T,
+    len: usize,
+    capacity: usize,
+}
+
+impl<T> Hello<T> {
+    // Create a new empty Hello with initial capacity
+    pub fn new() -> Self {
+        Self {
+            ptr: std::ptr::null_mut(),
+            len: 0,
+            capacity: 0,
+        }
+    }
+
+    // Create a new Hello with specified capacity
+    pub fn with_capacity(capacity: usize) -> Self {
+        let layout = std::alloc::Layout::array::<T>(capacity).unwrap();
+        let ptr = unsafe { std::alloc::alloc(layout) as *mut T };
+        
+        Self {
+            ptr,
+            len: 0,
+            capacity,
+        }
+    }
+
+    // Push a value to the vector
+    pub fn push(&mut self, value: T) {
+        if self.len == self.capacity {
+            let new_capacity = if self.capacity == 0 { 1 } else { self.capacity * 2 };
+            self.grow(new_capacity);
+        }
+        
+        unsafe {
+            std::ptr::write(self.ptr.add(self.len), value);
+        }
+        self.len += 1;
+    }
+
+    // Grow the capacity of the vector
+    fn grow(&mut self, new_capacity: usize) {
+        let new_layout = std::alloc::Layout::array::<T>(new_capacity).unwrap();
+        let new_ptr = if self.capacity == 0 {
+            unsafe { std::alloc::alloc(new_layout) as *mut T }
+        } else {
+            let old_layout = std::alloc::Layout::array::<T>(self.capacity).unwrap();
+            unsafe { 
+                let ptr = std::alloc::realloc(
+                    self.ptr as *mut u8,
+                    old_layout,
+                    new_capacity * std::mem::size_of::<T>()
+                ) as *mut T;
+                ptr
+    }
+        };
+
+        self.ptr = new_ptr;
+        self.capacity = new_capacity;
+}
+}
+
+// Implement Drop to properly deallocate memory
+impl<T> Drop for Hello<T> {
+    fn drop(&mut self) {
+        if self.capacity > 0 {
+            unsafe {
+                let layout = std::alloc::Layout::array::<T>(self.capacity).unwrap();
+                std::alloc::dealloc(self.ptr as *mut u8, layout);
+            }
+        }
+    }
+}
