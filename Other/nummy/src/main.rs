@@ -107,3 +107,31 @@ impl<T> Drop for Hello<T> {
         }
     }
 }
+
+
+
+#[test]
+fn test(){
+    let v = vec![75, 437,2 ,4, 3, 67, 5, 5,8, 997];
+    let v = quick_sort(v);
+    println!("{v:?}");
+}
+
+
+fn quick_sort<T: Ord>(mut v: Vec<T>) -> Vec<T>{
+    if v.len() == 1 { return v }
+    let p = v.remove(0);
+    let mut v1 = Vec::new();
+    let mut v2 = Vec::new();
+    for i in v {
+        if i < p {
+            v1.push(i);
+        } else {
+            v2.push(i);
+        }
+    }
+    v1.push(p);
+    let mut v = quick_sort(v1);
+    v.extend(v2);
+    v
+}
