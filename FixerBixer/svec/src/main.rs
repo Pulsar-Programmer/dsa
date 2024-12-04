@@ -299,3 +299,33 @@ impl<T> LinkedList<T>{
         }
     }
 }
+
+
+
+
+
+
+struct LinkedListStack<T>{
+    next: *const LinkedListStack<T>,
+    value: Option<T>,
+}
+impl<T> LinkedListStack<T>{
+    fn new() -> Self{
+        Self { next: std::ptr::null(), value: None }
+    }
+    fn peek(&self) -> Option<&T>{
+        todo!()
+    }
+    fn pop(&mut self) -> Option<T>{
+        todo!()
+    }
+    fn push(&mut self, val:T){
+        todo!()
+    }
+    fn is_empty(&self) -> bool{
+        todo!()
+    }
+    fn len(&self) -> usize{
+        todo!()
+    }
+}
