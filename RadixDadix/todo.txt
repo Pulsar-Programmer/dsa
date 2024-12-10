@@ -1,0 +1,13 @@
+The goal of the lab is to demonstrate how Radix Sort sorts integers in linear time.
+
+
+The elements should be presented as boxes with an integer inside which will be split and
+recombined based on the individual digits until the elements are sorted. The integers should be
+loaded in from a csv file and can be assumed to be in base 10 and that there will be less than 50
+and will be non-negative.
+
+Both the MSD and LSD Radix sort must be demonstrated (the user can choose this), the
+numbers will then start to distribute and recombine.
+All inputs (including the name of the input file) needs to be through a GUI. No inputs outputs in
+the system.
+Be creative with the animation of the split. Include a slider for the animation speed.
