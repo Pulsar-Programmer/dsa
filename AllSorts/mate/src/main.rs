@@ -41,3 +41,9 @@ fn outplace_recursive_vec_merge_sort<T: Ord>(mut v1: Vec<T>) -> Vec<T>{
 
 
 }
+
+
+
+fn outplace_recursive_vec_lomuto_quick_sort(){
+    
+}
