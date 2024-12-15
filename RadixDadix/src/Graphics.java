@@ -10,8 +10,10 @@ public class Graphics extends JPanel {
     private ArrayList<Piece> pieces;
 
     public Graphics(ArrayList<Piece> pieces){
-        
+        this.pieces = pieces;
     }
+
+    
 
 
 
