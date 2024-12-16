@@ -15,25 +15,48 @@ public class App {
         ///We get the operating system so we know which operating system is being used for the path.
         final String os_name = System.getProperty("os.name").toLowerCase();
         final String path = os_name.contains("win") ? ".\\" : "./";
+        
+        ///We create our frame.
+        JFrame foundation = new JFrame();
+        foundation.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        foundation.setVisible(true);
+        foundation.setSize(1000, 1000);
+        // foundation.setSize(NewEngland.x(100), NewEngland.y(100));
+        
+        RadixGraphics handle = new RadixGraphics();
+        foundation.add(handle);
+        
+        while(true){
+            
+            ///We create the File Chooser.
+            JFileChooser jchoose = new JFileChooser();
+            jchoose.setCurrentDirectory(new File(path));
+            jchoose.showOpenDialog(null);
 
-        ///We create the File Chooser.
-        JFileChooser jchoose = new JFileChooser();
-        jchoose.setCurrentDirectory(new File(path));
-        jchoose.showOpenDialog(null);
+            ///We obtain the file and process the input.
+            File csv = jchoose.getSelectedFile();
+            Scanner scanner = new Scanner(csv);
+            scanner.useDelimiter(",");
 
-        ///We obtain the file and process the input.
-        File csv = jchoose.getSelectedFile();
-        Scanner scanner = new Scanner(csv);
-        scanner.useDelimiter(",");
+            // ArrayList<Integer> array = new ArrayList<>();
+            // while (scanner.hasNext()) {
+            //     array.add(Integer.parseInt(scanner.next()));
+            // }
+            // handle.setPieces(array);
+            handle.start();
+            foundation.repaint();
 
-        ArrayList<Integer> array = new ArrayList<>();
-        while (scanner.hasNext()) {
-            array.add(Integer.parseInt(scanner.next()));
+            scanner.close();
+
+
+
+
+
+
+
+
+
+
         }
-        scanner.close();
-        
-        JFrame frame = new JFrame();
-        
-        
     }
 }
