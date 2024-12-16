@@ -36,7 +36,7 @@ public class App {
             ///We obtain the file and process the input.
             File csv = jchoose.getSelectedFile();
             Scanner scanner = new Scanner(csv);
-            scanner.useDelimiter(",");
+            // scanner.useDelimiter(",");
 
             // ArrayList<Integer> array = new ArrayList<>();
             // while (scanner.hasNext()) {

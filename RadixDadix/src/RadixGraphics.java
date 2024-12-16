@@ -7,7 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.TextArea;
 
 public class RadixGraphics extends JPanel {
@@ -37,10 +37,24 @@ public class RadixGraphics extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         var g2d = (Graphics2D)g;
-        setLayout(new FlowLayout());
-        add(new TextArea());
-        add(new TextArea());
-        add(new TextArea());
+        placeArray(g2d, new Point(100, 100), this.pieces);
+    }
+
+
+
+
+
+
+
+    private static void placeArray(Graphics2D ctx, Point p, ArrayList<Integer> list){
+        for(var i = 0; i < list.size(); i++){
+            var x = p.x + i * 50;
+            var y = p.y;
+            ctx.setColor(Color.black);
+            ctx.setFont(font);
+            ctx.drawRect(x, y, x+50, y+50);
+            ctx.drawString(list.get(i).toString(), x, y);
+        }
     }
 
 
