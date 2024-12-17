@@ -4,11 +4,12 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 
 public class Box {
-    public int x, y, width, height;
+    public double x, y;
+    public int width, height;
     private String content;
     // private int selected;
 
-    public Box(int x, int y, int width, int length, String content) {
+    public Box(double x, double y, int width, int length, String content) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -33,52 +34,60 @@ public class Box {
         FontMetrics fm = ctx.getFontMetrics();
         int yOffset = fm.getAscent();
 
-        ctx.drawString(content, x + 5, y + yOffset);
-        ctx.drawRect(x, y, width, height);
+        ctx.drawString(content, (int)x + 5, (int)y + yOffset);
+        ctx.drawRect((int)x, (int)y, width, height);
     }
 
-
+    /** Also known as the `common lerp`, it is the lerp adjusted for the animation speed. */
+    public void lerp(Point target){
+        lerp(target, RadixGraphics.LERP_TIME);
+    }
 
     ///We lerp the box with a time.
-    public void lerp(Point target, int time){
-        var original = new Point(x, y);
+    public void lerp(Point target, double time){
+        double dx = target.x - x;
+        double dy = target.y - y;
         for(var i = 0; i < time; i++){
             App.sleep_safe(1);
-            x += (target.x - original.x)/((double)time);
-            y += (target.y - original.y)/((double)time);
+            x += dx/time;
+            y += dy/time;
         }
     }
+
+    // public void move(Point target){
+    //     move(target, RadixGraphics.SPEED);
+    // }
 
     ///We move the box with a speed.
-    public void move(Point target, int speed){
-        int dx = target.x - x; // Difference in x direction
-        int dy = target.y - y; // Difference in y direction
+    // public void move(Point target, double speed){
+    //     int dx = target.x - x; // Difference in x direction
+    //     int dy = target.y - y; // Difference in y direction
 
-        // Normalize the direction for movement along x and y
-        double distance = Math.sqrt(dx * dx + dy * dy); // Hypotenuse, total distance to the target
-        double moveX = (dx / distance) * speed; // Step size in the x direction
-        double moveY = (dy / distance) * speed; // Step size in the y direction
+    //     // Normalize the direction for movement along x and y
+    //     double distance = Math.sqrt(dx * dx + dy * dy); // Hypotenuse, total distance to the target
+    //     double moveX = (dx / distance) * speed; // Step size in the x direction
+    //     double moveY = (dy / distance) * speed; // Step size in the y direction
 
-        while(true){
-            App.sleep_safe(1);
-            x += moveX;
-            y += moveY;
+    //     while(true){
+    //         App.sleep_safe(1);
+    //         x += moveX;
+    //         y += moveY;
 
-            // If the box has reached the target in both x and y directions, stop
-            if ((dx > 0 && x >= target.x) || (dx < 0 && x <= target.x)) {
-                x = target.x; // Ensure no overshoot in the x direction
-            }
+    //         // If the box has reached the target in both x and y directions, stop
+    //         if ((dx > 0 && x >= target.x) || (dx < 0 && x <= target.x)) {
+    //             x = target.x; // Ensure no overshoot in the x direction
+    //         }
 
-            if ((dy > 0 && y >= target.y) || (dy < 0 && y <= target.y)) {
-                y = target.y; // Ensure no overshoot in the y direction
-            }
+    //         if ((dy > 0 && y >= target.y) || (dy < 0 && y <= target.y)) {
+    //             y = target.y; // Ensure no overshoot in the y direction
+    //         }
 
-            // If the box has reached both target.x and target.y, stop the movement
-            if (x == target.x && y == target.y) {
-                break;
-            }
-        }
-    }
+    //         // If the box has reached both target.x and target.y, stop the movement
+    //         if (x == target.x && y == target.y) {
+    //             break;
+    //         }
+    //     }
+    // }
 
 
 

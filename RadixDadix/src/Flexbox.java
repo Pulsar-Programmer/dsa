@@ -36,6 +36,7 @@ public class Flexbox {
     public void spaceOut() {
         if(elements.size() >= 1){
             var box = elements.get(0);
+            box.lerp(zero, 1000);
             box.x = zero.x;
             box.y = zero.y;
         }
@@ -43,7 +44,7 @@ public class Flexbox {
             Box prevBox = elements.get(i - 1);
             Box currentBox = elements.get(i);
             // Set the x of the current box based on the previous box's width + 20 space
-            int newX = prevBox.x + prevBox.width + 20;
+            int newX = (int)prevBox.x + prevBox.width + 20;
             currentBox.x = newX;
             currentBox.y = prevBox.y;
         }

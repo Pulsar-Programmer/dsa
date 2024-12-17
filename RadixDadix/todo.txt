@@ -25,3 +25,4 @@ Be creative with the animation of the split.
 
 ·Create LSD > Queues, LSD > Counting
 ·Test what happens without the Fira Code font
+·Clean Up All Code

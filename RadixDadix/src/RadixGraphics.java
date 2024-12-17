@@ -15,6 +15,7 @@ import java.awt.image.BufferedImage;
 
 public class RadixGraphics extends JPanel {
     public final static Font FONT = new Font("Fira Code", Font.PLAIN, 24);
+    public static double LERP_TIME = 1000;
 
     private ArrayList<Integer> pieces;
     public ArrayList<Box> boxes;
@@ -107,13 +108,16 @@ public class RadixGraphics extends JPanel {
 
     public void msd(){
         //TODO
-        boxes.get(0).move(new Point(300, 300), 2);
-            
         // var flex = new Flexbox(new Point(10, 100));
         // for(var  i = 0; i < boxes.size(); i++){
         //     flex.addBox(boxes.get(boxes.size() - i - 1));
         // }
         // flexers.add(flex);
+
+        while(true){
+            boxes.get(0).lerp(new Point(300, 300));
+            boxes.get(0).lerp(new Point(100, 100));
+        }
         
 
 
@@ -122,11 +126,11 @@ public class RadixGraphics extends JPanel {
 
 
     private static void draw_separator(Graphics2D ctx, Box one, Box two){
-        int separatorX1 = one.x + one.width; // Right edge of Box 1
-        int separatorX2 = two.x; // Left edge of Box 2
+        int separatorX1 = (int)one.x + one.width; // Right edge of Box 1
+        int separatorX2 = (int)two.x; // Left edge of Box 2
 
         int middle_of_edges = (separatorX1 + separatorX2) / 2;
-        int y_middle = one.y + one.height / 2;
+        int y_middle = (int)one.y + one.height / 2;
 
         ctx.setColor(Color.BLACK);
         ctx.drawLine(middle_of_edges,  y_middle - one.height / 8 * 9, middle_of_edges, y_middle + one.height / 8 * 9);

@@ -30,15 +30,17 @@ public class App {
         handle.setBackground(new Color(0xCDA678));
         foundation.add(handle);
         
-        // ///We create a slider for the animation speed.
-        // var animation_slider = new JSlider(0, 100, 0);
-        // animation_slider.setMajorTickSpacing(10);
-        // animation_slider.setMinorTickSpacing(1);
-        // animation_slider.setPaintTicks(true);
-        // animation_slider.setPaintLabels(true);
-        // foundation.add(animation_slider, BorderLayout.SOUTH);
-        // handle.setVisible(true);
-        // animation_slider.setVisible(true);
+        ///We create a slider for the animation speed.
+        var animation_slider = new JSlider(0, 10, 0);
+        animation_slider.setMajorTickSpacing(2);
+        animation_slider.setMinorTickSpacing(1);
+        animation_slider.setPaintTicks(true);
+        animation_slider.setPaintLabels(true);
+        foundation.add(animation_slider, BorderLayout.SOUTH);
+
+        foundation.setVisible(true);
+        animation_slider.setVisible(true);
+        handle.setVisible(true);
 
         while(true){
             handle.clear();
@@ -71,6 +73,7 @@ public class App {
             ///Spawn a second thread to periodically call repaint.
             Thread drawer = new Thread(() -> {
                 while(is_painting[0]){
+                    RadixGraphics.LERP_TIME = 2000 / (animation_slider.getValue() + 1);
                     foundation.repaint();
                 }
             });
