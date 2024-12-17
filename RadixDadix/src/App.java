@@ -41,6 +41,7 @@ public class App {
         // animation_slider.setVisible(true);
 
         while(true){
+            handle.clear();
             
             ///We create the File Chooser.
             JFileChooser jchoose = new JFileChooser();
@@ -55,33 +56,64 @@ public class App {
                 array.add(Integer.parseInt(scanner.next()));
             }
             scanner.close();
-            handle = new RadixGraphics(array);
-            System.out.println(handle.boxes);
-            // handle.setBackground(new Color(0xCDA678));
+            handle.setPieces(array);
+
             
+
             ///We must select our preferred sort type.
             String[] choices = {"MSD", "LSD"};
             String option = (String) JOptionPane.showInputDialog(null, "Sort Method", "What method should be used to sort the elements?", 
             JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
 
+
+
+            final boolean[] is_painting = {true};
+            ///Spawn a second thread to periodically call repaint.
+            Thread drawer = new Thread(() -> {
+                while(is_painting[0]){
+                    foundation.repaint();
+                }
+            });
+            drawer.start();
+
             ///We choose our type of sort.
             if(option.equals("MSD")){
-                // handle.msd();
+                handle.msd();
             } else {
-                // handle.lsd();
-            }
-            
-            while (true) {
-                foundation.repaint();
+                handle.lsd();
             }
 
-            // ///Spawn a second thread to periodically call repaint.
-            // new Thread(() -> {
-            //     while(true){
-            //         foundation.repaint();
-            //     }
-            // }).start();
+            is_painting[0] = false;
+
+            App.sleep_safe(1000);
+            
+            try {
+                drawer.join(); // Wait for the repainting thread to finish
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            int choice = JOptionPane.showConfirmDialog(
+                    null, // Parent component (null means no parent)
+                    "Do you want to run again?", // Message to show
+                    "Run Again", // Title of the dialog
+                    JOptionPane.YES_NO_OPTION // Options (Yes and No buttons)
+            );
+
+            // If user clicks "Yes" (response = 0), proceed to run again
+            if (choice != JOptionPane.YES_OPTION) {
+                break;
+            }
         }
         
+    }
+
+    ///A method to sleep safely.
+    public static void sleep_safe(long amt_ms){
+        try {
+            Thread.sleep(amt_ms);
+        } catch (Exception e) {
+
+        }
     }
 }

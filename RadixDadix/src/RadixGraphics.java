@@ -21,6 +21,7 @@ public class RadixGraphics extends JPanel {
     // private ArrayList<RadixHolder> holders;
     // private ArrayList<Pointer> pointers;
     private ArrayList<Slicer> slicers;
+    private ArrayList<Flexbox> flexers;
     
     public RadixGraphics(){
         pieces = new ArrayList<>();
@@ -28,6 +29,7 @@ public class RadixGraphics extends JPanel {
         // holders = new ArrayList<>();
         // pointers = new ArrayList<>();
         slicers = new ArrayList<>();
+        flexers = new ArrayList<>();
     }
     public RadixGraphics(ArrayList<Integer> pieces){
         this();
@@ -41,6 +43,7 @@ public class RadixGraphics extends JPanel {
     }
     public void setPieces(ArrayList<Integer> pieces) {
         this.pieces = pieces;
+        start();
     }
 
     public void start(){
@@ -52,21 +55,23 @@ public class RadixGraphics extends JPanel {
         super.paintComponent(g);
         var ctx = (Graphics2D)g;
 
-        // System.out.println(boxes.size());
         for (Box box : boxes) {
-            System.out.println("Test");
             box.draw(ctx);
         }
         for (Slicer slicer : slicers) {
             slicer.draw(ctx);
         }
+        for(Flexbox flexbox: flexers){
+            flexbox.draw(ctx);
+        }
     }
 
-
-
-
-
-
+    public void clear(){
+        pieces.clear();
+        boxes.clear();
+        flexers.clear();
+        slicers.clear();
+    }
 
     private void placeArray(Point p){
         var list = pieces;
@@ -89,7 +94,6 @@ public class RadixGraphics extends JPanel {
 
             x += x_offset + 20;
         }
-        System.out.println(boxes);
     }
 
 
@@ -103,9 +107,14 @@ public class RadixGraphics extends JPanel {
 
     public void msd(){
         //TODO
-
-
-
+        boxes.get(0).move(new Point(300, 300), 2);
+            
+        // var flex = new Flexbox(new Point(10, 100));
+        // for(var  i = 0; i < boxes.size(); i++){
+        //     flex.addBox(boxes.get(boxes.size() - i - 1));
+        // }
+        // flexers.add(flex);
+        
 
 
     }

@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 
 public class Slicer {
     public final static Font FONT = new Font("Fira Code", Font.PLAIN, 10);
@@ -48,6 +49,4 @@ public class Slicer {
         x = middle_of_edges;
         y = y_middle;
     }
-
-    
 }
