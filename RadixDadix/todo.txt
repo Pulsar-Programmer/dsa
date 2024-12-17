@@ -1,6 +1,6 @@
 
 ·Get back into graphics
-·
+·Do ALL constructors, getters, and setters
 
 
 

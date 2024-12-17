@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.io.File;
 import java.security.Key;
 import java.util.ArrayList;
@@ -20,11 +21,11 @@ public class App {
         JFrame foundation = new JFrame();
         foundation.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         foundation.setVisible(true);
-        foundation.setSize(1000, 1000);
-        // foundation.setSize(NewEngland.x(100), NewEngland.y(100));
+        foundation.setSize(RadixGraphics.scrn_x(100), RadixGraphics.scrn_y(100));
         
         RadixGraphics handle = new RadixGraphics();
         foundation.add(handle);
+        handle.setBackground(new Color(0xCDA678));
         
         while(true){
             
@@ -36,27 +37,20 @@ public class App {
             ///We obtain the file and process the input.
             File csv = jchoose.getSelectedFile();
             Scanner scanner = new Scanner(csv);
-            // scanner.useDelimiter(",");
 
-            // ArrayList<Integer> array = new ArrayList<>();
-            // while (scanner.hasNext()) {
-            //     array.add(Integer.parseInt(scanner.next()));
-            // }
-            // handle.setPieces(array);
-            handle.start();
-            foundation.repaint();
-
+            ArrayList<Integer> array = new ArrayList<>();
+            while (scanner.hasNext()) {
+                array.add(Integer.parseInt(scanner.next()));
+            }
             scanner.close();
-
-
-
-
-
-
-
-
-
-
+            handle.setPieces(array);
+            while (true) {
+                foundation.repaint();
+                if(5!=5){break;}
+            }
+            
+            
         }
+        
     }
 }
