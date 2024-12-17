@@ -61,7 +61,7 @@ public class Flexbox {
             Box prevBox = elements.get(i - 1);
             Box currentBox = elements.get(i);
             // Set the x of the current box based on the previous box's width + 20 space
-            int newX = (int)prevBox.x + prevBox.width + 20;
+            int newX = (int)prevBox.x + prevBox.width + 10;
             currentBox.lerp(new Point(newX, (int)prevBox.y));
         }
     }

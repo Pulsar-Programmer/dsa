@@ -14,8 +14,8 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 
-public class RadixGraphics extends JPanel {
-    public final static Font FONT = new Font("Fira Code", Font.PLAIN, 24);
+public class RadixGraphics extends JPanel {//24
+    public final static Font FONT = new Font("Fira Code", Font.PLAIN, 15);
     public static double LERP_TIME = 1000;
     public static Point z = new Point(40, 10);
 
@@ -145,84 +145,104 @@ public class RadixGraphics extends JPanel {
         var max = Collections.max(pieces);
         int max_d = (int)Math.floor(Math.log10(max)) + 1;
         Flexbox main = new Flexbox(boxes, z);
-        for(int d = max_d - 1; d >= 0; d--){
-            flexers.clear();
-            // slicers.clear();
+        recursive_msd(max_d, main);
+    }
 
-            ///We split apart into 10 cases for each digit.
-            for(var i = 0; i < 10; i++){
-                var fbox = new Flexbox(new Point(z.x, (i + 10) * 40), Integer.toString(i).charAt(0));
-                flexers.add(fbox);
-            }
-            for(var i = 0; i < main.elements.size(); i++){
-                var value = check_digit(d, main.elements.get(i).content, max_d);
-                flexers.get(value).addBox(main.elements.get(i));
-            }
-            for (var flexer : flexers) {
-                flexer.spaceOut();
-            }
-            main.elements.clear();
 
-            for (var flexer : flexers) {
-                for(var elem : flexer.elements){
-                    main.addBox(elem);
-                }
-            }
 
-            main.spaceOut();
+    public void recursive_msd(int d, Flexbox main){
+        if(d==0 || main.elements.size() <= 1){
+            return;
+        }
+        flexers.clear();
+        
+        ///We split apart into 10 cases for each digit.
+        for(var i = 0; i < 10; i++){
+            var fbox = new Flexbox(new Point(z.x, (i + 10) * 40), Integer.toString(i).charAt(0));
+            flexers.add(fbox);
+        }
+        ///For each element, we check the digit and place it into a flex box.
+        for(var i = 0; i < main.elements.size(); i++){
+            var value = check_digit(d-1, main.elements.get(i).content, d);
+            flexers.get(value).addBox(main.elements.get(i));
+        }
+        ///We visualize all the flexers.
+        for (var flexer : flexers) {
+            flexer.spaceOut();
+        }
+        ///We clear all the elements from the main portion to put them back in.
+        main.elements.clear();
+        ///We add the elements into main.
+        for (var flexer : flexers) {
+            for(var elem : flexer.elements){
+                main.addBox(elem);
+            }
+        }
+        ///We visualize main.
+        main.spaceOut();
+
+
+        var local_slices = new ArrayList<Slicer>();
+
+        ///We formulate the slices.
+        Slicer slice = new Slicer(z.x-5, z.y+10, 30, '0');
+        local_slices.add(slice);
+        slicers.add(slice);
+        ///We initialize `i` and `j`.
+        int i = 0;
+        int j = 1;
+        while(true) {
+            ///We stop if we reach the end.
+            if(j >= flexers.size()) break;
+
+            ///We get the current and next flexer.
+            var currentFlexer = flexers.get(i);
+            var nextFlexer = flexers.get(j);
+
+            ///We attempt to find the end of the current, otherwise we continue.
+            Box endOfCurrent;
+            if(currentFlexer.elements.isEmpty()){
+                i++;
+                j++;
+                continue;
+            } else {
+                // Get the "end" of the current flexer (last element)
+                endOfCurrent = currentFlexer.elements.get(currentFlexer.elements.size() - 1);
+            }
             
-            Slicer slice = new Slicer(z.x-5, z.y+10, 30, '0');
-            slicers.add(slice);
-
-            int i = 0;
-            int j = 1;
-            while(true) {
-                if(j >= flexers.size()) break;
-
-                var currentFlexer = flexers.get(i);
-                var nextFlexer = flexers.get(j);
-
-                Box endOfCurrent;
-                if(currentFlexer.elements.isEmpty()){
-                    i++;
-                    j++;
-                    continue;
-                } else {
-                    // Get the "end" of the current flexer (last element)
-                    endOfCurrent = currentFlexer.elements.get(currentFlexer.elements.size() - 1);
-                }
-                
-
-                
-                Box startOfNext;
-                if(nextFlexer.elements.isEmpty()){
-                    j++;
-                    continue;
-                } else {
-                    // Get the "beginning" of the next flexer (first element)
-                    startOfNext = nextFlexer.elements.get(0);
-                }
-
-                i = j - 1;
-
-                // Perform your operation between the two boundary elements
-                Slicer splice = new Slicer(endOfCurrent, startOfNext, (char) ('0' + j));
-                slicers.add(splice);
-
-                i+=1;
-                j+=1;
+            ///We attempt to find the start of the next, otherwise we continue the j in search for another next.
+            Box startOfNext;
+            if(nextFlexer.elements.isEmpty()){
+                j++;
+                continue;
+            } else {
+                // Get the "beginning" of the next flexer (first element)
+                startOfNext = nextFlexer.elements.get(0);
             }
-            break;
-            // for (Box box : main.elements) {
-                
-            // }
 
-            
-            
+            ///We can bring i back to us if our j move was successful.
+            i = j - 1;
 
+            ///We add the splice.
+            Slicer splice = new Slicer(endOfCurrent, startOfNext, (char) ('0' + j));
+            local_slices.add(splice);
+            slicers.add(splice);
 
+            ///We increment them per time.
+            i+=1;
+            j+=1;
+        }
 
+        var local_flexers = new ArrayList<Flexbox>();
+        for(var k = 0; k<flexers.size(); k++){
+            local_flexers.add(flexers.get(k));
+        }
+        flexers.clear();
 
+        for(var s = 0; s<local_slices.size(); s++){
+            var splice = local_slices.get(s);
+            var next = new Flexbox(local_flexers.get(s).elements, new Point(splice.x+5, splice.y-10));
+            recursive_msd(d-1, next);
         }
     }
     
