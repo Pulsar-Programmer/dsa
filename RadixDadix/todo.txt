@@ -1,17 +1,13 @@
-
-·Get back into graphics
+·Allow larger arrays to loop around
+·Add LSD with Queues
+·Create better box texture
+·Comment
 ·Do ALL constructors, getters, and setters
 
-
-
-
-The goal of the lab is to demonstrate how Radix Sort sorts integers in linear time.
-
-
-The elements should be presented as boxes with an integer inside which will be split and
-recombined based on the individual digits until the elements are sorted. The integers should be
-loaded in from a csv file and can be assumed to be in base 10 and that there will be less than 50
-and will be non-negative.
+·The elements should be presented as boxes with an integer inside 
+which will be split and
+recombined based on the individual digits until the elements are sorted. 
+·there will be less than 50 and will be non-negative.
 
 
 
@@ -20,6 +16,12 @@ numbers will then start to distribute and recombine.
 
 
 
-All inputs (including the name of the input file) needs to be through a GUI. No inputs outputs in
-the system.
-Be creative with the animation of the split. Include a slider for the animation speed.
+
+Be creative with the animation of the split. 
+
+·Include a slider for the animation speed.
+·Privatize All Variables
+·Generically create the size of the font based on amount
+
+·Create LSD > Queues, LSD > Counting
+·Test what happens without the Fira Code font
