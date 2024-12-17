@@ -147,10 +147,11 @@ public class RadixGraphics extends JPanel {
         Flexbox main = new Flexbox(boxes, z);
         for(int d = max_d - 1; d >= 0; d--){
             flexers.clear();
+            // slicers.clear();
 
             ///We split apart into 10 cases for each digit.
             for(var i = 0; i < 10; i++){
-                var fbox = new Flexbox(new Point(z.x, (i + 2) * 40), Integer.toString(i).charAt(0));
+                var fbox = new Flexbox(new Point(z.x, (i + 10) * 40), Integer.toString(i).charAt(0));
                 flexers.add(fbox);
             }
             for(var i = 0; i < main.elements.size(); i++){
@@ -161,12 +162,62 @@ public class RadixGraphics extends JPanel {
                 flexer.spaceOut();
             }
             main.elements.clear();
+
             for (var flexer : flexers) {
                 for(var elem : flexer.elements){
                     main.addBox(elem);
                 }
             }
+
             main.spaceOut();
+            
+            Slicer slice = new Slicer(z.x-5, z.y+10, 30, '0');
+            slicers.add(slice);
+
+            int i = 0;
+            int j = 1;
+            while(true) {
+                if(j >= flexers.size()) break;
+
+                var currentFlexer = flexers.get(i);
+                var nextFlexer = flexers.get(j);
+
+                Box endOfCurrent;
+                if(currentFlexer.elements.isEmpty()){
+                    i++;
+                    j++;
+                    continue;
+                } else {
+                    // Get the "end" of the current flexer (last element)
+                    endOfCurrent = currentFlexer.elements.get(currentFlexer.elements.size() - 1);
+                }
+                
+
+                
+                Box startOfNext;
+                if(nextFlexer.elements.isEmpty()){
+                    j++;
+                    continue;
+                } else {
+                    // Get the "beginning" of the next flexer (first element)
+                    startOfNext = nextFlexer.elements.get(0);
+                }
+
+                i = j - 1;
+
+                // Perform your operation between the two boundary elements
+                Slicer splice = new Slicer(endOfCurrent, startOfNext, (char) ('0' + j));
+                slicers.add(splice);
+
+                i+=1;
+                j+=1;
+            }
+            break;
+            // for (Box box : main.elements) {
+                
+            // }
+
+            
             
 
 
@@ -239,70 +290,6 @@ public class RadixGraphics extends JPanel {
             }
         }
     }
-
-
-    public static void lsdRadixSort(int[] arr) {
-        if (arr.length == 0) return;
-
-        // Find the maximum number to determine the number of digits
-        int max = Arrays.stream(arr).max().orElse(0);
-        int exp = 1; // Exponent to extract digits (1 for units, 10 for tens, etc.)
-        int radix = 10; // Base of the number system (10 for decimal)
-
-        while (max / exp > 0) {
-            countingSortByDigit(arr, exp, radix);
-            exp *= radix; // Move to the next significant digit
-        }
-    }
-
-    private static void countingSortByDigit(int[] arr, int exp, int radix) {
-        int[] output = new int[arr.length];
-        int[] count = new int[radix];
-
-        // Count occurrences of each digit
-        for (int num : arr) {
-            int digit = (num / exp) % radix;
-            count[digit]++;
-        }
-
-        // Accumulate counts
-        for (int i = 1; i < radix; i++) {
-            count[i] += count[i - 1];
-        }
-
-        // Build output array (stable sort)
-        for (int i = arr.length - 1; i >= 0; i--) {
-            int digit = (arr[i] / exp) % radix;
-            output[--count[digit]] = arr[i];
-        }
-
-        // Copy sorted array back to original
-        System.arraycopy(output, 0, arr, 0, arr.length);
-    }
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-   
-
-
     
     ///Here, we intend to get the maximum x value that the person may scale their screen up to. The input is mapped between this range.
     public static int scrn_x(double pct){

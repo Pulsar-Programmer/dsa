@@ -9,12 +9,18 @@ public class Slicer {
 
     public int x, y, size;
     public char content;
+    // public 
     
     
     public Slicer(int x, int y, int size, char content) {
         this.x = x;
         this.y = y;
         this.size = size;
+        this.content = content;
+    }
+
+    public Slicer(Box one, Box two, char content) {
+        move_between(one, two);
         this.content = content;
     }
 

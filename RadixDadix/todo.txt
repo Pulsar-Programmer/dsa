@@ -1,28 +1,15 @@
-·Allow larger arrays to loop around
-·Add LSD with Queues
-·Create better box texture
+ ·there will be less than 50 and will be non-negative.
+
+·MSD
+·Be creative with the animation of the split. 
+·LSD > Counting
+·Test what happens without the Fira Code font
+·Clean Up All Code
+·Privatize All Variables
+·Generically create the size of the font based on amount
 ·Comment
 ·Do ALL constructors, getters, and setters
 
-·The elements should be presented as boxes with an integer inside 
-which will be split and
-recombined based on the individual digits until the elements are sorted. 
-·there will be less than 50 and will be non-negative.
+·Allow larger arrays to loop around
+·Create better box texture
 
-
-
-Both the MSD and LSD Radix sort must be demonstrated (the user can choose this), the
-numbers will then start to distribute and recombine.
-
-
-
-
-Be creative with the animation of the split. 
-
-·Include a slider for the animation speed.
-·Privatize All Variables
-·Generically create the size of the font based on amount
-
-·Create LSD > Queues, LSD > Counting
-·Test what happens without the Fira Code font
-·Clean Up All Code
