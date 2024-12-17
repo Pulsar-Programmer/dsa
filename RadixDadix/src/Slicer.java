@@ -40,11 +40,11 @@ public class Slicer {
     public void move_between(Box one, Box two){
         size = one.height / 8 * 9;
 
-        int separatorX1 = one.x + one.width; // Right edge of Box 1
-        int separatorX2 = two.x; // Left edge of Box 2
+        int separatorX1 = (int)one.x + one.width; // Right edge of Box 1
+        int separatorX2 = (int)two.x; // Left edge of Box 2
 
         int middle_of_edges = (separatorX1 + separatorX2) / 2;
-        int y_middle = one.y + one.height / 2;
+        int y_middle = (int)one.y + one.height / 2;
 
         x = middle_of_edges;
         y = y_middle;

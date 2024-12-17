@@ -19,16 +19,16 @@ public class RadixGraphics extends JPanel {
 
     private ArrayList<Integer> pieces;
     public ArrayList<Box> boxes;
-    // private ArrayList<RadixHolder> holders;
-    // private ArrayList<Pointer> pointers;
+    private ArrayList<Holder> holders;
+    private ArrayList<Pointer> pointers;
     private ArrayList<Slicer> slicers;
     private ArrayList<Flexbox> flexers;
     
     public RadixGraphics(){
         pieces = new ArrayList<>();
         boxes = new ArrayList<>();
-        // holders = new ArrayList<>();
-        // pointers = new ArrayList<>();
+        holders = new ArrayList<>();
+        pointers = new ArrayList<>();
         slicers = new ArrayList<>();
         flexers = new ArrayList<>();
     }
@@ -48,7 +48,7 @@ public class RadixGraphics extends JPanel {
     }
 
     public void start(){
-        placeArray(new Point(10, 10));
+        placeArray(new Point(40, 10));
     }
 
     @Override
@@ -62,8 +62,14 @@ public class RadixGraphics extends JPanel {
         for (Slicer slicer : slicers) {
             slicer.draw(ctx);
         }
+        for(Pointer pointer : pointers){
+            pointer.draw(ctx);
+        }
         for(Flexbox flexbox: flexers){
             flexbox.draw(ctx);
+        }
+        for(Holder holder : holders){
+            holder.draw(ctx);
         }
     }
 
@@ -72,6 +78,8 @@ public class RadixGraphics extends JPanel {
         boxes.clear();
         flexers.clear();
         slicers.clear();
+        pointers.clear();
+        holders.clear();
     }
 
     private void placeArray(Point p){
@@ -107,34 +115,36 @@ public class RadixGraphics extends JPanel {
     }
 
     public void msd(){
-        //TODO
-        // var flex = new Flexbox(new Point(10, 100));
-        // for(var  i = 0; i < boxes.size(); i++){
-        //     flex.addBox(boxes.get(boxes.size() - i - 1));
-        // }
-        // flexers.add(flex);
 
-        while(true){
-            boxes.get(0).lerp(new Point(300, 300));
-            boxes.get(0).lerp(new Point(100, 100));
+        var flex = new Flexbox(new Point(40, 100));
+        flexers.add(flex);
+        for(var  i = 0; i < boxes.size(); i++){
+            flex.addBox(boxes.get(boxes.size() - i - 1));
         }
+        flex.spaceOut();
         
+        var holder = new Holder(new Point(200, 900));
+        holders.add(holder);
+        for(var  i = 0; i < boxes.size(); i++){
+            holder.addBox(boxes.get(boxes.size() - i - 1));
+        }
+        holder.spaceOut();
 
 
     }
     
 
 
-    private static void draw_separator(Graphics2D ctx, Box one, Box two){
-        int separatorX1 = (int)one.x + one.width; // Right edge of Box 1
-        int separatorX2 = (int)two.x; // Left edge of Box 2
+    // private static void draw_separator(Graphics2D ctx, Box one, Box two){
+    //     int separatorX1 = (int)one.x + one.width; // Right edge of Box 1
+    //     int separatorX2 = (int)two.x; // Left edge of Box 2
 
-        int middle_of_edges = (separatorX1 + separatorX2) / 2;
-        int y_middle = (int)one.y + one.height / 2;
+    //     int middle_of_edges = (separatorX1 + separatorX2) / 2;
+    //     int y_middle = (int)one.y + one.height / 2;
 
-        ctx.setColor(Color.BLACK);
-        ctx.drawLine(middle_of_edges,  y_middle - one.height / 8 * 9, middle_of_edges, y_middle + one.height / 8 * 9);
-    }
+    //     ctx.setColor(Color.BLACK);
+    //     ctx.drawLine(middle_of_edges,  y_middle - one.height / 8 * 9, middle_of_edges, y_middle + one.height / 8 * 9);
+    // }
 
 
 

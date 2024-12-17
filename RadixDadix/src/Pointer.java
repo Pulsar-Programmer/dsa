@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 
 public class Pointer {
     private double x;
@@ -23,14 +24,21 @@ public class Pointer {
     }
 
 
-    // ///We slowly lerp the pointer.
-    // public void move(int x_lerp){
-    //     var original_x = x;
-    //     for(var i = 0; i < 500; i++){
-    //         SortDriver.sleep_safe(1);
-    //         x += (x_lerp - original_x)/500.0;
-    //     }
-    // }
+    /** Also known as the `common lerp`, it is the lerp adjusted for the animation speed. */
+    public void lerp(Point target){
+        lerp(target, RadixGraphics.LERP_TIME);
+    }
+
+    ///We lerp the box with a time.
+    public void lerp(Point target, double time){
+        double dx = target.x - x;
+        double dy = target.y - y;
+        for(var i = 0; i < time; i++){
+            App.sleep_safe(1);
+            x += dx/time;
+            y += dy/time;
+        }
+    }
 
 
 

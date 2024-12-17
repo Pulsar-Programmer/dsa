@@ -31,7 +31,7 @@ public class App {
         foundation.add(handle);
         
         ///We create a slider for the animation speed.
-        var animation_slider = new JSlider(0, 10, 0);
+        var animation_slider = new JSlider(0, 20, 0);
         animation_slider.setMajorTickSpacing(2);
         animation_slider.setMinorTickSpacing(1);
         animation_slider.setPaintTicks(true);

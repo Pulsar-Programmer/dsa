@@ -1,25 +1,25 @@
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Flexbox {
+public class Holder {
 
     private ArrayList<Box> elements;
     Point zero;
     char content;
 
     // Constructor to initialize the ArrayList
-    public Flexbox() {
+    public Holder() {
         elements = new ArrayList<>();
         zero = new Point(0, 0);
         content = '0';
     }
 
-    public Flexbox(Point zero) {
+    public Holder(Point zero) {
         this();
         this.zero = zero;
     }
 
-    public Flexbox(ArrayList<Box> elements, Point zero) {
+    public Holder(ArrayList<Box> elements, Point zero) {
         this(zero);
         this.elements = elements;
     }
@@ -31,13 +31,14 @@ public class Flexbox {
 
     public void draw(Graphics2D ctx){
         ctx.setFont(Slicer.FONT);
-        var centering = !elements.isEmpty() ? elements.get(0).height / 2 : 0;
+        var centering = !elements.isEmpty() ? elements.get(0).width / 2 : 0;
 
+
+        // Get the width of the text (number) to center it properly
         FontMetrics fm = ctx.getFontMetrics();
-        int textHeight = fm.getAscent();
+        int textWidth = fm.charWidth(content);
 
-
-        ctx.drawString(Character.toString(content), zero.x-10, zero.y + centering + textHeight / 2);
+        ctx.drawString(Character.toString(content), zero.x + centering - textWidth / 2, zero.y+50);
     }
 
     // Method to space out the boxes, ensuring each box is placed after the previous one with at least 20 pixels between them
@@ -49,9 +50,9 @@ public class Flexbox {
         for (int i = 1; i < elements.size(); i++) {
             Box prevBox = elements.get(i - 1);
             Box currentBox = elements.get(i);
-            // Set the x of the current box based on the previous box's width + 20 space
-            int newX = (int)prevBox.x + prevBox.width + 20;
-            currentBox.lerp(new Point(newX, (int)prevBox.y));
+
+            int newY = (int)prevBox.y - prevBox.height - 20;
+            currentBox.lerp(new Point((int)prevBox.x, newY));
         }
     }
 }
