@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class Flexbox {
 
-    private ArrayList<Box> elements;
+    ArrayList<Box> elements;
     Point zero;
     char content;
 
@@ -22,6 +22,17 @@ public class Flexbox {
     public Flexbox(ArrayList<Box> elements, Point zero) {
         this(zero);
         this.elements = elements;
+    }
+
+    public Flexbox(ArrayList<Box> elements, Point zero, char content) {
+        this(elements, zero);
+        this.content = content;
+    }
+
+    public Flexbox(Point zero, char content) {
+        this();
+        this.zero = zero;
+        this.content = content;
     }
 
     // Method to add a new box with specified width

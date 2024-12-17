@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -16,6 +17,7 @@ import java.awt.image.BufferedImage;
 public class RadixGraphics extends JPanel {
     public final static Font FONT = new Font("Fira Code", Font.PLAIN, 24);
     public static double LERP_TIME = 1000;
+    public static Point z = new Point(40, 10);
 
     private ArrayList<Integer> pieces;
     public ArrayList<Box> boxes;
@@ -48,7 +50,7 @@ public class RadixGraphics extends JPanel {
     }
 
     public void start(){
-        placeArray(new Point(40, 10));
+        placeArray(z);
     }
 
     @Override
@@ -111,29 +113,72 @@ public class RadixGraphics extends JPanel {
     
 
     public void lsd(){
-        //TODO
+        var max = Collections.max(pieces);
+        int max_d = (int)Math.floor(Math.log10(max)) + 1;
+        Flexbox main = new Flexbox(boxes, z);
+        for(int d = 0; d < max_d; d++){
+            holders.clear();
+
+            ///We split apart into 10 cases for each digit.
+            for(var i = 0; i < 10; i++){
+                var holder = new Holder(new Point((i + 2) * 75, z.y + 900), Integer.toString(i).charAt(0));
+                holders.add(holder);
+            }
+            for(var i = 0; i < main.elements.size(); i++){
+                var value = check_digit(d, main.elements.get(i).content, max_d);
+                holders.get(value).addBox(main.elements.get(i));
+            }
+            for (var holder : holders) {
+                holder.spaceOut();
+            }
+            main.elements.clear();
+            for (var holder : holders) {
+                for(var elem : holder.elements){
+                    main.addBox(elem);
+                }
+            }
+            main.spaceOut();
+        }
     }
 
     public void msd(){
+        var max = Collections.max(pieces);
+        int max_d = (int)Math.floor(Math.log10(max)) + 1;
+        Flexbox main = new Flexbox(boxes, z);
+        for(int d = max_d - 1; d >= 0; d--){
+            flexers.clear();
 
-        var flex = new Flexbox(new Point(40, 100));
-        flexers.add(flex);
-        for(var  i = 0; i < boxes.size(); i++){
-            flex.addBox(boxes.get(boxes.size() - i - 1));
+            ///We split apart into 10 cases for each digit.
+            for(var i = 0; i < 10; i++){
+                var fbox = new Flexbox(new Point(z.x, (i + 2) * 40), Integer.toString(i).charAt(0));
+                flexers.add(fbox);
+            }
+            for(var i = 0; i < main.elements.size(); i++){
+                var value = check_digit(d, main.elements.get(i).content, max_d);
+                flexers.get(value).addBox(main.elements.get(i));
+            }
+            for (var flexer : flexers) {
+                flexer.spaceOut();
+            }
+            main.elements.clear();
+            for (var flexer : flexers) {
+                for(var elem : flexer.elements){
+                    main.addBox(elem);
+                }
+            }
+            main.spaceOut();
+            
+
+
+
+
         }
-        flex.spaceOut();
-        
-        var holder = new Holder(new Point(200, 900));
-        holders.add(holder);
-        for(var  i = 0; i < boxes.size(); i++){
-            holder.addBox(boxes.get(boxes.size() - i - 1));
-        }
-        holder.spaceOut();
-
-
     }
     
-
+    private static int check_digit(int digit, String content, int max_d){
+        String padded = String.format("%0" + max_d + "d", Integer.parseInt(content));
+        return Character.getNumericValue(padded.charAt(max_d - digit - 1));
+    }
 
     // private static void draw_separator(Graphics2D ctx, Box one, Box two){
     //     int separatorX1 = (int)one.x + one.width; // Right edge of Box 1

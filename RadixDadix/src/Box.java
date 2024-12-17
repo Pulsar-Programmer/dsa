@@ -6,7 +6,7 @@ import java.awt.Point;
 public class Box {
     public double x, y;
     public int width, height;
-    private String content;
+    public String content;
     // private int selected;
 
     public Box(double x, double y, int width, int length, String content) {
