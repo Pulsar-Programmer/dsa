@@ -26,7 +26,7 @@ public class Box {
     // }
 
 
-
+    /**We draw a box. */
     public void draw(Graphics2D ctx){
         ctx.setFont(RadixGraphics.FONT);
         ctx.setColor(Color.black);
@@ -43,7 +43,7 @@ public class Box {
         lerp(target, RadixGraphics.LERP_TIME);
     }
 
-    ///We lerp the box with a time.
+    /**We lerp the box with a time.*/
     public void lerp(Point target, double time){
         double dx = target.x - x;
         double dy = target.y - y;
@@ -54,32 +54,32 @@ public class Box {
         }
     }
 
-    //TODO
-    public static void draw_selected_string(Graphics2D ctx, int idx, String text, int x, int y){
-        FontMetrics fm = ctx.getFontMetrics();
 
-        // Calculate the width of the string up to the highlighted character
-        int charStartX = x;
-        for (int i = 0; i < idx; i++) {
-            charStartX += fm.charWidth(text.charAt(i));
-        }
+    // public static void draw_selected_string(Graphics2D ctx, int idx, String text, int x, int y){
+    //     FontMetrics fm = ctx.getFontMetrics();
 
-        // Draw the part of the string before the highlighted character
-        ctx.setColor(Color.BLACK);
-        ctx.drawString(text.substring(0, idx), x, y);
+    //     // Calculate the width of the string up to the highlighted character
+    //     int charStartX = x;
+    //     for (int i = 0; i < idx; i++) {
+    //         charStartX += fm.charWidth(text.charAt(i));
+    //     }
 
-        // Draw the highlighted character
-        char highlightedChar = text.charAt(idx);
-        ctx.setColor(Color.RED);
-        ctx.drawString(String.valueOf(highlightedChar), charStartX, y);
+    //     // Draw the part of the string before the highlighted character
+    //     ctx.setColor(Color.BLACK);
+    //     ctx.drawString(text.substring(0, idx), x, y);
 
-        // Optionally underline the highlighted character
-        int charWidth = fm.charWidth(highlightedChar);
-        int underlineY = y + 2; // Slightly below the baseline
-        ctx.drawLine(charStartX, underlineY, charStartX + charWidth, underlineY);
+    //     // Draw the highlighted character
+    //     char highlightedChar = text.charAt(idx);
+    //     ctx.setColor(Color.RED);
+    //     ctx.drawString(String.valueOf(highlightedChar), charStartX, y);
 
-        // Draw the rest of the string after the highlighted character
-        ctx.setColor(Color.BLACK);
-        ctx.drawString(text.substring(idx + 1), charStartX + charWidth, y);
-    }
+    //     // Optionally underline the highlighted character
+    //     int charWidth = fm.charWidth(highlightedChar);
+    //     int underlineY = y + 2; // Slightly below the baseline
+    //     ctx.drawLine(charStartX, underlineY, charStartX + charWidth, underlineY);
+
+    //     // Draw the rest of the string after the highlighted character
+    //     ctx.setColor(Color.BLACK);
+    //     ctx.drawString(text.substring(idx + 1), charStartX + charWidth, y);
+    // }
 }

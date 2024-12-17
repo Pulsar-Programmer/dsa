@@ -85,24 +85,28 @@ public class App {
                 handle.lsd();
             }
 
+            ///We prevent the loop.
             is_painting[0] = false;
 
+            ///We sleep for a final look.
             App.sleep_safe(1000);
             
+            ///We try to rejoin the thread once done sorting.
             try {
-                drawer.join(); // Wait for the repainting thread to finish
+                drawer.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
+            ///We ask to run again.
             int choice = JOptionPane.showConfirmDialog(
-                    null, // Parent component (null means no parent)
-                    "Do you want to run again?", // Message to show
-                    "Run Again", // Title of the dialog
-                    JOptionPane.YES_NO_OPTION // Options (Yes and No buttons)
+                    null, 
+                    "Do you want to run again?", 
+                    "Run Again", 
+                    JOptionPane.YES_NO_OPTION 
             );
 
-            // If user clicks "Yes" (response = 0), proceed to run again
+            ///We stop if not.
             if (choice != JOptionPane.YES_OPTION) {
                 break;
             }
@@ -110,7 +114,7 @@ public class App {
         
     }
 
-    ///A method to sleep safely.
+    /**A method to sleep safely.*/
     public static void sleep_safe(long amt_ms){
         try {
             Thread.sleep(amt_ms);

@@ -1,13 +1,14 @@
 import java.awt.*;
 import java.util.ArrayList;
 
+/**A class for holding boxes in a particular arrangement. */
 public class Holder {
 
+    ///We have elements, the starting point, and the content of the holder.
     ArrayList<Box> elements;
     Point zero;
     char content;
 
-    // Constructor to initialize the ArrayList
     public Holder() {
         elements = new ArrayList<>();
         zero = new Point(0, 0);
@@ -35,11 +36,12 @@ public class Holder {
         this.content = content;
     }
 
-    // Method to add a new box with specified width
+    /**Adds a box to the holder. */
     public void addBox(Box box) {
         elements.add(box);
     }
 
+    /**Draws the holder with centering corrections. */
     public void draw(Graphics2D ctx){
         ctx.setFont(Slicer.FONT);
         var centering = !elements.isEmpty() ? elements.get(0).width / 2 : 0;
@@ -52,7 +54,7 @@ public class Holder {
         ctx.drawString(Character.toString(content), zero.x + centering - textWidth / 2, zero.y+50);
     }
 
-    // Method to space out the boxes, ensuring each box is placed after the previous one with at least 20 pixels between them
+    /**Spaces out the boxes and places 10px in between them. */
     public void spaceOut() {
         if(elements.size() >= 1){
             var box = elements.get(0);
@@ -62,7 +64,7 @@ public class Holder {
             Box prevBox = elements.get(i - 1);
             Box currentBox = elements.get(i);
 
-            int newY = (int)prevBox.y - prevBox.height - 20;
+            int newY = (int)prevBox.y - prevBox.height - 10;
             currentBox.lerp(new Point((int)prevBox.x, newY));
         }
     }

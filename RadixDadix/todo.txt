@@ -1,13 +1,11 @@
- ·there will be less than 50 and will be non-negative.
+
 
 ·MSD
 ·Be creative with the animation of the split. 
 ·LSD > Counting
 ·Test what happens without the Fira Code font
-·Clean Up All Code
 ·Privatize All Variables
 ·Generically create the size of the font based on amount
-·Comment
 ·Do ALL constructors, getters, and setters
 
 ·Allow larger arrays to loop around
