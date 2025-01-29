@@ -39,7 +39,8 @@ impl<R, const N: usize> DynamicFunction<R, N>{
 
         let r = (self.method)(inp);
         let b = &r;
-        self.storage.insert(inp, r);
-        b
+        // self.storage.insert(inp, r);
+        // b
+        todo!()
     }
 }
