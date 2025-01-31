@@ -1,5 +1,4 @@
 
-import java.util.Stack;
 
 public class TreeNode<T> {
     private TreeNode left;
@@ -27,15 +26,34 @@ public class TreeNode<T> {
         return Math.max(left == null ? 0 : left.height(), right == null ? 0 : right.height());
     }
 
-    public TreeNode remove(TreeNode tn){
-        TreeNode found = null;
-        TreeNode parent = this;
-        Stack to_investigate = new Stack();
-        while(found == null){
-            if(parent.left != null && parent.left == tn) found = parent.left;
-            if(parent.right != null && parent.right == tn) found = parent.right;
-            
+    public TreeNode get(Comparable num){
+        if(num.equals(value)){
+            return this;
         }
-        return found;
+        var selected = num.compareTo(value) < 0 ? left : right;
+        if(selected == null) {
+            return null;
+        } else{
+            return selected.get(num);
+        }
     }
+
+    // public TreeNode<Integer> remove(TreeNode<Integer> tn){
+    //     TreeNode found = null;
+    //     TreeNode parent = this;
+    //     Stack to_investigate = new Stack();
+    //     while(found == null){
+    //         var selection = left != null && left.value < tn.value ? left : right;
+
+    //         if(parent.left != null && parent.left.value == tn.value) found = parent.left;
+    //         if(parent.right != null && parent.right == tn) found = parent.right;
+            
+    //     }
+    //     return found;
+    // }
+
+    // public TreeNode discard_left(){
+        
+
+    // }
 }
