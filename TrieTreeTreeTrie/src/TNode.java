@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -13,6 +14,18 @@ public class TNode {
             runner = runner.add_or_get(c);
         }
         runner.isKey = true;
+    }
+
+    /** Gets a Node based on the given String. May not exist. */
+    public Optional<TNode> getNode(String key){
+        var runner = this;
+        for(Character c : key.toCharArray()){
+            runner = runner.next.get(c.toString());
+            if(runner == null){
+                return Optional.empty();
+            }
+        }
+        return Optional.of(runner);
     }
 
     /** Checks if the Key is present in the Trie. */
@@ -70,9 +83,17 @@ public class TNode {
     }
 
     /** Searches for all possible Keys based on the first starter words. */
-    // public void auto(){
-
-    // }
+    public ArrayList<String> auto(String given){
+        ArrayList<String> words = new ArrayList<>();
+        var val = getNode(given);
+        if(val.isEmpty()){
+            return words;
+        }
+        val.get().next.values().forEach((node) -> {
+            words.addAll(node.auto("").stream().map((word) -> given + word).toList());
+        });
+        return words;
+    }
 
     // @Override
     // public String toString() {
