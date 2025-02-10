@@ -14,6 +14,6 @@ Options:
 such word”) auto(String)
 6. Check if a word is a key isKey(String)
 
-Ask:
-4. Compress (a single chain will be rolled up to a single String) after this you can’t add anymore
-compress()
+End:
+TEST ALL METHODS
+TEST OVERALL FUNCTIONALITY

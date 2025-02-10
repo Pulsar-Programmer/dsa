@@ -45,6 +45,21 @@ public class TNode {
         }
     }
 
+    /** Compresses the tree into perfect Strings by taking any one-node characters and merging them to one unit. */
+    public void compress(){
+        if(next.size() == 1){
+            var next_1 = next.values().iterator().next();
+            var next_2hm = next_1.next;
+            value += next_1.value;
+            next = next_2hm;
+            compress();
+        } else {
+            for(TNode n : next.values()){
+                n.compress();
+            }
+        }
+    }
+
 
 
 }
