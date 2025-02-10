@@ -15,6 +15,15 @@ public class TNode {
         runner.isKey = true;
     }
 
+    /** Checks if the Key is present in the Trie. */
+    public boolean isKey(String key){
+        var runner = this;
+        for(Character c : key.toCharArray()){
+            runner = runner.add_or_get(c);
+        }
+        return runner.isKey;
+    }
+
     /** Deletes an existing Key of the Trie */
     public void deleteKey(String key){
         var runner = this;
@@ -59,6 +68,19 @@ public class TNode {
             }
         }
     }
+
+    /** Searches for all possible Keys based on the first starter words. */
+    // public void auto(){
+
+    // }
+
+    // @Override
+    // public String toString() {
+    //     String total = new String();
+
+
+    //     return value+"->"+next;
+    // }
 
 
 
