@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.Optional;
 
 public class TNode {
     private String value;
@@ -17,13 +18,20 @@ public class TNode {
     /** Deletes an existing Key of the Trie */
     public void deleteKey(String key){
         var runner = this;
+        Optional<TNode> soonest = Optional.empty();
         for(Character c : key.toCharArray()){
+            if(runner.next.size() == 1 || runner.isKey){
+                soonest = Optional.of(runner);
+            }
             runner = runner.next.get(c.toString());
             if(runner == null){
                 return;
             }
         }
-        runner.isKey = false;
+        if(soonest.isPresent()){
+            soonest.get().next.remove(key.substring(key.length()-1));
+        }
+        // runner.isKey = false;
     }
 
     /** Gets a Node or Creates it if it Doesn't Exist */

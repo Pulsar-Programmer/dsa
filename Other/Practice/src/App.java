@@ -1,5 +1,7 @@
 import java.util.Optional;
 
+import javax.swing.tree.TreeNode;
+
 public class App {
     public static void main(String[] args) throws Exception {
         System.out.println("Hello, World!");
@@ -29,5 +31,30 @@ public class App {
     }
 
 
+
+
+
+
+    public static boolean isBST(TNode<Integer> root, int min, int max){
+        if(root == null){
+            return true;
+        }
+        boolean is_bst = true;
+        if(root.left != null){
+            is_bst &= root.left.val < root.val;
+        }
+        if(root.right != null){
+            is_bst &= root.right.val > root.val;
+        }
+        return is_bst && isBST(root.left) && isBST(root.right);
+    }
+
+
     
+}
+
+class TNode<T>{
+    public T val;
+    public TNode<T> left;
+    public TNode<T> right;
 }

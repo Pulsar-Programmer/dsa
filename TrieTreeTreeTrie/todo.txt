@@ -1,22 +1,19 @@
+App:
+After loading the tree (based on a file provided by the user)
+The trie will be constructed from a text file with words/phrases in a single column 
 The goal of the lab is to auto complete a user’s typing after constructing a trie from an
 alphabet.
 
-The trie will be constructed from a text file with words/phrases in a single column
+AutoComplete:
+Will load a text file first, make a Trie out of it
+and then ask the user for options to 1: add 2: delete 3:AutoComplete 4: Compress 5: print inorder
 
-Three classes needs to be created. 
-The third class will be called AutoComplete which will load a text file first, make a Trie out of it
-and then ask the user for options to 1: add 2: delete 3:AutoComplete 4: Compress 5: print
-inorder
-
-Is this graphics?
-
-After loading the tree (based on a file provided by the user)
-You will need to have the following options
-
-
+Options:
 3. Display the tree ( Each Node can display it’s children) line by line toString()
-4. Compress (a single chain will be rolled up to a single String) after this you can’t add anymore
-compress()
 5. Autocomplete (show all possible ways to finish from a prefix, if a prefix doesn’t exist say “no
 such word”) auto(String)
 6. Check if a word is a key isKey(String)
+
+Ask:
+4. Compress (a single chain will be rolled up to a single String) after this you can’t add anymore
+compress()
