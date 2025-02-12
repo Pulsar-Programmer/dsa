@@ -1,16 +1,6 @@
-App:
-After loading the tree (based on a file provided by the user)
-The trie will be constructed from a text file with words/phrases in a single column 
-The goal of the lab is to auto complete a user’s typing after constructing a trie from an
-alphabet.
-
-AutoComplete:
-
-and then ask the user for options to 1: add 2: delete 3:AutoComplete 4: Compress 5: print inorder
-
-End:
 TEST ALL METHODS
 3. Display the tree ( Each Node can display it’s children) line by line toString() -> TEST TO STRING MORE RESPONSIVELY
 5. Autocomplete (show all possible ways to finish from a prefix, if a prefix doesn’t exist say “no
 such word”) auto(String) -> On frontend
 TEST OVERALL FUNCTIONALITY
+5: print inorder

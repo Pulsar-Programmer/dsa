@@ -1,5 +1,5 @@
 public class Dictionary {
-    private TNode root;
+    public TNode root;
 
     public Dictionary(TNode root){
         this.root = root;
