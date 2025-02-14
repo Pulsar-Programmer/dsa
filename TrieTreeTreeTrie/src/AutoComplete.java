@@ -27,13 +27,17 @@ public class AutoComplete{
                 }
                 case 3 -> {
                     System.out.println("Enter the Key to Autocomplete: ");
-                    dictionary.root.auto(stdin.nextLine()).forEach(System.out::println);
+                    var auto = dictionary.root.auto(stdin.nextLine());
+                    if(auto.isEmpty()){
+                        System.out.println("No such word!");
+                    }
+                    auto.forEach(System.out::println);
                 }
                 case 4 -> {
                     dictionary.root.compress();
                     System.out.println("Compressed successfully!");
                 }
-                // case 5 -> dictionary.printInOrder().forEach(System.out::println);
+                case 5 -> System.out.println(dictionary.root);
                 case 6 -> {
                     System.out.println("Exiting...");
                     break skibidi;

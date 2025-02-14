@@ -7,6 +7,12 @@ public class TNode {
     private boolean isKey;
     private HashMap<String, TNode> next;
 
+    public TNode(){
+        this.value = "";
+        isKey = false;
+        next = new HashMap<>();
+    }
+
     /** Adds a Key to the Trie. */
     public void addKey(String key){
         var runner = this;
@@ -39,20 +45,21 @@ public class TNode {
 
     /** Deletes an existing Key of the Trie */
     public void deleteKey(String key){
-        var runner = this;
-        Optional<TNode> soonest = Optional.empty();
+        TNode runner = this;
+        TNode soonest = this;
+        Character last_c = key.charAt(0);
         for(Character c : key.toCharArray()){
-            if(runner.next.size() == 1 || runner.isKey){
-                soonest = Optional.of(runner);
+            //should it be >1 or ==1?
+            if(runner.next.size() > 1 || runner.isKey){
+                soonest = runner;
+                last_c = c;
             }
             runner = runner.next.get(c.toString());
             if(runner == null){
                 return;
             }
         }
-        if(soonest.isPresent()){
-            soonest.get().next.remove(key.substring(key.length()-1));
-        }
+        soonest.next.remove(last_c.toString());
         // runner.isKey = false;
     }
 
@@ -91,17 +98,20 @@ public class TNode {
         }
         val.get().next.values().forEach((node) -> {
             words.addAll(node.auto("").stream().map((word) -> given + word).toList());
-        });
+        });  
         return words;
     }
 
-    // @Override
-    // public String toString() {
-    //     String total = new String();
+    @Override
+    public String toString() {
+        String total = new String();
+        total += value + " -> ";
+        for(TNode n : next.values()){
+            total += n.toString() + " \n";
+        }
 
-
-    //     return value+"->"+next;
-    // }
+        return value+"->"+next;
+    }
 
 
 
