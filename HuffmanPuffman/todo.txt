@@ -1,0 +1,13 @@
+The goal of the lab is efficiently encode a textile using the Huffman Encoding strategy
+
+Then create a frequency table which will be using to create the Huffman Encoding for every
+character based on the frequency.
+Create a huffman encoding table for every character that’s in the article
+Display the table
+Then encode it and output the file.
+You also need to decode anything using the encoding created from an article
+
+Set up the driver to take in a file that has the text and then encode it.
+
+Then ask to decode something using the coding strategy you developed (could be the output
+file you created when encoding)
