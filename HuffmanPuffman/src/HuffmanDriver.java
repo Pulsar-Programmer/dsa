@@ -13,7 +13,7 @@ public class HuffmanDriver {
             return;
         }
         String content = Files.readString(fileChooser.getSelectedFile().toPath());
-        
+        Huffman h = new Huffman(content);
 
 
 
