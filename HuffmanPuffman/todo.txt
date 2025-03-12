@@ -4,8 +4,11 @@ Read in an article as a text file character by character creating a HashMap of t
 their frequency which will be using to create the Huffman Encoding for every character based
 on the frequency.
 
+
+
 In the driver, ask the user for the file and create a huffman encoding table for every character
 that’s in the article
+
 Display the table
 Then encode it and output the file.
 Then ask the user to decode a file using the encoding created from an article (could be the

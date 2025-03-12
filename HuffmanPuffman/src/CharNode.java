@@ -18,6 +18,13 @@ public class CharNode implements Comparable<CharNode> {
         right = Optional.empty();
     }
 
+    public CharNode(int frequency, CharNode left, CharNode right) {
+        this.character = Optional.empty();
+        this.frequency = frequency;
+        this.left = Optional.of(left);
+        this.right = Optional.of(right);
+    }
+
 
     /**
      * The compareTo method in the CharNode class if the frequencies are the same then it should
@@ -38,6 +45,14 @@ the alphabet should come first in the priority queue.
         
         return this.character.get() - other.character.get();
     }
+
+    @Override
+    public String toString() {
+        return "CharNode [character=" + character + ", frequency=" + frequency + ", left=" + left + ", right=" + right
+                + "]";
+    }
+
+    
 
 
 

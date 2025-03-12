@@ -1,6 +1,8 @@
 //Double comments are not intended to be read.
 ///Triple comments are intended to be read.
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import javax.swing.JFileChooser;
 
@@ -14,6 +16,7 @@ public class HuffmanDriver {
         }
         String content = Files.readString(fileChooser.getSelectedFile().toPath());
         Huffman h = new Huffman(content);
+        write_output(h.encoding.toString() + "\n" + h.final_message);
 
 
 
@@ -21,5 +24,12 @@ public class HuffmanDriver {
         // // stdin.tokens().forEach(action);
 
         // stdin.close();
+    }
+    public static void write_output(String content) {
+        try (FileWriter writer = new FileWriter("output.txt")) {
+            writer.write(content);
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
     }
 }
