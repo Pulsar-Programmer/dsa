@@ -51,28 +51,22 @@ public class Huffman {
     public static HashMap<Character, String> encoding_hashmap(CharNode tree){
         var hm = new HashMap<Character, String>();
 
-        CharNode runner;
-        String code;
         Stack<NodeCodeUnion> stack = new Stack<>();
         stack.push(new NodeCodeUnion(tree, ""));
-        // System.out.println(tree);
+
         while(!stack.isEmpty()){
             var popped = stack.pop();
-            runner = popped.node;
-            code = popped.code;
-            if(runner.character.isPresent()){
-                hm.put(runner.character.get(), code);
-                continue;
-            }
-            while(runner.left.isPresent()){
-                runner = runner.left.get();
-                final var right_code = code + "1";
-                code += "0";
-                if(runner.character.isPresent()){
-                    hm.put(runner.character.get(), code);
+            var node = popped.node;
+            var code = popped.code;
+
+            if(node.character.isPresent()){
+                hm.put(node.character.get(), code);
+            } else {
+                if(node.left.isPresent()){
+                    stack.push(new NodeCodeUnion(node.left.get(), code + "0"));
                 }
-                if(runner.right.isPresent()){
-                    stack.push(new NodeCodeUnion(runner.right.get(), right_code));
+                if(node.right.isPresent()){
+                    stack.push(new NodeCodeUnion(node.right.get(), code + "1"));
                 }
             }
         }
