@@ -17,8 +17,8 @@ public class HuffmanDriver {
         String content = Files.readString(fileChooser.getSelectedFile().toPath());
         Huffman h = new Huffman(content);
         write_output(h.encoding.toString() + "\n" + h.final_message);
-
-
+        System.out.println("Encoding Successfully Created!");
+        
 
         // Scanner stdin = new Scanner(System.in);
         // // stdin.tokens().forEach(action);
