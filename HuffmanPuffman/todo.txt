@@ -1,13 +1,9 @@
 Encode
 Decode
-(Export)
-(Import)
 
 Read in an article as a text file character by character creating a HashMap of the characters and
 their frequency which will be using to create the Huffman Encoding for every character based
 on the frequency.
-
-Display the table
 
 Then encode it and output the file.
 

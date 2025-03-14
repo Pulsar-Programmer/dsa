@@ -86,8 +86,22 @@ public class Huffman {
         return built;
     }
 
-    public static void decode(HashMap<String, Character> decoding, String content){
-        
+    @Override
+    public String toString() {
+        return encoding.toString();
+    }
+
+    public static String decode(HashMap<String, Character> decoding, String content){
+        String fynel = "";
+        String read = "";
+        for (var c : content.toCharArray()) {
+            read += c;
+            if(decoding.containsKey(read)){
+                fynel += read;
+                read = "";
+            }
+        }
+        return fynel;
     }
     
 }
