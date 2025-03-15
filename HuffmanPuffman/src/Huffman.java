@@ -10,12 +10,14 @@ public class Huffman {
     HashMap<String, Character> decoding;
     String final_message;
 
+    /** Naturally creates an instance for this class by encoding the given content. */
     public Huffman(String content){
         encoding = encoding_hashmap(create_tree(process(content)));
         final_message = encode(encoding, content);
         decoding = decoding_hashmap(encoding);
     }
 
+    /** Processes the PriorityQueue ordering from the content given. */
     private static PriorityQueue<CharNode> process(String content){
         var hm = new HashMap<Character, Integer>();
         content.chars().forEach((v)->{
@@ -32,6 +34,7 @@ public class Huffman {
         return pq;
     }
 
+    /** Creates one big tree from the Priority Queue in previous steps. */
     private static CharNode create_tree(PriorityQueue<CharNode> pq){
         while(pq.size() > 1){
             var left = pq.remove();
@@ -41,6 +44,7 @@ public class Huffman {
         return pq.remove();
     }
 
+    /** A tuple of type {@code (CharNode, String)}. */
     static private class NodeCodeUnion{
         CharNode node;
         String code;
@@ -50,25 +54,30 @@ public class Huffman {
         }
     }
 
+    /**Creates the encoding hashmap given the one big CharNode tree. */
     private static HashMap<Character, String> encoding_hashmap(CharNode tree){
+        ///We create a hashmap to store the final value in.
         var hm = new HashMap<Character, String>();
 
-        Stack<NodeCodeUnion> stack = new Stack<>();
-        stack.push(new NodeCodeUnion(tree, ""));
+        ///We create a stack.
+        Stack<NodeCodeUnion> unexplored = new Stack<>();
+        unexplored.push(new NodeCodeUnion(tree, ""));
 
-        while(!stack.isEmpty()){
-            var popped = stack.pop();
+        ///We keep moving as long as the stack has content to explore.
+        while(!unexplored.isEmpty()){
+            var popped = unexplored.pop();
             var node = popped.node;
             var code = popped.code;
 
+            ///We check if it is a leaf and treat it appropriately. Otherwise, we keep exploring undiscovered areas of the tree.
             if(node.character.isPresent()){
                 hm.put(node.character.get(), code);
             } else {
                 if(node.left.isPresent()){
-                    stack.push(new NodeCodeUnion(node.left.get(), code + "0"));
+                    unexplored.push(new NodeCodeUnion(node.left.get(), code + "0"));
                 }
                 if(node.right.isPresent()){
-                    stack.push(new NodeCodeUnion(node.right.get(), code + "1"));
+                    unexplored.push(new NodeCodeUnion(node.right.get(), code + "1"));
                 }
             }
         }
@@ -76,6 +85,7 @@ public class Huffman {
         return hm;
     }
 
+    /** Creates the decoding HashMap given the Encoding HashMap. */
     private static HashMap<String, Character> decoding_hashmap(HashMap<Character, String> encoding){
         HashMap<String, Character> decoding = new HashMap<>();
         for (var entry : encoding.entrySet()) {
@@ -84,6 +94,7 @@ public class Huffman {
         return decoding;
     }
 
+    /** Encodes a message given the encoding and its content. */
     public static String encode(HashMap<Character, String> encoding, String content){
         String built = "";
         for(var c : content.chars().toArray()){
@@ -97,6 +108,7 @@ public class Huffman {
         return encoding.toString();
     }
 
+    /** Decodes a message given its decoding and content. */
     public static String decode(HashMap<String, Character> decoding, String content){
         String fynel = "";
         String read = "";
