@@ -1,11 +1,3 @@
-Encode
-Decode
-
-Read in an article as a text file character by character creating a HashMap of the characters and
-their frequency which will be using to create the Huffman Encoding for every character based
-on the frequency.
-
-Then encode it and output the file.
-
-Then ask the user to decode a file using the encoding created from an article (could be the
-output file you created when encoding)
+Decode test
+Mac test
+Comments

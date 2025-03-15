@@ -7,14 +7,16 @@ import java.util.Stack;
 public class Huffman {
     
     HashMap<Character, String> encoding;
+    HashMap<String, Character> decoding;
     String final_message;
 
     public Huffman(String content){
         encoding = encoding_hashmap(create_tree(process(content)));
         final_message = encode(encoding, content);
+        decoding = decoding_hashmap(encoding);
     }
 
-    public static PriorityQueue<CharNode> process(String content){
+    private static PriorityQueue<CharNode> process(String content){
         var hm = new HashMap<Character, Integer>();
         content.chars().forEach((v)->{
             if(hm.containsKey((char)v)){
@@ -30,7 +32,7 @@ public class Huffman {
         return pq;
     }
 
-    public static CharNode create_tree(PriorityQueue<CharNode> pq){
+    private static CharNode create_tree(PriorityQueue<CharNode> pq){
         while(pq.size() > 1){
             var left = pq.remove();
             var right = pq.remove();
@@ -48,7 +50,7 @@ public class Huffman {
         }
     }
 
-    public static HashMap<Character, String> encoding_hashmap(CharNode tree){
+    private static HashMap<Character, String> encoding_hashmap(CharNode tree){
         var hm = new HashMap<Character, String>();
 
         Stack<NodeCodeUnion> stack = new Stack<>();
@@ -74,9 +76,13 @@ public class Huffman {
         return hm;
     }
 
-    // public static HashMap<Character, String> get_decoding(HashMap<String, Character> encoding){
-
-    // }
+    private static HashMap<String, Character> decoding_hashmap(HashMap<Character, String> encoding){
+        HashMap<String, Character> decoding = new HashMap<>();
+        for (var entry : encoding.entrySet()) {
+            decoding.put(entry.getValue(), entry.getKey());
+        }
+        return decoding;
+    }
 
     public static String encode(HashMap<Character, String> encoding, String content){
         String built = "";

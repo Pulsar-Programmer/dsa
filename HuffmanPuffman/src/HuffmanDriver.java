@@ -13,46 +13,39 @@ import javax.swing.JFileChooser;
 public class HuffmanDriver {
     public static void main(String[] args) throws Exception {
 
-        while(true){
-            String content = Files.readString(select_file());
-            Huffman h = new Huffman(content);
-            write_output(h.final_message);
-            System.out.println("Encoding Successfully Created - Check Output!");
-            System.out.println(h);
+        ///We grab the file and encode it.
+        String content = Files.readString(select_file());
+        Huffman h = new Huffman(content);
+        write_output(h.final_message);
+        System.out.println("Encoding Successfully Created - Check `output.txt`!");
+        System.out.println(h);
 
-            
+        ///Next, we create a scanner and start the main loop.
+        var scanner = new Scanner(System.in);
+        while(true){
+            ///We request an encoding, decoding, or quit.
             System.out.println("Would you like to encode, decode, or quit? (e/d/q)");
-            var scanner = new Scanner(System.in);
             if(scanner.nextLine().equals("e")){
-                continue;
+                ///We appropriately encode.
+                content = Files.readString(select_file());
+                h = new Huffman(content);
+                write_output(h.final_message);
+                System.out.println("Encoding Successfully Created - Check `output.txt`!");
+                System.out.println(h);
             } else if(scanner.nextLine().equals("d")){
-                // h.decode(null, content);
+                ///We appropriately decode.
+                content = Files.readString(select_file());
+                var final_message = Huffman.decode(h.decoding, content);
+                write_output(final_message);
+                System.out.println("Decoding Successfully Created - Check `output.txt`!");
+                System.out.println(h.decoding);
             } else {
                 break;
             }
-            if(scanner.nextLine().equals("y")){
-                // System.out.println("Enter the encoded message:");
-                // String encoded_message = scanner.nextLine();
-                // System.out.println("Decoded message: " + h.decode(encoded_message));
-            } else {
-                System.out.println("");
-            }
-            scanner.close();
-
-
         }
-        
-
-
-        
-
-        
-
-        // Scanner stdin = new Scanner(System.in);
-        // // stdin.tokens().forEach(action);
-
-        // stdin.close();
+        scanner.close();
     }
+    /** This writes an output to a file called {@code output.txt} on the filesystem. */
     public static void write_output(String content) {
         try (FileWriter writer = new FileWriter("output.txt")) {
             writer.write(content);
@@ -60,6 +53,7 @@ public class HuffmanDriver {
             System.out.println("Error writing to file: " + e.getMessage());
         }
     }
+    /** Selects a file using the java file chooser. */
     public static Path select_file() throws Exception {
         JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
         if(fileChooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
