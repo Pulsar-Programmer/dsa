@@ -120,14 +120,26 @@ public class Huffman {
             }
         }
         if(!read.isEmpty()){
-            return Result.Err(fynel);
+            return Result.Err(fynel+read);
         }
         return Result.Ok(fynel);
     }
 
+    /**Synthesizes escape sequences from commonly escaped characters. */
+    public static String unescaped(String input){
+        return input.replace("\n", "\\n")
+                    .replace("\t", "\\t")
+                    .replace("\b", "\\b")
+                    .replace("\f", "\\f")
+                    .replace("\r", "\\r")
+                    .replace("\'", "\\\'")
+                    .replace("\"", "\\\"")
+                    .replace("\\", "\\\\");
+    }
+
     @Override
     public String toString() {
-        return encoding.toString();
+        return Huffman.unescaped(encoding.toString());
     }
     
 }

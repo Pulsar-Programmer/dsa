@@ -1,7 +1,6 @@
 //Double comments are not intended to be read.
 ///Triple comments are intended to be read.
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,11 +10,10 @@ import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 
 /** Doc comments are intended to be read. */
-
 public class HuffmanDriver {
     public static void main(String[] args) throws Exception {
         if(System.getProperty("os.name").toLowerCase().contains("mac")){
-            // System.setProperty("apple.awt.fileDialogForDirectories", "false");
+            System.setProperty("apple.awt.fileDialogForDirectories", "false");
             UIManager.put("FileChooser.useSystemFileDialogs", Boolean.FALSE);
         }
 
@@ -24,7 +22,7 @@ public class HuffmanDriver {
         String content = Files.readString(select_file());
         Huffman h = new Huffman(content);
         write_output(h.final_message);
-        System.out.println("Encoding Successfully Created - Check `output.txt`!");
+        System.out.println("❇️ Encoding Successfully Created - Check `output.txt`!");
         System.out.println(h);
 
         ///Next, we create a scanner and start the main loop.
@@ -38,15 +36,20 @@ public class HuffmanDriver {
                 content = Files.readString(select_file());
                 h = new Huffman(content);
                 write_output(h.final_message);
-                System.out.println("Encoding Successfully Created - Check `output.txt`!");
+                System.out.println("❇️ Encoding Successfully Created - Check `output.txt`!");
                 System.out.println(h);
             } else if(next.equals("d")){
                 ///We appropriately decode.
                 content = Files.readString(select_file());
-                var final_message = Huffman.decode(h.decoding, content);
-                write_output(final_message);
-                System.out.println("Decoding Successfully Created - Check `output.txt`!");
-                System.out.println(h.decoding);
+                Result<String, String> final_message = Huffman.decode(h.decoding, content);
+                if(final_message.isSuccess()){
+                    write_output(final_message.getValue());
+                    System.out.println("❇️ Decoding Successfully Created - Check `output.txt`!");
+                } else{
+                    write_output(final_message.getError());
+                    System.out.println("⚠️ Message Decoding Failed - Check `output.txt`!");
+                }
+                System.out.println(Huffman.unescaped(h.decoding.toString()));
             } else {
                 break;
             }
