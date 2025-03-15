@@ -1,4 +1,3 @@
-
 import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Stack;
@@ -103,23 +102,82 @@ public class Huffman {
         return built;
     }
 
-    @Override
-    public String toString() {
-        return encoding.toString();
-    }
+    
+    
 
     /** Decodes a message given its decoding and content. */
-    public static String decode(HashMap<String, Character> decoding, String content){
+    /** Returns None if a String cannot be synthesized properly. */
+    public static Result<String, String> decode(HashMap<String, Character> decoding, String content){
         String fynel = "";
         String read = "";
         for (var c : content.toCharArray()) {
             read += c;
+            System.out.println(read);
             if(decoding.containsKey(read)){
-                fynel += read;
+                System.out.println("Contained!");
+                fynel += decoding.get(read);
                 read = "";
             }
         }
-        return fynel;
+        if(!read.isEmpty()){
+            return Result.Err(fynel);
+        }
+        return Result.Ok(fynel);
+    }
+
+    @Override
+    public String toString() {
+        return encoding.toString();
     }
     
+}
+
+
+
+
+
+
+/** Result from Rust */
+class Result<T, E> {
+
+    private final T value;
+    private final E error;
+
+    private Result(T value, E error) {
+        this.value = value;
+        this.error = error;
+    }
+
+    /** Ok Variant */
+    public static <T, E> Result<T, E> Ok(T value) {
+        return new Result<>(value, null);
+    }
+
+    /** Err Variant */
+    public static <T, E> Result<T, E> Err(E error) {
+        return new Result<>(null, error);
+    }
+
+    public boolean isSuccess() {
+        return value != null;
+    }
+
+    public boolean isFailure() {
+        return error != null;
+    }
+
+    public T getValue() {
+        if (isFailure()) throw new IllegalStateException("No value present");
+        return value;
+    }
+
+    public E getError() {
+        if (isSuccess()) throw new IllegalStateException("No error present");
+        return error;
+    }
+
+    @Override
+    public String toString() {
+        return isSuccess() ? "Ok(" + value + ")" : "Err(" + error + ")";
+    }
 }
