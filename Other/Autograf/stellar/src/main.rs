@@ -78,6 +78,9 @@ impl<'a, T: Eq + std::hash::Hash> DSACottage<'a, T>{
         self.graph.get_mut(node).ok_or(())?.extend(sanitized_set);
         Ok(())
     }
+    // pub fn remove_node(&mut self, node: &'a T){
+        //can you create a borrow checker failure if you remove? weird
+    // }
 }
 
 struct Node{
