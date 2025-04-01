@@ -1,0 +1,20 @@
+The goal is to connect all of the islands by drawing a series of bridges between the islands. The
+bridges must follow certain criteria: [2]
+1. They must begin and end at distinct islands, travelling a straight line in between.
+2. They must not cross any other bridges or islands.
+3. They may only run orthogonally (i.e. they may not run diagonally).
+4. At most two bridges connect a pair of islands.
+5. The number of bridges connected to each island must match the number on that island.
+6. The bridges must connect the islands into a single connected group.
+You will need to load in a file with a potential solution and then run the checks below to confirm that
+it’s solved. You will need to make a graph out of it first and display the vertices and edges.
+
+Then check the rules that every out degree for the node is equal to the value as well as that the
+graph is connected.
+If either of the above stipulation is not met clearly identify which islands don’t have the
+numbers match up and identify the clusters of islands that are disjoint.
+The 3 classes will be
+Hashi (this will have the graph and it’s algorithms )
+Island (This is a single island)
+
+Farhan's Concept of Getting the Coordinates then Looking Every Which Way
