@@ -2,6 +2,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Optional;
 
 /** Hashi (this will have the graph and it’s algorithms ) */
 public class Hashi {
@@ -14,18 +15,16 @@ public class Hashi {
         this.nodes_neighbors = nodes_neighbors;
     }
 
-    public Hashi load_from_str(String str){
+    public static Hashi load_from_str(String str){
         var list = str.lines().toList();
+        var hashmap = new HashMap<Island, HashSet<IslandNum>>();
 
         for(int i = 0; i < list.size(); i++){
             for(int j = 0; j < list.get(i).length(); j++){
                 var digit = list.get(i).charAt(j);
                 if(Character.isDigit(digit)){
                     Island island = new Island('0' + digit);
-                    var left = 0;
-                    while(){
-                        
-                    }
+                    
                 }
             }
         }
@@ -36,6 +35,15 @@ public class Hashi {
         // char[] inner = new char[str.indexOf("\n")][];
         // char[][] outer = new char[0][0];
         // return load_from_2darray(array);
+    }
+
+    private static Optional<Island> repeat_left(ArrayList<String> list, int i, int j){
+        int count = 0;
+        var amt = list.get(i).charAt(j - 1);
+        if(Character.isDigit(amt)){
+            return Optional.of(new Island(amt));
+        }
+        
     }
     // public Hashi load_from_2darray(char[][] array) {
     //     return new Hashi();
