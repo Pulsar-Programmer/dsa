@@ -15,7 +15,10 @@ public class HashiDriver {
                 System.out.println("Please select a file to insert a graph from.");
                 Path path = select_file();
                 System.out.println("Inserting graph from " + path.toString() + "...");
-
+                var file = path.toFile();
+                var fileString = new String(java.nio.file.Files.readAllBytes(path));
+                var hashi = Hashi.load_from_str(fileString);
+                System.out.println(hashi);
                 // Insert the graph here using the path
                 // Graph graph = new Graph(path);
                 // graph.insertGraph(path);

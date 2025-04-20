@@ -24,37 +24,75 @@ public class Hashi {
                 var digit = list.get(i).charAt(j);
                 if(Character.isDigit(digit)){
                     Island island = new Island('0' + digit);
-                    
+                    //explore left
+                    //explore right
+                    //explore down
+                    //explore up
+
                 }
             }
         }
 
 
 
-        
-        // char[] inner = new char[str.indexOf("\n")][];
-        // char[][] outer = new char[0][0];
-        // return load_from_2darray(array);
+
+        return new Hashi(hashmap);
     }
 
+
+
+
+
+    private static Optional<Character> try_get(ArrayList<String> list, int i, int j){
+        Character amt;
+        try {
+            amt = list.get(i).charAt(j);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+        return Optional.of(amt);
+    }
+
+
     private static Optional<Island> repeat_left(ArrayList<String> list, int i, int j){
-        int count = 0;
-        var amt = list.get(i).charAt(j - 1);
+        return repeat_offset(list, i, j, 0, -1);
+    }
+    private static Optional<Island> repeat_right(ArrayList<String> list, int i, int j){
+        return repeat_offset(list, i, j, 0, 1);
+    }
+    private static Optional<Island> repeat_up(ArrayList<String> list, int i, int j){
+        return repeat_offset(list, i, j, -1, 0);
+    }
+    private static Optional<Island> repeat_down(ArrayList<String> list, int i, int j){
+        return repeat_offset(list, i, j, 1, 0);
+    }
+    private static Optional<Island> repeat_offset(ArrayList<String> list, int i, int j, int i_, int j_){
+        char amt;
+        try {
+            amt = list.get(i + i_).charAt(j + j_);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
         if(Character.isDigit(amt)){
             return Optional.of(new Island(amt));
         }
-        
+        return repeat_offset(list, i + i_, j + j_, i_, j_);
     }
-    // public Hashi load_from_2darray(char[][] array) {
-    //     return new Hashi();
-    // }
-    
+
+    @Override
+    public String toString() {
+        var str = new String();
+        for (var entry : nodes_neighbors.entrySet()) {
+            str += entry.getKey() + " -> " + entry.getValue();
+        }
+        return str;
+    }
 }
 
 class IslandNum{
-    int num_connections;
+    boolean num_connections;
     Island island;
-    public IslandNum(int num_connections, Island island) {
+    public IslandNum(boolean num_connections, Island island) {
         this.num_connections = num_connections;
         this.island = island;
     }
