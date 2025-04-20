@@ -17,6 +17,7 @@ public class Hashi {
         this.nodes_neighbors = nodes_neighbors;
     }
 
+    /** Loads a graph from a str representation. */
     public static Hashi load_from_str(String str){
         var list = str.lines().toList();
         var hashmap = new HashMap<Island, HashSet<IslandNum>>();
@@ -90,6 +91,7 @@ public class Hashi {
         return new Hashi(hashmap);
     }
 
+    /** Determines if the graph is solved. */
     public String determine_if_solved(){
         for(var entry : nodes_neighbors.entrySet()){
             var island = entry.getKey();
@@ -108,7 +110,7 @@ public class Hashi {
         return "Solved";
     }
 
-    ///Determines if the graph is connected by giving a connected part cancer and checking if the any other part has it.
+    /** Determines if the graph is connected by giving a connected part cancer and checking if the any other part has it. */
     public boolean cancerize_find(){
         ///We get the first island and its neighbors.
         if(nodes_neighbors.isEmpty()){
@@ -162,6 +164,7 @@ public class Hashi {
     private static Optional<Island> repeat_down(List<String> list, int i, int j){
         return repeat_offset(list, i, j, 1, 0);
     }
+    /** Repeats an operation of going a direction and checking for an island. */
     private static Optional<Island> repeat_offset(List<String> list, int i, int j, int i_, int j_){
         char amt;
         try {
