@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Stack;
 
 /** Hashi (this will have the graph and it’s algorithms ) */
 public class Hashi {
@@ -29,6 +30,7 @@ public class Hashi {
                 var digit = list.get(i).charAt(j);
                 if(Character.isDigit(digit)){
                     Island island = new Island(j, i, digit - '0');
+                    hashmap.computeIfAbsent(island, k -> new HashSet<>());
                     ///We explore left for signs of another isle.
                     try_get(list, i, j - 1)
                         ///If we get the isle at the proper place, we compute the number of connections and add the island. 
@@ -39,7 +41,7 @@ public class Hashi {
                             }
                             repeat_left(list, i, j).ifPresent((isle) -> {
                                 var island_num = new IslandNum(num, isle);
-                                hashmap.computeIfAbsent(island, k -> new HashSet<>()).add(island_num);
+                                hashmap.get(island).add(island_num);
                             });
                         });
                     ///We explore right.
@@ -51,7 +53,7 @@ public class Hashi {
                             }
                             repeat_right(list, i, j).ifPresent((isle) -> {
                                 var island_num = new IslandNum(num, isle);
-                                hashmap.computeIfAbsent(island, k -> new HashSet<>()).add(island_num);
+                                hashmap.get(island).add(island_num);
                             });
                         });
                     ///We explore up.
@@ -63,7 +65,7 @@ public class Hashi {
                             }
                             repeat_up(list, i, j).ifPresent((isle) -> {
                                 var island_num = new IslandNum(num, isle);
-                                hashmap.computeIfAbsent(island, k -> new HashSet<>()).add(island_num);
+                                hashmap.get(island).add(island_num);
                             });
                         });
                     ///We explore down.
@@ -75,7 +77,7 @@ public class Hashi {
                             }
                             repeat_down(list, i, j).ifPresent((isle) -> {
                                 var island_num = new IslandNum(num, isle);
-                                hashmap.computeIfAbsent(island, k -> new HashSet<>()).add(island_num);
+                                hashmap.get(island).add(island_num);
                             });
                         });
                 }
@@ -96,14 +98,47 @@ public class Hashi {
             for(var neighbor : neighbors){
                 total_connections += neighbor.num_connections;
             }
-            // System.out.println(total_connections);
-            // System.out.println(island.size);
             if(total_connections != island.size){
                 return "Not Solved: Issue with Island x=" + island.x + ", y=" + island.y;
             }
         }
+        if(!cancerize_find()){
+            return "Not Solved: Graph is not connected!";
+        }
         return "Solved";
     }
+
+    ///Determines if the graph is connected by giving a connected part cancer and checking if the any other part has it.
+    public boolean cancerize_find(){
+        ///We get the first island and its neighbors.
+        if(nodes_neighbors.isEmpty()){
+            return true;
+        }
+        ///We get ready for traversal.
+        var entry = nodes_neighbors.entrySet().iterator().next();
+        var island = entry.getKey();
+        var unvisited = new ArrayList<Island>(entry.getValue().stream().map((island_num) -> island_num.island).toList());
+        var visited = new HashSet<Island>();
+        visited.add(island);
+        while(!unvisited.isEmpty()){
+            var unexplored = unvisited.remove(unvisited.size() - 1);
+            nodes_neighbors.get(unexplored).forEach((island_num) -> {
+                var neighbor = island_num.island;
+                if(!visited.contains(neighbor)){
+                    unvisited.add(neighbor);
+                }
+            });
+            visited.add(unexplored);
+        }
+        ///We remove all the nodes that we've seen.
+        for (var isle : visited) {
+            nodes_neighbors.remove(isle);
+        }
+        ///If there is still more, it is not connected.
+        return nodes_neighbors.isEmpty();
+    }
+
+
 
     private static Optional<Character> try_get(List<String> list, int i, int j){
         Character amt;

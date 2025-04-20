@@ -17,26 +17,17 @@ public class Island {
         int result = 1;
         result = prime * result + x;
         result = prime * result + y;
-        result = prime * result + size;
         return result;
     }
+    
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Island other = (Island) obj;
-        if (x != other.x)
-            return false;
-        if (y != other.y)
-            return false;
-        if (size != other.size)
-            return false;
-        return true;
+    public boolean equals(Object ob) {
+        var obj = (Island) ob;
+        if (obj == null || this == null) {
+            return obj == null ^ this == null;
+        }
+        return this.x == obj.x && this.y == obj.y;
     }
 
     @Override
