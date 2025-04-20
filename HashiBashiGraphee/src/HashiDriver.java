@@ -19,14 +19,11 @@ public class HashiDriver {
                 var fileString = new String(java.nio.file.Files.readAllBytes(path));
                 var hashi = Hashi.load_from_str(fileString);
                 System.out.println(hashi);
-                // Insert the graph here using the path
-                // Graph graph = new Graph(path);
-                // graph.insertGraph(path);
-                
+                System.out.println(hashi.determine_if_solved());
+                System.out.println("_______________________________");
             } else {
                 break;
             }
-
         }
 
 

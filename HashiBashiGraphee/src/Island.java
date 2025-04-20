@@ -4,8 +4,10 @@ public class Island {
     int y; /// The y coordinate of the island
     /** The number of bridges that must be connected to this island */
     int size;
-    
-    public Island(int size) {
+
+    public Island(int x, int y, int size) {
+        this.x = x;
+        this.y = y;
         this.size = size;
     }
 
@@ -37,5 +39,8 @@ public class Island {
         return true;
     }
 
-    
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ")";
+    }
 }

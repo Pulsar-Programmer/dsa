@@ -2,6 +2,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 /** Hashi (this will have the graph and it’s algorithms ) */
@@ -19,16 +20,64 @@ public class Hashi {
         var list = str.lines().toList();
         var hashmap = new HashMap<Island, HashSet<IslandNum>>();
 
-        for(int i = 0; i < list.size(); i++){
-            for(int j = 0; j < list.get(i).length(); j++){
+        for(int i_ = 0; i_ < list.size(); i_++){
+            for(int j_ = 0; j_ < list.get(i_).length(); j_++){
+                
+                final int j = j_;
+                final int i = i_;
+
                 var digit = list.get(i).charAt(j);
                 if(Character.isDigit(digit)){
-                    Island island = new Island('0' + digit);
-                    //explore left
-                    //explore right
-                    //explore down
-                    //explore up
-
+                    Island island = new Island(j, i, digit - '0');
+                    ///We explore left for signs of another isle.
+                    try_get(list, i, j - 1)
+                        ///If we get the isle at the proper place, we compute the number of connections and add the island. 
+                        .ifPresent((c) -> {
+                            var num = c == '=' ? 2 : c == '-' ? 1 : 0;
+                            if(num == 0){
+                                return;
+                            }
+                            repeat_left(list, i, j).ifPresent((isle) -> {
+                                var island_num = new IslandNum(num, isle);
+                                hashmap.computeIfAbsent(island, k -> new HashSet<>()).add(island_num);
+                            });
+                        });
+                    ///We explore right.
+                    try_get(list, i, j + 1)
+                        .ifPresent((c) -> {
+                            var num = c == '=' ? 2 : c == '-' ? 1 : 0;
+                            if(num == 0){
+                                return;
+                            }
+                            repeat_right(list, i, j).ifPresent((isle) -> {
+                                var island_num = new IslandNum(num, isle);
+                                hashmap.computeIfAbsent(island, k -> new HashSet<>()).add(island_num);
+                            });
+                        });
+                    ///We explore up.
+                    try_get(list, i - 1, j)
+                        .ifPresent((c) -> {
+                            var num = c == '#' ? 2 : c == '|' ? 1 : 0;
+                            if(num == 0){
+                                return;
+                            }
+                            repeat_up(list, i, j).ifPresent((isle) -> {
+                                var island_num = new IslandNum(num, isle);
+                                hashmap.computeIfAbsent(island, k -> new HashSet<>()).add(island_num);
+                            });
+                        });
+                    ///We explore down.
+                    try_get(list, i + 1, j)
+                        .ifPresent((c) -> {
+                            var num = c == '#' ? 2 : c == '|' ? 1 : 0;
+                            if(num == 0){
+                                return;
+                            }
+                            repeat_down(list, i, j).ifPresent((isle) -> {
+                                var island_num = new IslandNum(num, isle);
+                                hashmap.computeIfAbsent(island, k -> new HashSet<>()).add(island_num);
+                            });
+                        });
                 }
             }
         }
@@ -39,11 +88,24 @@ public class Hashi {
         return new Hashi(hashmap);
     }
 
+    public String determine_if_solved(){
+        for(var entry : nodes_neighbors.entrySet()){
+            var island = entry.getKey();
+            var neighbors = entry.getValue();
+            int total_connections = 0;
+            for(var neighbor : neighbors){
+                total_connections += neighbor.num_connections;
+            }
+            // System.out.println(total_connections);
+            // System.out.println(island.size);
+            if(total_connections != island.size){
+                return "Not Solved: Issue with Island x=" + island.x + ", y=" + island.y;
+            }
+        }
+        return "Solved";
+    }
 
-
-
-
-    private static Optional<Character> try_get(ArrayList<String> list, int i, int j){
+    private static Optional<Character> try_get(List<String> list, int i, int j){
         Character amt;
         try {
             amt = list.get(i).charAt(j);
@@ -53,20 +115,19 @@ public class Hashi {
         return Optional.of(amt);
     }
 
-
-    private static Optional<Island> repeat_left(ArrayList<String> list, int i, int j){
+    private static Optional<Island> repeat_left(List<String> list, int i, int j){
         return repeat_offset(list, i, j, 0, -1);
     }
-    private static Optional<Island> repeat_right(ArrayList<String> list, int i, int j){
+    private static Optional<Island> repeat_right(List<String> list, int i, int j){
         return repeat_offset(list, i, j, 0, 1);
     }
-    private static Optional<Island> repeat_up(ArrayList<String> list, int i, int j){
+    private static Optional<Island> repeat_up(List<String> list, int i, int j){
         return repeat_offset(list, i, j, -1, 0);
     }
-    private static Optional<Island> repeat_down(ArrayList<String> list, int i, int j){
+    private static Optional<Island> repeat_down(List<String> list, int i, int j){
         return repeat_offset(list, i, j, 1, 0);
     }
-    private static Optional<Island> repeat_offset(ArrayList<String> list, int i, int j, int i_, int j_){
+    private static Optional<Island> repeat_offset(List<String> list, int i, int j, int i_, int j_){
         char amt;
         try {
             amt = list.get(i + i_).charAt(j + j_);
@@ -74,7 +135,7 @@ public class Hashi {
             return Optional.empty();
         }
         if(Character.isDigit(amt)){
-            return Optional.of(new Island(amt));
+            return Optional.of(new Island(j + j_, i + i_, amt));
         }
         return repeat_offset(list, i + i_, j + j_, i_, j_);
     }
@@ -84,16 +145,21 @@ public class Hashi {
         var str = new String();
         for (var entry : nodes_neighbors.entrySet()) {
             str += entry.getKey() + " -> " + entry.getValue();
+            str += "\n";
         }
         return str;
     }
 }
 
 class IslandNum{
-    boolean num_connections;
+    int num_connections;
     Island island;
-    public IslandNum(boolean num_connections, Island island) {
+    public IslandNum(int num_connections, Island island) {
         this.num_connections = num_connections;
         this.island = island;
+    }
+    @Override
+    public String toString() {
+        return island.toString();
     }
 }
