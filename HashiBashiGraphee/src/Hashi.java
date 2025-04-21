@@ -104,8 +104,13 @@ public class Hashi {
                 return "Not Solved: Issue with Island x=" + island.x + ", y=" + island.y;
             }
         }
-        if(!cancerize_find()){
-            return "Not Solved: Graph is not connected!";
+        var c = 1;
+        while(!cancerize_find()){
+            c++;
+            // return "Not Solved: Graph is not connected!";
+        }
+        if(c > 1){
+            return "Not Solved: Graph is not connected! There are " + c + " chunks.";
         }
         return "Solved";
     }
