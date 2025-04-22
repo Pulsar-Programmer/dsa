@@ -135,3 +135,37 @@ fn quick_sort<T: Ord>(mut v: Vec<T>) -> Vec<T>{
     v.extend(v2);
     v
 }
+
+
+
+
+
+
+
+
+
+
+
+
+trait MyTrait {
+    fn my_method(&self) -> String;
+}
+impl dyn MyTrait {
+    fn my_method_2(&self) -> String {
+        "Hello from MyTrait".to_string()
+    }
+}
+impl MyTrait for i32{
+    fn my_method(&self) -> String {
+        self.to_string()
+    }
+}
+struct Better{
+    name: dyn MyTrait
+}
+#[test]
+fn stest(){
+    let b = Better { name: 1 };
+    println!("{}", b.name.my_method_2());
+    // println!("{}", b.name.my_method()); // This will not work because my_method is not implemented for dyn MyTrait
+}
