@@ -66,6 +66,22 @@ impl City{
         }
     }
 }
+impl PartialEq for City{
+    fn eq(&self, other: &Self) -> bool {
+        self.name == other.name
+    }
+}
+impl Eq for City{}
+impl PartialOrd for City{
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        self.toll.partial_cmp(&other.toll)
+    }
+}
+impl Ord for City{
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.toll.partial_cmp(&other.toll).unwrap()
+    }
+}
 
 struct Airline{
     cities: HashSet<City>,
@@ -95,3 +111,33 @@ fn example(){
     // };
 
 }
+use std::collections::binary_heap::BinaryHeap;
+
+
+// fn dijkstra(airline: Airline){
+//     let mut to_visit = BinaryHeap::new();
+//     for city in &mut airline.cities{
+//         if city.name == airline.hub.name{
+//             city.toll = 0.0;
+//         }
+//         else{
+//             city.toll = f64::MAX;
+//         }
+//         to_visit.push(city);
+//     }
+//     while !to_visit.is_empty() {
+//         let exploring = to_visit.pop().unwrap();
+//         for (city, toll) in exploring.connections.iter_mut(){
+//             city.toll = city.toll.min(exploring.toll + *toll);
+//         }
+//     }
+
+// }
+
+
+
+
+
+// struct Hivemind{
+    
+// }
