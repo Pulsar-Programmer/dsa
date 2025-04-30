@@ -1,0 +1,9 @@
+/**
+ * this takes in the territories between which the shortest path can be found as well as
+the shortest that is possible.
+ */
+public class RiskDriver {
+    public static void main(String[] args) throws Exception {
+        System.out.println("Hello, World!");
+    }
+}

@@ -1,0 +1,126 @@
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.PriorityQueue;
+
+/**this will have a static graph of the world map as well. Hashmap would be good here along
+with the methods to chart out the path */
+public class Risk {
+    HashMap<Territory, HashSet<Territory>> graph;
+    
+
+    // Assuming this method exists and gives the cost between two connected territories
+    public double cost(Territory a, Territory b) {
+        // Placeholder: implement cost logic here
+        return 1.0; // Default cost for example
+    }
+
+    public HashMap<Territory, Double> djikstra(Territory start) {
+        HashMap<Territory, Double> distance_map = new HashMap<>();
+
+
+        PriorityQueue<TerritoryDistance> pq = new PriorityQueue<>(Comparator.comparingDouble(td -> td.distance));
+        HashSet<Territory> visited = new HashSet<>();
+
+        // Initialize all distances to infinity
+        for (Territory t : graph.keySet()) {
+            distance_map.put(t, Double.POSITIVE_INFINITY);
+        }
+
+        // Start node distance = 0
+        distance_map.put(start, 0.0);
+        pq.add(new TerritoryDistance(start, 0.0));
+
+        while (!pq.isEmpty()) {
+            TerritoryDistance current = pq.poll();
+            Territory currentTerritory = current.territory;
+
+            if (visited.contains(currentTerritory)) continue;
+            visited.add(currentTerritory);
+
+            for (Territory neighbor : graph.getOrDefault(currentTerritory, new HashSet<>())) {
+                if (visited.contains(neighbor)) continue;
+
+                double newDist = distance_map.get(currentTerritory) + cost(currentTerritory, neighbor);
+                if (newDist < distance_map.get(neighbor)) {
+                    distance_map.put(neighbor, newDist);
+                    pq.add(new TerritoryDistance(neighbor, newDist));
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //cost(territory, territory) is the distance between the two territories
+        return distance_map;
+    }
+
+
+
+    // Helper class to wrap territory and its distance
+    static class TerritoryDistance {
+        Territory territory;
+        double distance;
+
+        TerritoryDistance(Territory territory, double distance) {
+            this.territory = territory;
+            this.distance = distance;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+    public HashMap<Territory, Territory> prim(Territory start) {
+        HashMap<Territory, Double> key = new HashMap<>();
+        HashMap<Territory, Territory> parent = new HashMap<>();
+        PriorityQueue<Territory> pq = new PriorityQueue<>(Comparator.comparingDouble(key::get));
+        HashSet<Territory> inMST = new HashSet<>();
+
+        // Initialize all keys to infinity
+        for (Territory t : graph.keySet()) {
+            key.put(t, Double.POSITIVE_INFINITY);
+            parent.put(t, null);
+        }
+
+        key.put(start, 0.0);
+        pq.add(start);
+
+        while (!pq.isEmpty()) {
+            Territory u = pq.poll();
+
+            if (inMST.contains(u)) continue;
+            inMST.add(u);
+
+            for (Territory neighbor : graph.getOrDefault(u, new HashSet<>())) {
+                if (!inMST.contains(neighbor)) {
+                    double weight = cost(u, neighbor);
+                    if (weight < key.get(neighbor)) {
+                        key.put(neighbor, weight);
+                        parent.put(neighbor, u);
+                        pq.add(neighbor);
+                    }
+                }
+            }
+        }
+
+        return parent; // This maps each node to its parent in the MST
+    }
+}

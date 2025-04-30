@@ -1,0 +1,18 @@
+The goal of the lab is to find the optimum path between two territories based on the
+constraints of soldiers on the starting territory and how many soldiers you have to “knock off”
+between the two territories from the popular game Risk using the World map.
+
+The connections of the territories are stored in a CSV file which you will need to load in. You will
+then prompt the user for a path which they wish to chart(from and to) along with how many
+soldiers are going to be on the starting spot. You will then let them know if it’s possible to do
+this(show the path) and if not let them know what’s the farthest you got. When charting out a
+path the tiebreaker between two equal paths would less stops. You can assume that the
+casualty rate is 1:1
+Finally, you need to determine what’s the least amount of moves needed to reach every city,
+for this question you can assume an unlimited supply of soldiers.
+
+For City,
+price is the total route to get to a territory and the HashMap<City, double> does not make sense as a variable as connections.
+When you do relaxxing thing, I go to the territory with the least amount of soldiers.
+Remove the HashMap and instead get HashSet because there is no cost, it is already associated in the City.
+
