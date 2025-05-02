@@ -9,25 +9,24 @@ public class Risk {
     HashMap<Territory, HashSet<Territory>> graph;
     
 
-    // Assuming this method exists and gives the cost between two connected territories
-    public double cost(Territory a, Territory b) {
-        // Placeholder: implement cost logic here
-        return 1.0; // Default cost for example
+    /** The cost between two territories is simply the cost of going to the Territory itself. */
+    public double cost_dji(Territory b) {
+        return b.soldiers;
     }
 
     public HashMap<Territory, Double> djikstra(Territory start) {
+        ///Create our map of distances.
         HashMap<Territory, Double> distance_map = new HashMap<>();
 
-
+        ///Create a priority queue ordering the distances from each territory.
         PriorityQueue<TerritoryDistance> pq = new PriorityQueue<>(Comparator.comparingDouble(td -> td.distance));
+        ///Create a set of visited territories.
         HashSet<Territory> visited = new HashSet<>();
 
-        // Initialize all distances to infinity
         for (Territory t : graph.keySet()) {
             distance_map.put(t, Double.POSITIVE_INFINITY);
         }
 
-        // Start node distance = 0
         distance_map.put(start, 0.0);
         pq.add(new TerritoryDistance(start, 0.0));
 
@@ -41,7 +40,7 @@ public class Risk {
             for (Territory neighbor : graph.getOrDefault(currentTerritory, new HashSet<>())) {
                 if (visited.contains(neighbor)) continue;
 
-                double newDist = distance_map.get(currentTerritory) + cost(currentTerritory, neighbor);
+                double newDist = distance_map.get(currentTerritory) + cost_dji(neighbor);
                 if (newDist < distance_map.get(neighbor)) {
                     distance_map.put(neighbor, newDist);
                     pq.add(new TerritoryDistance(neighbor, newDist));
@@ -67,7 +66,7 @@ public class Risk {
 
 
 
-    // Helper class to wrap territory and its distance
+    ///Tiny class to hold the territory and distance together. (I miss tuples)
     static class TerritoryDistance {
         Territory territory;
         double distance;
@@ -86,8 +85,8 @@ public class Risk {
 
 
 
-
-
+    
+    // public cost_map for prim
     public HashMap<Territory, Territory> prim(Territory start) {
         HashMap<Territory, Double> key = new HashMap<>();
         HashMap<Territory, Territory> parent = new HashMap<>();
@@ -111,7 +110,7 @@ public class Risk {
 
             for (Territory neighbor : graph.getOrDefault(u, new HashSet<>())) {
                 if (!inMST.contains(neighbor)) {
-                    double weight = cost(u, neighbor);
+                    double weight = cost_prim(neighbor);
                     if (weight < key.get(neighbor)) {
                         key.put(neighbor, weight);
                         parent.put(neighbor, u);

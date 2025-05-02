@@ -16,3 +16,10 @@ price is the total route to get to a territory and the HashMap<City, double> doe
 When you do relaxxing thing, I go to the territory with the least amount of soldiers.
 Remove the HashMap and instead get HashSet because there is no cost, it is already associated in the City.
 
+
+
+Make sure you keep track of the path.
+In the end, you will assess if you have enough soldiers to go through the path.
+
+
+
