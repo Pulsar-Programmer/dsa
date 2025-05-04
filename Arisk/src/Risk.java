@@ -7,7 +7,12 @@ import java.util.PriorityQueue;
 with the methods to chart out the path */
 public class Risk {
     HashMap<Territory, HashSet<Territory>> graph;
+    HashMap<TerritoryTerritory, Double> prim_map;
     
+    public Risk(HashMap<Territory, HashSet<Territory>> graph, HashMap<TerritoryTerritory, Double> prim_map) {
+        this.graph = graph;
+        this.prim_map = prim_map;
+    }
 
     /** The cost between two territories is simply the cost of going to the Territory itself. */
     public double cost_dji(Territory b) {
@@ -86,7 +91,7 @@ public class Risk {
 
 
     
-    // public cost_map for prim
+
     public HashMap<Territory, Territory> prim(Territory start) {
         HashMap<Territory, Double> key = new HashMap<>();
         HashMap<Territory, Territory> parent = new HashMap<>();

@@ -7,3 +7,14 @@ public class Territory {
     public int soldiers;
     public HashSet<Territory> connections;
 }
+
+/** Boilerplate Territory^2 in place of Tuple. */
+class TerritoryTerritory{
+    String one, two;
+    public static TerritoryTerritory struct(String one, String two){
+        TerritoryTerritory territory = new TerritoryTerritory();
+        territory.one = one;
+        territory.two = two;
+        return territory;
+    }
+}

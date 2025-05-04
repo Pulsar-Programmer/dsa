@@ -23,3 +23,7 @@ In the end, you will assess if you have enough soldiers to go through the path.
 
 
 
+In DSA (School):
+Find code to keep track of path
+Ask what is up with the multiple tabs here : https://drive.google.com/file/d/1bAz5JYTVOOAOK2aMXiLU0AbqL_dTBWO6/view
+Are RiskEdges and Terrain the same files?
