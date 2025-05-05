@@ -8,7 +8,7 @@ with the methods to chart out the path */
 public class Risk {
     HashMap<Territory, HashSet<Territory>> graph;
     HashMap<TerritoryTerritory, Double> prim_map;
-    
+
     public Risk(HashMap<Territory, HashSet<Territory>> graph, HashMap<TerritoryTerritory, Double> prim_map) {
         this.graph = graph;
         this.prim_map = prim_map;
@@ -115,7 +115,7 @@ public class Risk {
 
             for (Territory neighbor : graph.getOrDefault(u, new HashSet<>())) {
                 if (!inMST.contains(neighbor)) {
-                    double weight = cost_prim(neighbor);
+                    double weight = cost_prim(u, neighbor);
                     if (weight < key.get(neighbor)) {
                         key.put(neighbor, weight);
                         parent.put(neighbor, u);
@@ -126,5 +126,9 @@ public class Risk {
         }
 
         return parent; // This maps each node to its parent in the MST
+    }
+
+    private double cost_prim(Territory u, Territory neighbor) {
+        return prim_map.get(TerritoryTerritory.struct(u.name, neighbor.name));
     }
 }

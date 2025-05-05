@@ -31,12 +31,14 @@ public class RiskDriver {
             if(!scanner.nextLine().equals("1")){
                 break;
             }
-            //input where we want to start at
+            
+            var risk = load_files();
 
             System.out.println("Which region would you like to start at?");
-
+            var start = scanner.nextLine();
+            //input where we want to start at
             //set region thing to zero
-
+            // risk.djikstra(null)
 
             
 
