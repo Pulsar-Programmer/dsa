@@ -1,11 +1,42 @@
-import java.util.HashSet;
 
 /** this is a single territory with the connections to other territories and how many
 soldiers it holds */
 public class Territory {
     public String name;
-    public int soldiers;
-    public HashSet<Territory> connections;
+    // public HashSet<Territory> connections;
+    //soldiers
+    public Territory previous;
+
+    public Territory(String name){
+        this.name = name;
+        // this.connections = new HashSet<>();
+    }
+
+    // @Override
+    // public int hashCode() {
+    //     final int prime = 31;
+    //     int result = 1;
+    //     result = prime * result + ((name == null) ? 0 : name.hashCode());
+    //     return result;
+    // }
+    // @Override
+    // public boolean equals(Object obj) {
+    //     if (this == obj)
+    //         return true;
+    //     if (obj == null)
+    //         return false;
+    //     if (getClass() != obj.getClass())
+    //         return false;
+    //     Territory other = (Territory) obj;
+    //     if (name == null) {
+    //         if (other.name != null)
+    //             return false;
+    //     } else if (!name.equals(other.name))
+    //         return false;
+    //     return true;
+    // }
+
+    
 }
 
 /** Boilerplate Territory^2 in place of Tuple. */

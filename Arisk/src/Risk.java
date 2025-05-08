@@ -8,18 +8,24 @@ with the methods to chart out the path */
 public class Risk {
     HashMap<Territory, HashSet<Territory>> graph;
     HashMap<TerritoryTerritory, Double> prim_map;
+    HashMap<Territory, Integer> soliders;
 
-    public Risk(HashMap<Territory, HashSet<Territory>> graph, HashMap<TerritoryTerritory, Double> prim_map) {
+    Territory start;
+
+    public Risk(HashMap<Territory, HashSet<Territory>> graph, HashMap<TerritoryTerritory, Double> prim_map, HashMap<Territory, Integer> soliders, Territory start) {
         this.graph = graph;
         this.prim_map = prim_map;
+        this.soliders = soliders;
+        this.start = start;
     }
 
     /** The cost between two territories is simply the cost of going to the Territory itself. */
     public double cost_dji(Territory b) {
-        return b.soldiers;
+        // return b.soldiers;
+        return soliders.get(b);
     }
 
-    public HashMap<Territory, Double> djikstra(Territory start) {
+    public HashMap<Territory, Double> djikstra() {
         ///Create our map of distances.
         HashMap<Territory, Double> distance_map = new HashMap<>();
 
@@ -47,6 +53,7 @@ public class Risk {
 
                 double newDist = distance_map.get(currentTerritory) + cost_dji(neighbor);
                 if (newDist < distance_map.get(neighbor)) {
+                    // neighbor.previous = currentTerritory;
                     distance_map.put(neighbor, newDist);
                     pq.add(new TerritoryDistance(neighbor, newDist));
                 }
@@ -92,7 +99,7 @@ public class Risk {
 
     
 
-    public HashMap<Territory, Territory> prim(Territory start) {
+    public HashMap<Territory, Territory> prim() {
         HashMap<Territory, Double> key = new HashMap<>();
         HashMap<Territory, Territory> parent = new HashMap<>();
         PriorityQueue<Territory> pq = new PriorityQueue<>(Comparator.comparingDouble(key::get));

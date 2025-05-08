@@ -21,9 +21,8 @@ Remove the HashMap and instead get HashSet because there is no cost, it is alrea
 Make sure you keep track of the path.
 In the end, you will assess if you have enough soldiers to go through the path.
 
+Let them input the amount of soldiers they want to sends
 
 
 In DSA (School):
 Find code to keep track of path
-Ask what is up with the multiple tabs here : https://drive.google.com/file/d/1bAz5JYTVOOAOK2aMXiLU0AbqL_dTBWO6/view
-Are RiskEdges and Terrain the same files?
