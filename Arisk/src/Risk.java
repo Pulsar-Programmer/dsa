@@ -9,21 +9,23 @@ with the methods to chart out the path */
 public class Risk {
     HashMap<Territory, HashSet<Territory>> graph;
     HashMap<TerritoryTerritory, Double> prim_map;
-    HashMap<Territory, Integer> soliders;
+    HashMap<String, Integer> soldiers;
 
     Territory start;
 
-    public Risk(HashMap<Territory, HashSet<Territory>> graph, HashMap<TerritoryTerritory, Double> prim_map, HashMap<Territory, Integer> soliders, Territory start) {
+    public Risk(HashMap<Territory, HashSet<Territory>> graph, HashMap<TerritoryTerritory, Double> prim_map, HashMap<String, Integer> soliders, Territory start) {
         this.graph = graph;
         this.prim_map = prim_map;
-        this.soliders = soliders;
+        this.soldiers = soliders;
         this.start = start;
     }
 
     /** The cost between two territories is simply the cost of going to the Territory itself. */
     public double cost_dji(Territory b) {
-        // return b.soldiers;
-        return soliders.get(b);
+        System.out.println(b.name);
+        soldiers.forEach((a, bb) -> { System.out.println(a + " " + bb); });
+        System.out.println(b.name.equals("Afghanistan"));
+        return soldiers.get(b.name);
     }
 
     public HashMap<Territory, Double> djikstra() {
@@ -51,7 +53,7 @@ public class Risk {
 
             for (Territory neighbor : graph.getOrDefault(currentTerritory, new HashSet<>())) {
                 if (visited.contains(neighbor)) continue;
-                
+
                 double newDist = distance_map.get(currentTerritory) + cost_dji(neighbor);
                 if (newDist < distance_map.get(neighbor)) {
                     neighbor.previous = currentTerritory;

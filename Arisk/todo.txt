@@ -1,20 +1,8 @@
-You will then let them know if it’s possible to do
-this(show the path) and if not let them know what’s the farthest you got. When charting out a
-path the tiebreaker between two equal paths would less stops. You can assume that the
-casualty rate is 1:1
-Finally, you need to determine what’s the least amount of moves needed to reach every city,
-for this question you can assume an unlimited supply of soldiers.
-
-For City,
-price is the total route to get to a territory and the HashMap<City, double> does not make sense as a variable as connections.
-When you do relaxxing thing, I go to the territory with the least amount of soldiers.
-Remove the HashMap and instead get HashSet because there is no cost, it is already associated in the City.
 
 
 
-Make sure you keep track of the path.
-In the end, you will assess if you have enough soldiers to go through the path.
+Test & Make Work
 
-Let them input the amount of soldiers they want to sends
-
-Find code to keep track of path
+Not doing:
+When charting out a path the tiebreaker between two equal paths would less stops.
+if not let them know what’s the farthest you got. 

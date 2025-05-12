@@ -34,8 +34,6 @@ public class RiskDriver {
             var start = scanner.nextLine();
 
             var risk = load_files(start);
-            //input where we want to start at
-            //set region thing to zero
 
             System.out.println("Would you like to invade a country or show the MST?");
             System.out.println("1. Invade a country");
@@ -119,7 +117,7 @@ public class RiskDriver {
     public static Risk load_files(String start) throws Exception{
 
         HashMap<Territory, HashSet<Territory>> graph = new HashMap();
-        HashMap<Territory, Integer> soldiers = new HashMap();
+        HashMap<String, Integer> soldiers = new HashMap();
         HashMap<TerritoryTerritory, Double> prim_map = new HashMap();
 
         var path = Path.of(System.getProperty("user.dir"), "Terrain.csv");
@@ -128,7 +126,7 @@ public class RiskDriver {
             var result = scanner.nextLine();
             var subscanner = new Scanner(result);
             subscanner.useDelimiter(";");
-            var region_one = subscanner.next();
+            var region_one = subscanner.next().replace("\uFEFF", "").trim();
             var region_two = subscanner.next();
             var territorysquare = TerritoryTerritory.struct(region_one, region_two);
             prim_map.put(territorysquare, subscanner.nextDouble());
@@ -148,14 +146,13 @@ public class RiskDriver {
             var subscanner = new Scanner(result);
             subscanner.useDelimiter(";");
 
-            var t = subscanner.next();
+            var t = subscanner.next().replace("\uFEFF", "").trim();
             var soldier = subscanner.nextInt();
-            soldiers.put(new Territory(t), soldier);
+            soldiers.put(t, soldier);
             
             subscanner.close();
         }
         scanner1.close();
-
         return new Risk(graph, prim_map, soldiers, new Territory(start));
     }
 
