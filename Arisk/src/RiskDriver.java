@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 /**
@@ -43,7 +44,9 @@ public class RiskDriver {
             var next = scanner.nextLine();
             switch (next) {
                 case "1" -> {
-                    Map<String, Double> distanceMap = risk.djikstra().entrySet().stream()
+                    var dmap = risk.djikstra();
+
+                    Map<String, Double> distanceMap = dmap.entrySet().stream()
                     .collect(Collectors.toMap(
                         entry -> entry.getKey().name,
                         Map.Entry::getValue
@@ -61,15 +64,34 @@ public class RiskDriver {
                         if(dist <= soldiers) System.out.println("Success!");
                         else System.out.println("Failed!");
 
-                        //place the 
-
+                        ///Find the last node.
+                        Stack<Territory> path = new Stack();
+                        Territory last = null;
+                        for (Territory territory : dmap.keySet()) {
+                            if (territory.name.equals(invade)) {
+                                last = territory;
+                            }
+                        }
+                        ///Retrace the path.
+                        while (last != null) {
+                            path.push(last);
+                            last = last.previous;
+                        }
+                        StringBuilder pathStr = new StringBuilder();
+                        while (!path.isEmpty()) {
+                            pathStr.append(path.pop().name);
+                            if (!path.isEmpty()) {
+                                pathStr.append(" -> ");
+                            }
+                        }
+                        System.out.println("The path is: " + pathStr);
                     }
-                    
                 }
                 case "2" -> {
                     System.out.println("The MST is: ");
                     var runner = 0;
-                    for (var entry : risk.prim_map.entrySet()) {
+                    var entries = risk.prim().entrySet();
+                    for (var entry : entries) {
                         var t = entry.getKey();
                         var money = entry.getValue();
                         System.out.println(t.one + " -> " + t.two + " : " + money);
@@ -98,9 +120,8 @@ public class RiskDriver {
 
         HashMap<Territory, HashSet<Territory>> graph = new HashMap();
         HashMap<Territory, Integer> soldiers = new HashMap();
-
-
         HashMap<TerritoryTerritory, Double> prim_map = new HashMap();
+
         var path = Path.of(System.getProperty("user.dir"), "Terrain.csv");
         var scanner = new Scanner(path.toFile());
         while(scanner.hasNextLine()) {
@@ -108,7 +129,6 @@ public class RiskDriver {
             var subscanner = new Scanner(result);
             subscanner.useDelimiter(";");
             var region_one = subscanner.next();
-            System.out.println(region_one);
             var region_two = subscanner.next();
             var territorysquare = TerritoryTerritory.struct(region_one, region_two);
             prim_map.put(territorysquare, subscanner.nextDouble());

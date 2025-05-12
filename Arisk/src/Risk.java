@@ -1,6 +1,7 @@
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.PriorityQueue;
 
 /**this will have a static graph of the world map as well. Hashmap would be good here along
@@ -50,7 +51,7 @@ public class Risk {
 
             for (Territory neighbor : graph.getOrDefault(currentTerritory, new HashSet<>())) {
                 if (visited.contains(neighbor)) continue;
-
+                
                 double newDist = distance_map.get(currentTerritory) + cost_dji(neighbor);
                 if (newDist < distance_map.get(neighbor)) {
                     neighbor.previous = currentTerritory;
@@ -84,15 +85,14 @@ public class Risk {
 
 
 
-    
 
-    public HashMap<Territory, Territory> prim() {
+
+    public HashMap<TerritoryTerritory, Double> prim() {
         HashMap<Territory, Double> key = new HashMap<>();
         HashMap<Territory, Territory> parent = new HashMap<>();
         PriorityQueue<Territory> pq = new PriorityQueue<>(Comparator.comparingDouble(key::get));
         HashSet<Territory> inMST = new HashSet<>();
 
-        // Initialize all keys to infinity
         for (Territory t : graph.keySet()) {
             key.put(t, Double.POSITIVE_INFINITY);
             parent.put(t, null);
@@ -119,7 +119,18 @@ public class Risk {
             }
         }
 
-        return parent; // This maps each node to its parent in the MST
+        HashMap<TerritoryTerritory, Double> mstEdges = new HashMap<>();
+
+        for (Map.Entry<Territory, Territory> entry : parent.entrySet()) {
+            Territory child = entry.getKey();
+            Territory par = entry.getValue();
+            if (par != null) {
+                double weight = cost_prim(par, child);
+                mstEdges.put(TerritoryTerritory.struct(par.name, child.name), weight);
+            }
+        }
+
+        return mstEdges;
     }
 
     private double cost_prim(Territory u, Territory neighbor) {
