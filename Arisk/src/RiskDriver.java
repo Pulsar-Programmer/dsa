@@ -5,7 +5,9 @@
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 /**
  * this takes in the territories between which the shortest path can be found as well as
@@ -17,9 +19,7 @@ public class RiskDriver {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            
-            
-
+            ///Query the start of the game.
             System.out.println("Would you like to start a game or break?");
             System.out.println("1. Start a Game");
             System.out.println("2. Quit");
@@ -27,17 +27,14 @@ public class RiskDriver {
             if(!scanner.nextLine().equals("1")){
                 break;
             }
-            
-            
 
+            ///Query the start and load in the files.
             System.out.println("Which region would you like to start at?");
             var start = scanner.nextLine();
 
             var risk = load_files(start);
             //input where we want to start at
             //set region thing to zero
-            // risk.djikstra(new Territory())
-            // risk.prim(
 
             System.out.println("Would you like to invade a country or show the MST?");
             System.out.println("1. Invade a country");
@@ -46,23 +43,40 @@ public class RiskDriver {
             var next = scanner.nextLine();
             switch (next) {
                 case "1" -> {
-                    System.out.println("Which country would you like to invade?");
-                    var invade = scanner.nextLine();
-                    System.out.println("How many soldiers would you like to send?");
-                    var soldiers = scanner.nextInt(); scanner.nextLine(); // Consume the newline character left by nextInt()
+                    Map<String, Double> distanceMap = risk.djikstra().entrySet().stream()
+                    .collect(Collectors.toMap(
+                        entry -> entry.getKey().name,
+                        Map.Entry::getValue
+                    ));
+
+                    while (true) {
+                        System.out.println("Which country would you like to invade?");
+                        var invade = scanner.nextLine();
+                        var dist = distanceMap.get(invade);
+                        System.out.println("The distance to " + invade + " is " + dist);
+
+                        System.out.println("How many soldiers would you like to send?");
+                        var soldiers = scanner.nextInt(); scanner.nextLine();
+
+                        if(dist <= soldiers) System.out.println("Success!");
+                        else System.out.println("Failed!");
+
+                        //place the 
+
+                    }
                     
-                    // var territory = new Territory(invade);
-                    // var distance_map = risk.djikstra();
-                    // System.out.println("The distance to " + invade + " is " + distance_map.get(territory));
                 }
                 case "2" -> {
                     System.out.println("The MST is: ");
-                    // var prim_map = risk.prim_map;
-                    // for(var territory : prim_map.keySet()){
-                    //     System.out.println(territory.one + " to " + territory.two + " with a cost of " + prim_map.get(territory));
-                    // }
+                    var runner = 0;
+                    for (var entry : risk.prim_map.entrySet()) {
+                        var t = entry.getKey();
+                        var money = entry.getValue();
+                        System.out.println(t.one + " -> " + t.two + " : " + money);
+                        runner += money;
+                    }
+                    System.out.println("The least value is " + runner);
                 }
-
 
                 default -> {}
             }
@@ -93,8 +107,9 @@ public class RiskDriver {
             var result = scanner.nextLine();
             var subscanner = new Scanner(result);
             subscanner.useDelimiter(";");
-            var region_one = subscanner.nextLine();
-            var region_two = subscanner.nextLine();
+            var region_one = subscanner.next();
+            System.out.println(region_one);
+            var region_two = subscanner.next();
             var territorysquare = TerritoryTerritory.struct(region_one, region_two);
             prim_map.put(territorysquare, subscanner.nextDouble());
             subscanner.close();
@@ -113,7 +128,7 @@ public class RiskDriver {
             var subscanner = new Scanner(result);
             subscanner.useDelimiter(";");
 
-            var t = subscanner.nextLine();
+            var t = subscanner.next();
             var soldier = subscanner.nextInt();
             soldiers.put(new Territory(t), soldier);
             

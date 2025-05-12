@@ -53,26 +53,13 @@ public class Risk {
 
                 double newDist = distance_map.get(currentTerritory) + cost_dji(neighbor);
                 if (newDist < distance_map.get(neighbor)) {
-                    // neighbor.previous = currentTerritory;
+                    neighbor.previous = currentTerritory;
                     distance_map.put(neighbor, newDist);
                     pq.add(new TerritoryDistance(neighbor, newDist));
                 }
             }
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-        //cost(territory, territory) is the distance between the two territories
         return distance_map;
     }
 

@@ -1,10 +1,4 @@
-The goal of the lab is to find the optimum path between two territories based on the
-constraints of soldiers on the starting territory and how many soldiers you have to “knock off”
-between the two territories from the popular game Risk using the World map.
-
-The connections of the territories are stored in a CSV file which you will need to load in. You will
-then prompt the user for a path which they wish to chart(from and to) along with how many
-soldiers are going to be on the starting spot. You will then let them know if it’s possible to do
+You will then let them know if it’s possible to do
 this(show the path) and if not let them know what’s the farthest you got. When charting out a
 path the tiebreaker between two equal paths would less stops. You can assume that the
 casualty rate is 1:1
@@ -23,6 +17,4 @@ In the end, you will assess if you have enough soldiers to go through the path.
 
 Let them input the amount of soldiers they want to sends
 
-
-In DSA (School):
 Find code to keep track of path
