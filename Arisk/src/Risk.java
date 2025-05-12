@@ -22,9 +22,6 @@ public class Risk {
 
     /** The cost between two territories is simply the cost of going to the Territory itself. */
     public double cost_dji(Territory b) {
-        System.out.println(b.name);
-        soldiers.forEach((a, bb) -> { System.out.println(a + " " + bb); });
-        System.out.println(b.name.equals("Afghanistan"));
         return soldiers.get(b.name);
     }
 

@@ -51,8 +51,9 @@ public class RiskDriver {
                     ));
 
                     while (true) {
-                        System.out.println("Which country would you like to invade?");
+                        System.out.println("Which country would you like to invade OR type `quit`?");
                         var invade = scanner.nextLine();
+                        if(invade.equals("quit")) break;
                         var dist = distanceMap.get(invade);
                         System.out.println("The distance to " + invade + " is " + dist);
 
@@ -127,9 +128,12 @@ public class RiskDriver {
             var subscanner = new Scanner(result);
             subscanner.useDelimiter(";");
             var region_one = subscanner.next().replace("\uFEFF", "").trim();
-            var region_two = subscanner.next();
+            var region_two = subscanner.next().replace("\uFEFF", "").trim();
             var territorysquare = TerritoryTerritory.struct(region_one, region_two);
-            prim_map.put(territorysquare, subscanner.nextDouble());
+            var territorysquare2 = TerritoryTerritory.struct(region_two, region_one);
+            var dubble = subscanner.nextDouble();
+            prim_map.put(territorysquare, dubble);
+            prim_map.put(territorysquare2, dubble);
             subscanner.close();
 
             var t1 = new Territory(region_one);
@@ -155,13 +159,4 @@ public class RiskDriver {
         scanner1.close();
         return new Risk(graph, prim_map, soldiers, new Territory(start));
     }
-
-    // /** Selects a file using the java file chooser. */
-    // public static Path select_file() throws Exception {
-    //     JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
-    //     if(fileChooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
-    //         throw new Exception("No file selected.");
-    //     }
-    //     return fileChooser.getSelectedFile().toPath();
-    // }
 }
