@@ -5,7 +5,7 @@ public class Territory {
     public String name;
     // public HashSet<Territory> connections;
     //soldiers
-    public Territory previous;
+    // public Territory previous;
 
     public Territory(String name){
         this.name = name;

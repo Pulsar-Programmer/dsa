@@ -60,30 +60,46 @@ public class RiskDriver {
                         System.out.println("How many soldiers would you like to send?");
                         var soldiers = scanner.nextInt(); scanner.nextLine();
 
-                        if(dist <= soldiers) System.out.println("Success!");
-                        else System.out.println("Failed!");
-
                         ///Find the last node.
-                        Stack<Territory> path = new Stack();
                         Territory last = null;
                         for (Territory territory : dmap.keySet()) {
                             if (territory.name.equals(invade)) {
                                 last = territory;
                             }
                         }
+                        
                         ///Retrace the path.
+                        Stack<Territory> path = new Stack();
+                        var newdmap = risk.previous_map;
                         while (last != null) {
                             path.push(last);
-                            last = last.previous;
+                            last = newdmap.get(last);
                         }
+
                         StringBuilder pathStr = new StringBuilder();
+                        ///We use this previous distance to track the previous distance of the previous node.
+                        var prevdist = 0d;
                         while (!path.isEmpty()) {
-                            pathStr.append(path.pop().name);
+                            ///We get what is popped.
+                            var popped = path.pop();
+                            pathStr.append(popped.name);
+                            ///The soldiers die after a distance.
+                            var distt = distanceMap.get(popped.name);
+                            soldiers -= distt - prevdist;
+                            prevdist = distt;
+                            //reusing `last` variable
+                            if(soldiers <= 0) {
+                                last = popped;
+                                break;
+                            }
                             if (!path.isEmpty()) {
                                 pathStr.append(" -> ");
                             }
                         }
                         System.out.println("The path is: " + pathStr);
+
+                        if(soldiers >= 0) System.out.println("Success!");
+                        else System.out.println("Failed at " + last.name + "!");
                     }
                 }
                 case "2" -> {

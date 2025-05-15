@@ -1,8 +1,2 @@
-
-
-
-Test & Make Work
-
 Not doing:
 When charting out a path the tiebreaker between two equal paths would less stops.
-if not let them know what’s the farthest you got. 

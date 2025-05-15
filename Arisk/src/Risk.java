@@ -10,6 +10,7 @@ public class Risk {
     HashMap<Territory, HashSet<Territory>> graph;
     HashMap<TerritoryTerritory, Double> prim_map;
     HashMap<String, Integer> soldiers;
+    HashMap<Territory, Territory> previous_map;
 
     Territory start;
 
@@ -18,6 +19,7 @@ public class Risk {
         this.prim_map = prim_map;
         this.soldiers = soliders;
         this.start = start;
+        this.previous_map = new HashMap<>();
     }
 
     /** The cost between two territories is simply the cost of going to the Territory itself. */
@@ -26,6 +28,7 @@ public class Risk {
     }
 
     public HashMap<Territory, Double> djikstra() {
+        previous_map.clear();
         ///Create our map of distances.
         HashMap<Territory, Double> distance_map = new HashMap<>();
 
@@ -53,7 +56,8 @@ public class Risk {
 
                 double newDist = distance_map.get(currentTerritory) + cost_dji(neighbor);
                 if (newDist < distance_map.get(neighbor)) {
-                    neighbor.previous = currentTerritory;
+                    // neighbor.previous = currentTerritory;
+                    previous_map.put(neighbor, currentTerritory);
                     distance_map.put(neighbor, newDist);
                     pq.add(new TerritoryDistance(neighbor, newDist));
                 }
