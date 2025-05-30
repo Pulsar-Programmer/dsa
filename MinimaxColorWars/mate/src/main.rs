@@ -22,3 +22,26 @@ impl std::default::Default for Board<8, 8> {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+// struct Wall{
+//     enabled: bool,
+// }
+// impl Triggerable for Wall{
+//     fn trigger(&mut self) {
+//         self.enabled = true;
+//     }
+// }
+
+// trait Triggerable{
+//     fn trigger(&mut self);
+// }

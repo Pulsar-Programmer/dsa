@@ -7,9 +7,6 @@ import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements Runnable {
     
-
-
-
     public Thread gameThread;
 
     public GamePanel() {
@@ -82,6 +79,17 @@ public class GamePanel extends JPanel implements Runnable {
     public void update(){
 
     }
+
+
+
+
+
+
+
+
+
+
+    
 
 
 
