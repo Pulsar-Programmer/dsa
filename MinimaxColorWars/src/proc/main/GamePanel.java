@@ -5,9 +5,15 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
+import ds.Board;
+import ds.Player;
+import proc.Drawing;
+
 public class GamePanel extends JPanel implements Runnable {
     
     public Thread gameThread;
+    Board board;
+    Player player;
 
     public GamePanel() {
         setPreferredSize(new Dimension(1000, 1000));
@@ -16,10 +22,10 @@ public class GamePanel extends JPanel implements Runnable {
         // addKeyListener(keyH);
         // addMouseListener(l);
         setFocusable(true);
+
+        board = new Board();
+        player = new Player();
     }
-
-
-
 
     public void startGameThread() {
         // sounds.clear();
@@ -44,7 +50,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         while(gameThread != null){
             currentTime = System.nanoTime();
-
+            
             delta += (currentTime - lastTime) / drawInterval;
 
             lastTime = currentTime;
@@ -61,8 +67,11 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
 
-        draw_bg(g2);
-        draw_grid(g2);
+        var drawer = new Drawing(g2);
+
+        // drawer.draw_bg(getWidth(), getHeight());
+
+        // drawer.draw_grid();
         
         g2.dispose();
     }
@@ -93,35 +102,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 
 
-    /** Draws background and board. */
-    public void draw_bg(Graphics2D g2) {
-        g2.setColor(java.awt.Color.white);
-        g2.fillRect(0, 0, this.getWidth(), this.getHeight());
-        // Draw the board here
-        // g2.drawImage(boardImage, 0, 0, null);
-    }
-
-    public static void draw_board(Graphics2D g2) {
-        // Draw the board here
-        // g2.drawImage(boardImage, 0, 0, null);
-    }
-
-    public void draw_grid(Graphics2D g2) {
-        // g2.setColor(Color.GRAY);
-        // for (int i = 0; i < this.getWidth(); i += 50) {
-        //     g2.drawLine(i, 0, i, this.getHeight());
-        //     g2.fillRect(i, i, WIDTH, HEIGHT);
-        // }
-        // for (int j = 0; j < this.getHeight(); j += 50) {
-        //     g2.drawLine(0, j, this.getWidth(), j);
-        // }
-    }
-
-    public void draw_player(Graphics2D g2) {
-        // Draw player pieces here
-        // g2.setColor(Color.RED);
-        // g2.fillOval(playerX, playerY, playerWidth, playerHeight);
-    }
+    
 
 
 
