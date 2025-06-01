@@ -1,6 +1,7 @@
 package proc;
 
 import java.awt.Graphics2D;
+import java.awt.Shape;
 
 import ds.GraphicsObject;
 
@@ -49,7 +50,7 @@ public class Drawing {
         // g2.fillOval(playerX, playerY, playerWidth, playerHeight);
     }
 
-    public void draw_object(GraphicsObject g2){
-        //TODO
+    public <T extends Shape> void draw_object(GraphicsObject<T> obj){
+        obj.draw(g2);
     }
 }

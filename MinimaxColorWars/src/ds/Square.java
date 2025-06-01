@@ -1,8 +1,10 @@
 package ds;
 
+import java.awt.Rectangle;
+
 /**Squares within the board. */
 public class Square implements Selectable {
-    GraphicsObject object;
+    GraphicsObject<Rectangle> object;
 
 
 
