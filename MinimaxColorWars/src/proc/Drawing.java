@@ -1,5 +1,7 @@
 package proc;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 
@@ -20,36 +22,31 @@ public class Drawing {
     
 
     /** Draws background. */
-    public void draw_bg(int width, int height) {
+    public void draw_bg() {
+        final var dim = 990;
         
-        // g2.setColor(java.awt.Color.black);
-        // g2.fillRect(0, 0, this.getWidth(), this.getHeight());
-        // Draw the board here
-        // g2.drawImage(boardImage, 0, 0, null);
+        g2.setColor(java.awt.Color.black);
+        g2.fillRect(5, 5, dim + 5, dim + 5);
     }
 
     public void draw_board() {
         // Draw the board here
         // g2.drawImage(boardImage, 0, 0, null);
+        //TODO
     }
 
-    public void draw_grid() {
-        // g2.setColor(Color.GRAY);
-        // for (int i = 0; i < this.getWidth(); i += 50) {
-        //     g2.drawLine(i, 0, i, this.getHeight());
-        //     g2.fillRect(i, i, WIDTH, HEIGHT);
-        // }
-        // for (int j = 0; j < this.getHeight(); j += 50) {
-        //     g2.drawLine(0, j, this.getWidth(), j);
-        // }
+    /** Draws a selection on an object. */
+    public void draw_selection(Color shade, Shape selection){
+        var prev = g2.getStroke();
+
+        g2.setColor(shade);
+        g2.setStroke(new BasicStroke(4));
+        g2.draw(selection);
+
+        g2.setStroke(prev);
     }
 
-    public void draw_player() {
-        // Draw player pieces here
-        // g2.setColor(Color.RED);
-        // g2.fillOval(playerX, playerY, playerWidth, playerHeight);
-    }
-
+    /** Draws the object. */
     public <T extends Shape> void draw_object(GraphicsObject<T> obj){
         obj.draw(g2);
     }

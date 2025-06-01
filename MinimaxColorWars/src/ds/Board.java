@@ -9,7 +9,7 @@ public class Board {
     SelectPool<Square> squares;
 
     public Board(SelectPool<Wall> walls, SelectPool<Square> squares){
-
+        
     }
 
     public Board() {

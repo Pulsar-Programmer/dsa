@@ -13,7 +13,7 @@ public class SelectPool<T extends Selectable> {
     public SelectPool(ArrayList<T> pool) {
         this.pool = pool;
     }
-
+    
     /** Default implementation. */
     public static <T extends Selectable> SelectPool<T> Default() {
         return new SelectPool<T>(new ArrayList<T>());
