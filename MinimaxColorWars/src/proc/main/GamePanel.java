@@ -22,9 +22,6 @@ public class GamePanel extends JPanel implements Runnable {
         // addKeyListener(keyH);
         // addMouseListener(l);
         setFocusable(true);
-
-        board = new Board();
-        player = new Player();
     }
 
     public void startGameThread() {
@@ -37,7 +34,9 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void setupGame(){
+        board = new Board();
         
+
     }
 
     @Override
@@ -50,7 +49,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         while(gameThread != null){
             currentTime = System.nanoTime();
-            
+
             delta += (currentTime - lastTime) / drawInterval;
 
             lastTime = currentTime;
@@ -69,7 +68,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         var drawer = new Drawing(g2);
 
-        // drawer.draw_bg(getWidth(), getHeight());
+        drawer.draw_bg();
 
         // drawer.draw_grid();
         

@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 
+import ds.Board;
 import ds.GraphicsObject;
 
 public class Drawing {
@@ -29,7 +30,9 @@ public class Drawing {
         g2.fillRect(5, 5, dim + 5, dim + 5);
     }
 
-    public void draw_board() {
+    public void draw_board(Board board) {
+        board.squares.pool.forEach((square) -> square.object.draw(g2));
+        board.walls.pool.forEach((wall) -> wall.object.draw(g2));
         // Draw the board here
         // g2.drawImage(boardImage, 0, 0, null);
         //TODO

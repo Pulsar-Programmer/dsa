@@ -8,7 +8,7 @@ public class SelectPool<T extends Selectable> {
     //a specific method is called on the object when the mouse meets this condition
 
     /**Contents of the pool. */
-    ArrayList<T> pool;
+    public ArrayList<T> pool;
 
     public SelectPool(ArrayList<T> pool) {
         this.pool = pool;

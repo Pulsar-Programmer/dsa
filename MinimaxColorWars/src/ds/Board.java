@@ -5,16 +5,16 @@ public class Board {
     //must allow clicking in the spaces
     //have all walls present, make them eitehr disabled or enabled
 
-    SelectPool<Wall> walls;
-    SelectPool<Square> squares;
+    public SelectPool<Wall> walls;
+    public SelectPool<Square> squares;
 
     public Board(SelectPool<Wall> walls, SelectPool<Square> squares){
-        
+        this.walls = walls;
+        this.squares = squares;
     }
 
     public Board() {
-        walls = SelectPool.Default();
-        squares = SelectPool.Default();
+        this(SelectPool.Default(), SelectPool.Default());
     }
     
 }

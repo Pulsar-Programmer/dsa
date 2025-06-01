@@ -1,12 +1,14 @@
 package ds;
 
+import java.awt.Color;
+import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.ArrayList;
+import proc.main.App;
 
 /** Walls present within the Board. */
 public class Wall implements Selectable {
     boolean enabled;
-    GraphicsObject<Rectangle> object;
+    public GraphicsObject<Rectangle> object;
 
     public Wall(boolean enabled, GraphicsObject<Rectangle> object) {
         this.enabled = enabled;
@@ -14,13 +16,19 @@ public class Wall implements Selectable {
     }
 
     /** Wide implementation. */
-    public static Wall wide() {
-        return new Wall(false, new GraphicsObject<Rectangle>(color, new Rectangle(0, 0, 90, 18)));
+    public static Wall wide(Point pos) {
+        return new Wall(false, new GraphicsObject<Rectangle>(Color.black, new Rectangle(pos.x, pos.y, 90, 18)));
     }
 
     /** High implementation. */
-    public static Wall high() {
-        return new Wall(false, new GraphicsObject<Rectangle>(new Rectangle(0, 0, 18, 90)));
+    public static Wall high(Point pos) {
+        return new Wall(false, new GraphicsObject<Rectangle>(Color.black, new Rectangle(pos.x, pos.y, 18, 90)));
+    }
+
+    /** Enables the wall. */
+    public void enable(){
+        enabled = true;
+        object.color = App.mantle;
     }
 
     @Override
