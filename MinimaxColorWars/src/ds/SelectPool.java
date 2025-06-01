@@ -3,15 +3,21 @@ package ds;
 import java.util.ArrayList;
 
 /** A collection of objects, that, when an action is called, the trigger pool triggers the proper object. */
-public class SelectPool<T> {
+public class SelectPool<T extends Selectable> {
     //represents a pool of objects
     //a specific method is called on the object when the mouse meets this condition
 
-    ArrayList<Selectable> pool;
+    ArrayList<T> pool;
 
-    // public Selectable select(int mouse_x, int mouse_y){
-        
-    // }
+    public ArrayList<T> select(int mouse_x, int mouse_y){
+        ArrayList<T> list = new ArrayList<>();
+        for (T selectable : pool) {
+            if(selectable.cmp(mouse_x, mouse_y)){
+                list.add(selectable);
+            }
+        }
+        return list;
+    }
 }
 
 /** Trait that allows the entering within a TriggerPool. */

@@ -5,16 +5,10 @@ public class Square implements Selectable {
     GraphicsObject object;
 
 
-    
-    @Override
-    public boolean cmp(int mouse_x, int mouse_y) {
-        // TODO Auto-generated method stub
-        return false;
-    }
 
     @Override
-    public boolean on_select() {
-        // TODO Auto-generated method stub
+    public boolean cmp(int mouse_x, int mouse_y) {
+        // return mouse_x - object.position.x
         return false;
     }
 

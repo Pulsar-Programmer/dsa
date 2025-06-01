@@ -1,11 +1,13 @@
 package ds;
 
-public class Player {
-    GraphicsObject object;
-    
-    ///TODO
-    public Player() {
+import java.awt.Polygon;
 
+public class Player {
+    GraphicsObject<Polygon> object;
+    
+    public Player() {
+        
+        ///TODO
     }
     
     
