@@ -1,13 +1,11 @@
 package proc;
 
+import ds.Board;
+import ds.GraphicsObject;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Polygon;
 import java.awt.Shape;
-
-import ds.Board;
-import ds.GraphicsObject;
 
 public class Drawing {
     Graphics2D g2;

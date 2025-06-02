@@ -7,7 +7,7 @@ import proc.main.App;
 
 /** Walls present within the Board. */
 public class Wall implements Selectable {
-    boolean enabled;
+    public boolean enabled;
     public GraphicsObject<Rectangle> object;
 
     public Wall(boolean enabled, GraphicsObject<Rectangle> object) {

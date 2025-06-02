@@ -1,6 +1,5 @@
 package proc.main;
 import java.awt.Color;
-
 import javax.swing.JFrame;
 
 //Double comments are not intended to be read.
