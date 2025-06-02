@@ -33,7 +33,10 @@ public class Wall implements Selectable {
 
     @Override
     public boolean cmp(int mouse_x, int mouse_y) {
-        return mouse_x - object.shape.x < object.shape.width && mouse_y - object.shape.y < object.shape.height;
+        return mouse_x < object.shape.width + object.shape.x 
+        && mouse_x > object.shape.x
+        && mouse_y < object.shape.height + object.shape.y
+        && mouse_y > object.shape.y;
     }
 
 

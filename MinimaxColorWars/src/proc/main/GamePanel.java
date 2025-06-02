@@ -20,14 +20,16 @@ public class GamePanel extends JPanel implements Runnable {
     Board board;
     Player player;
     MouseHandler handler;
+    boolean turn = false;
+    
 
     public GamePanel() {
         setPreferredSize(new Dimension(1000, 1000));
         setBackground(Color.black);
         setDoubleBuffered(true);
-        // addKeyListener(keyH);
         handler = new MouseHandler();
         addMouseListener(handler);
+        addMouseMotionListener(handler);
         setFocusable(true);
     }
 
@@ -112,9 +114,11 @@ public class GamePanel extends JPanel implements Runnable {
         drawer.draw_bg();
         drawer.draw_board(board);
 
-        var vec = board.squares.select(handler.mouseX, handler.mouseY);
-        for (var square : vec) {
-            drawer.draw_selection(Color.blue, square.object.shape);
+        for (var square : board.squares.select(handler.mouseX, handler.mouseY)) {
+            drawer.draw_selection(turn ? App.sunglo : App.cornflowerblue, square.object.shape);
+        }
+        for (var wall : board.walls.select(handler.mouseX, handler.mouseY)) {
+            drawer.draw_selection(turn ? App.chestnut : App.dodgerblue, wall.object.shape);
         }
         
         g2.dispose();

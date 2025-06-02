@@ -34,7 +34,7 @@ public class Drawing {
         var prev = g2.getStroke();
 
         g2.setColor(shade);
-        g2.setStroke(new BasicStroke(4));
+        g2.setStroke(new BasicStroke(5));
         g2.draw(selection);
 
         g2.setStroke(prev);
