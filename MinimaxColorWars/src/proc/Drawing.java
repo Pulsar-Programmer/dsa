@@ -3,6 +3,7 @@ package proc;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 import java.awt.Shape;
 
 import ds.Board;
@@ -44,4 +45,40 @@ public class Drawing {
     public <T extends Shape> void draw_object(GraphicsObject<T> obj){
         obj.draw(g2);
     }
+
+
+
+
+
+
+
+
+
+    // public void drawPawn(Graphics2D g2d) {
+    //     // g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    //     g2d.setColor(Color.BLACK);
+
+    //     int centerX = 150;
+    //     int baseY = 250;
+
+    //     // Draw head (oval)
+    //     int headWidth = 60;
+    //     int headHeight = 60;
+    //     g2d.fillOval(centerX - headWidth / 2, baseY - 200, headWidth, headHeight);
+
+    //     // Draw neck (rectangle)
+    //     int neckWidth = 20;
+    //     int neckHeight = 60;
+    //     g2d.fillRect(centerX - neckWidth / 2, baseY - 140, neckWidth, neckHeight);
+
+    //     // Draw base (polygon like hex base)
+    //     Polygon base = new Polygon();
+    //     base.addPoint(centerX - 50, baseY);       // Bottom left
+    //     base.addPoint(centerX - 30, baseY - 30);  // Upper left
+    //     base.addPoint(centerX - 10, baseY - 40);  // Neck left
+    //     base.addPoint(centerX + 10, baseY - 40);  // Neck right
+    //     base.addPoint(centerX + 30, baseY - 30);  // Upper right
+    //     base.addPoint(centerX + 50, baseY);       // Bottom right
+    //     g2d.fillPolygon(base);
+    // }
 }

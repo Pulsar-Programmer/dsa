@@ -120,6 +120,8 @@ public class GamePanel extends JPanel implements Runnable {
         for (var wall : board.walls.select(handler.mouseX, handler.mouseY)) {
             drawer.draw_selection(turn ? App.chestnut : App.dodgerblue, wall.object.shape);
         }
+
+        // drawer.drawPawn(g2);
         
         g2.dispose();
     }
