@@ -15,13 +15,6 @@ public class Drawing {
         this.g2 = g2;
     }
 
-
-
-
-
-
-    
-
     /** Draws background. */
     public void draw_bg() {
         final var dim = 990;

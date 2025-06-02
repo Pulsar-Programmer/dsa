@@ -3,6 +3,10 @@ import java.awt.Color;
 
 import javax.swing.JFrame;
 
+//Double comments are not intended to be read.
+///Triple comments are intended to be read.
+/** Doc comments are intended to be read. */
+
 public class App {
 
     public final static Color muddy_waters = new Color(0xB37E5B);

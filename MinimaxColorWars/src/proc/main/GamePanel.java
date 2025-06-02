@@ -12,19 +12,22 @@ import ds.Player;
 import ds.Square;
 import ds.Wall;
 import proc.Drawing;
+import proc.MouseHandler;
 
 public class GamePanel extends JPanel implements Runnable {
     
     public Thread gameThread;
     Board board;
     Player player;
+    MouseHandler handler;
 
     public GamePanel() {
         setPreferredSize(new Dimension(1000, 1000));
         setBackground(Color.black);
         setDoubleBuffered(true);
         // addKeyListener(keyH);
-        // addMouseListener(l);
+        handler = new MouseHandler();
+        addMouseListener(handler);
         setFocusable(true);
     }
 
@@ -109,21 +112,24 @@ public class GamePanel extends JPanel implements Runnable {
         drawer.draw_bg();
         drawer.draw_board(board);
 
-        // drawer.draw_grid();
+        var vec = board.squares.select(handler.mouseX, handler.mouseY);
+        for (var square : vec) {
+            drawer.draw_selection(Color.blue, square.object.shape);
+        }
         
         g2.dispose();
     }
 
-
-
-
-
-
-
-
-
-
     public void update(){
+        // if(handler.mouseClicked.isPresent()){
+        //     handler.mouseClicked.
+        // }
+        //how do you do move events in mousehandler like hovering and stuff??!? 
+        //Do i have to chceck every frame? I guess so ...
+        // var vec = board.squares.select(handler.mouseX, handler.mouseY);
+        // for (var square : vec) {
+            
+        // }
 
     }
 

@@ -8,7 +8,7 @@ import java.awt.Shape;
 public class GraphicsObject<T extends Shape> {
     // Point position;
     Color color;
-    T shape;
+    public T shape;
 
     public GraphicsObject(Color color, T shape) {
         // this.position = position;
