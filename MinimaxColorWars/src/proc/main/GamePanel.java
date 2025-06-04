@@ -127,11 +127,23 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update(){
-        // if(selecting){
-        //     if(handler.mouseClicked.isPresent()){
-        //         var p = handler.mouseClicked.get();
-        //     }
-        // }
+        if(selecting){
+            if(handler.mouseClicked.isPresent()){
+                var p = handler.mouseClicked.get();
+
+                var walls = board.walls.select(p.x, p.y);
+                if(!walls.isEmpty()){
+                    Wall wall = walls.get(0);
+                    if(wall.enabled){
+                        message("Wall already enabled");
+                        return;
+                    }
+                    wall.enable();
+                    selecting = false;
+                    turn = !turn;
+                }
+            }
+        }
         if(handler.mouseClicked.isPresent()){
             var p = handler.mouseClicked.get();
 
@@ -145,10 +157,12 @@ public class GamePanel extends JPanel implements Runnable {
             if(!walls.isEmpty()){
                 Wall wall = walls.get(0);
                 if(wall.enabled){
-                    //message("Wall already enabled"); TODO
+                    message("Wall already enabled.");
                     return;
                 }
                 wall.enable();
+                selecting = true;
+                message("Select another wall.");
                 turn = !turn;
             }
         }
@@ -167,6 +181,21 @@ public class GamePanel extends JPanel implements Runnable {
         }
         return Optional.of(walls.get(0));
     }
+    //create an adjacent wall
+    public Optional<Square> parent_square(Wall wall, boolean positive){
+
+        boolean is_vertical = wall.object.shape.width < wall.object.shape.height;
+
+        var x_offset = is_vertical ? (positive ? 1 + 18 : -1) : 0;
+        var y_offset = is_vertical ? 0 : (positive ? -1 : 1 + 18);
+
+        var pos = new Point(wall.object.shape.x + x_offset, wall.object.shape.y + y_offset);
+        var squares = board.squares.select(pos.x, pos.y);
+        if(squares.isEmpty()){
+            return Optional.empty();
+        }
+        return Optional.of(squares.get(0));
+    }
     public Optional<Square> next_square(Square square, boolean up, boolean right){
         var x_offset = right ? 90 + 1 + 18 : -1 - 18;
         var y_offset = up ? -1 - 18 : 90 + 1 + 18;
@@ -178,6 +207,10 @@ public class GamePanel extends JPanel implements Runnable {
         return Optional.of(squares.get(0));
     }
 
+
+    public void message(String msg){
+        System.out.println(msg);
+    }
 
 
 

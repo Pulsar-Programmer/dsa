@@ -1,7 +1,6 @@
 package ds;
 
 import java.awt.Polygon;
-import java.awt.Rectangle;
 
 public class Player {
     GraphicsObject<Polygon> object;
