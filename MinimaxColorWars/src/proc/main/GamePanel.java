@@ -127,6 +127,14 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update(){
+        if(true){
+            for (var square : board.squares.select(handler.mouseX, handler.mouseY)) {
+                message(square.map() + "");
+            }
+            for (var wall : board.walls.select(handler.mouseX, handler.mouseY)) {
+                message(wall.map() + "");
+            }
+        }
         if(selecting){
             if(handler.mouseClicked.isPresent()){
                 var p = handler.mouseClicked.get();

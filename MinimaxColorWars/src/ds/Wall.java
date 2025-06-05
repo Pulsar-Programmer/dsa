@@ -25,6 +25,11 @@ public class Wall implements Selectable {
         return new Wall(false, new GraphicsObject<Rectangle>(Color.black, new Rectangle(pos.x, pos.y, 18, 90)));
     }
 
+    /** Tests whether the wall is vertical or not. */
+    public boolean is_vertical(){
+        return object.shape.width < object.shape.height;
+    } 
+
     /** Enables the wall. */
     public void enable(){
         enabled = true;
@@ -39,6 +44,19 @@ public class Wall implements Selectable {
         && mouse_y > object.shape.y;
     }
 
+    @Override
+    public int map() {
+        var b_type = is_vertical();
+
+        var x_type = (object.shape.x - 5 - 18) / (90 + 18);
+        var y_type = (object.shape.y - 5) / (90 + 18);
+        if(b_type){
+            x_type = (object.shape.x - 5) / (90 + 18);
+            y_type = (object.shape.y - 5 - 18) / (90 + 18);
+        }
+
+        return x_type + y_type * 10 + (b_type ? 99 : 0);
+    }
 
 }
 

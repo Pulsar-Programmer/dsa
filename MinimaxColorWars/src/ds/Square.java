@@ -31,5 +31,12 @@ public class Square implements Selectable {
         && mouse_y > object.shape.y;
     }
 
+    @Override
+    public int map() {
+        var x_type = (object.shape.x - 5 - 18) / (90 + 18);
+        var y_type = (object.shape.y - 5 - 18) / (90 + 18);
+        return x_type + y_type * 9;
+    }
+
     
 }
