@@ -1,1 +1,7 @@
-- Get mouse input
+Figure out OnClick keep repeating bug
+Allow moves to work -> the two ways of moving
+Implement AI v. Friend
+Implement the depth and alpha beta pruning optimizing the board 
+Maybe come up with a better way of describing the board - need it for the alpha beta pruning
+Add the Player character
+

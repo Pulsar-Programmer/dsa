@@ -171,41 +171,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
 
-    public Optional<Wall> next_wall(Square square, boolean up, boolean right){
-        var x_offset = right ? 90 + 1 : -1;
-        var y_offset = up ? -1 : 90 + 1;
-        var pos = new Point(square.object.shape.x + x_offset, square.object.shape.y + y_offset);
-        var walls = board.walls.select(pos.x, pos.y);
-        if(walls.isEmpty()){
-            return Optional.empty();
-        }
-        return Optional.of(walls.get(0));
-    }
-    //create an adjacent wall
-    public Optional<Square> parent_square(Wall wall, boolean positive){
-
-        boolean is_vertical = wall.object.shape.width < wall.object.shape.height;
-
-        var x_offset = is_vertical ? (positive ? 1 + 18 : -1) : 0;
-        var y_offset = is_vertical ? 0 : (positive ? -1 : 1 + 18);
-
-        var pos = new Point(wall.object.shape.x + x_offset, wall.object.shape.y + y_offset);
-        var squares = board.squares.select(pos.x, pos.y);
-        if(squares.isEmpty()){
-            return Optional.empty();
-        }
-        return Optional.of(squares.get(0));
-    }
-    public Optional<Square> next_square(Square square, boolean up, boolean right){
-        var x_offset = right ? 90 + 1 + 18 : -1 - 18;
-        var y_offset = up ? -1 - 18 : 90 + 1 + 18;
-        var pos = new Point(square.object.shape.x + x_offset, square.object.shape.y + y_offset);
-        var squares = board.squares.select(pos.x, pos.y);
-        if(squares.isEmpty()){
-            return Optional.empty();
-        }
-        return Optional.of(squares.get(0));
-    }
+    
 
 
     public void message(String msg){
