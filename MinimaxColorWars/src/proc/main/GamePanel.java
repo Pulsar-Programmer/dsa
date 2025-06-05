@@ -56,15 +56,15 @@ public class GamePanel extends JPanel implements Runnable {
         for(var i = 0; i < 9; i++){
             for(var j = 0; j < 9; j++){
                 var pos = new Point(def_xy + (90 + 18) * i, def_xy + (90 + 18) * j);
-                board.squares.pool.add(color ? Square.muddy_waters(pos) : Square.sidecar(pos));
+                board.squares.push(color ? Square.muddy_waters(pos) : Square.sidecar(pos));
 
                 var pos_top = new Point(def_xy + (90 + 18) * i, def_xy + (90 + 18) * j - 18);
                 var top = Wall.wide(pos_top);
-                board.walls.pool.add(top);
+                board.walls.push(top);
 
                 var pos_left = new Point(def_xy + (90 + 18) * i - 18, def_xy + (90 + 18) * j);
                 var left = Wall.high(pos_left);
-                board.walls.pool.add(left);
+                board.walls.push(left);
 
                 color = !color;
             }
@@ -74,11 +74,11 @@ public class GamePanel extends JPanel implements Runnable {
         for(var i = 0; i < 9; i++){
             var pos_bottom = new Point(def_xy + (90 + 18) * i, def_xy + (90 + 18) * 9 - 18);
             var bottom = Wall.wide(pos_bottom);
-            board.walls.pool.add(bottom);
+            board.walls.push(bottom);
 
             var pos_right = new Point(def_xy + (90 + 18) * 9 - 18, def_xy + (90 + 18) * i);
             var right = Wall.high(pos_right);
-            board.walls.pool.add(right);
+            board.walls.push(right);
         }
     }
 
@@ -127,14 +127,14 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update(){
-        if(true){
-            for (var square : board.squares.select(handler.mouseX, handler.mouseY)) {
-                message(square.map() + "");
-            }
-            for (var wall : board.walls.select(handler.mouseX, handler.mouseY)) {
-                message(wall.map() + "");
-            }
-        }
+        // if(true){
+        //     for (var square : board.squares.select(handler.mouseX, handler.mouseY)) {
+        //         message(square.map() + "");
+        //     }
+        //     for (var wall : board.walls.select(handler.mouseX, handler.mouseY)) {
+        //         message(wall.map() + "");
+        //     }
+        // }
         if(selecting){
             if(handler.mouseClicked.isPresent()){
                 var p = handler.mouseClicked.get();

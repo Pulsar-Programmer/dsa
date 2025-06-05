@@ -1,6 +1,7 @@
 package ds;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 /** A collection of objects, that, when an action is called, the trigger pool triggers the proper object. */
 public class SelectPool<T extends Selectable> {
@@ -8,24 +9,37 @@ public class SelectPool<T extends Selectable> {
     //a specific method is called on the object when the mouse meets this condition
 
     /**Contents of the pool. */
-    public ArrayList<T> pool;
+    ArrayList<T> pool;
 
     private SelectPool(ArrayList<T> pool) {
         this.pool = pool;
     }
 
     /** Creates a locker-type vec. */
-    public static <T extends Selectable> SelectPool<T> with_cap(int cap){
-        var list = new ArrayList<T>();
-        for(var i = 0; i < cap; i++){
-            list.add(null);
-        }
-        return new SelectPool<T>(list);
-    }
+    // public static <T extends Selectable> SelectPool<T> with_cap(int cap){
+    //     var list = new ArrayList<T>();
+    //     for(var i = 0; i < cap; i++){
+    //         list.add(null);
+    //     }
+    //     return new SelectPool<T>(list);
+    // }
 
     /** Pushes the object and indexes it within the list. */
     public void push(T item){
-        
+        var idx = item.map();
+        while(idx >= pool.size()){
+            pool.add(null);
+        }
+        pool.set(idx, item);
+    }
+
+    public void forEach(Consumer<T> action) {
+        var iterator = pool.iterator();
+        while (iterator.hasNext()) {
+            var next = iterator.next();
+            if(next == null) continue;
+            action.accept(next);
+        }
     }
     
     /** Default implementation. */
@@ -36,11 +50,11 @@ public class SelectPool<T extends Selectable> {
     /** Selects items from the Trigger pool. */
     public ArrayList<T> select(int mouse_x, int mouse_y){
         ArrayList<T> list = new ArrayList<>();
-        for (T selectable : pool) {
+        forEach(selectable -> {
             if(selectable.cmp(mouse_x, mouse_y)){
                 list.add(selectable);
             }
-        }
+        });
         return list;
     }
 }

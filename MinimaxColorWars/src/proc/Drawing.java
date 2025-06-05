@@ -24,8 +24,8 @@ public class Drawing {
 
     /**Draws the board given its components. */
     public void draw_board(Board board) {
-        board.squares.pool.forEach((square) -> square.object.draw(g2));
-        board.walls.pool.forEach((wall) -> wall.object.draw(g2));
+        board.squares.forEach((square) -> square.object.draw(g2));
+        board.walls.forEach((wall) -> wall.object.draw(g2));
     }
 
     /** Draws a selection on an object. */
