@@ -1,7 +1,11 @@
-Figure out OnClick keep repeating bug
-Allow moves to work -> the two ways of moving
-Implement AI v. Friend
-Implement the depth and alpha beta pruning optimizing the board 
-Maybe come up with a better way of describing the board - need it for the alpha beta pruning
-Add the Player character
+USE MODERN TOOLING - GITHUB ISSUES + AI
+
+20m | Concurrent Modification Error (Multithread unsafe access)
+
+1h | Maybe come up with a better way of describing the board - need it for the alpha beta pruning
+
+1h | Add the Player character & Allow moves to work -> the two ways of moving
+1h | Implement AI v. Friend
+
+1h | Implement the depth and alpha beta pruning optimizing the board
 

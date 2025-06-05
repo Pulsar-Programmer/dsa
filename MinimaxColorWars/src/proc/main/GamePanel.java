@@ -142,6 +142,7 @@ public class GamePanel extends JPanel implements Runnable {
                     selecting = false;
                     turn = !turn;
                 }
+                handler.mouseClicked = Optional.empty();
             }
         }
         if(handler.mouseClicked.isPresent()){
@@ -163,8 +164,8 @@ public class GamePanel extends JPanel implements Runnable {
                 wall.enable();
                 selecting = true;
                 message("Select another wall.");
-                turn = !turn;
             }
+            handler.mouseClicked = Optional.empty();
         }
         
 
@@ -175,7 +176,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 
     public void message(String msg){
-        System.out.println(msg);
+        System.out.println("\n" + msg);
     }
 
 
