@@ -31,6 +31,10 @@ public class Board {
 
     /** Gets the next wall from the current square. */
     public Optional<Wall> next_wall(Square square, boolean up, boolean right){
+        // var x_offset = right ? 1 : -1;
+        // var y_offset = up ? 9 : -9;
+
+
         var x_offset = right ? 90 + 1 : -1;
         var y_offset = up ? -1 : 90 + 1;
         var pos = new Point(square.object.shape.x + x_offset, square.object.shape.y + y_offset);
@@ -42,17 +46,29 @@ public class Board {
     }
     /** Finds the wall adjacent to the current wall. */
     public Optional<Wall> adjacent_wall(Wall wall, boolean positive){
-        boolean is_vertical = wall.object.shape.width < wall.object.shape.height;
+        boolean is_vertical = wall.is_vertical();
 
-        var x_offset = is_vertical ? 0 : (positive ? 90 + 18 + 1 : -1 - 18);
-        var y_offset = is_vertical ? (positive ? -1 - 18 : 90 + 18 + 1) : 0;
+        var x_offset = is_vertical ? 0 : 1;
+        var y_offset = is_vertical ? 10 : 0;
+        x_offset *= positive ? 1 : -1;
+        y_offset *= positive ? 1 : -1;
+        
+        var next = walls.try_get(wall.map() + x_offset + y_offset);
 
-        var pos = new Point(wall.object.shape.x + x_offset, wall.object.shape.y + y_offset);
-        var walls = this.walls.select(pos.x, pos.y);
-        if(walls.isEmpty()){
-            return Optional.empty();
+        if(next.isPresent()){
+            var map = next.get().map();
+            if(!is_vertical){
+                if(map % 10 == 0 || map % 10 == 8 || map % 10 == 9 || map > 99) {
+                    next = Optional.empty();
+                }
+            } else{
+                if(map < 99){
+                    next = Optional.empty();
+                }
+            }
         }
-        return Optional.of(walls.get(0));
+
+        return next;
     }
     /** Finds the parent square given the wall. */
     public Optional<Square> parent_square(Wall wall, boolean positive){

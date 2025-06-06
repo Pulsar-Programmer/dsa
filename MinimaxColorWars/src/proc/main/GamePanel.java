@@ -26,7 +26,7 @@ public class GamePanel extends JPanel implements Runnable {
     Optional<Wall> selecting = Optional.empty();
     boolean ai;
     
-    
+
     public GamePanel() {
         setPreferredSize(new Dimension(1000, 1000));
         setBackground(Color.black);
@@ -134,7 +134,12 @@ public class GamePanel extends JPanel implements Runnable {
         g2.dispose();
     }
 
+    /**Updates the game called once per frame. */
     public void update(){
+        if(ai && !turn){
+            ai_update();
+            return;
+        }
         // if(true){
         //     for (var square : board.squares.select(handler.mouseX, handler.mouseY)) {
         //         message(square.map() + "");
@@ -198,8 +203,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     }
 
-
-    
+    /** Helper function to check the squares or selectables around the area. */
     public <T extends Selectable> boolean check_among(ArrayList<Optional<T>> a, T ctn){
         var arr = new ArrayList<Integer>();
         for (Optional<T> t : a) {
@@ -212,6 +216,7 @@ public class GamePanel extends JPanel implements Runnable {
         return arr.contains(ctn.map());
     }
 
+    /** Messages the user. */
     public void message(String msg){
         System.out.println("\n" + msg);
     }
@@ -224,14 +229,15 @@ public class GamePanel extends JPanel implements Runnable {
 
 
 
-    
 
+    //#region AI
 
+   
 
-    
-
-
-
+    /** Updates the ai - called every frame for the ai. */
+    public void ai_update(){
+        //TODO
+    }
 
 
 
@@ -246,5 +252,5 @@ public class GamePanel extends JPanel implements Runnable {
     
 
 
-
+    //#endregion AI
 }

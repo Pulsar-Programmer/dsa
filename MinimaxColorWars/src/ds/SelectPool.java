@@ -1,6 +1,7 @@
 package ds;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /** A collection of objects, that, when an action is called, the trigger pool triggers the proper object. */
@@ -23,6 +24,14 @@ public class SelectPool<T extends Selectable> {
     //     }
     //     return new SelectPool<T>(list);
     // }
+
+    public Optional<T> try_get(int idx){
+        try {
+            return Optional.of(pool.get(idx));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
 
     /** Pushes the object and indexes it within the list. */
     public void push(T item){
