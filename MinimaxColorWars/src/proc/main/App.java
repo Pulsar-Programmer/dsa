@@ -1,5 +1,7 @@
 package proc.main;
 import java.awt.Color;
+import java.util.Scanner;
+
 import javax.swing.JFrame;
 
 //Double comments are not intended to be read.
@@ -17,12 +19,23 @@ public class App {
     public final static Color chestnut = new Color(0xBB4C4C);
 
     public static void main(String[] args) throws Exception {
+
+        var scanner = new Scanner(System.in);
+        System.out.println("Play against a friend or AI (true for AI).");
+        var do_ai = scanner.nextBoolean(); scanner.nextLine();
+        scanner.close();
+
+
+
+
+
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
         window.setTitle("Quoridor");
 
         GamePanel gamePanel = new GamePanel();
+        gamePanel.ai = do_ai;
         window.add(gamePanel);
 
         window.pack();

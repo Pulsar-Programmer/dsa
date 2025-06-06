@@ -58,7 +58,6 @@ public class GamePanel extends JPanel implements Runnable {
         main = Player.main();
         op = Player.opponent();
         // main.translate(5, 0);
-        ai = false;
         setupBoard();
         // setupPlayers();
     }
@@ -155,7 +154,7 @@ public class GamePanel extends JPanel implements Runnable {
             return;
         }
         
-        if(ai && !turn){
+        if(ai && turn){
             ai_update();
             return;
         }
@@ -356,10 +355,35 @@ public class GamePanel extends JPanel implements Runnable {
         if(evaluate(board, main, op) > 0){
             var translation = shortestPathWithFirstMove(board, op, 8);
             op.translate(translation[0], translation[1]);
-            turn = !turn;
+            
         } else {
             //place a wall
+            var opponent_square = main.associated_square(board);
+            var assembly = new ArrayList<Optional<Wall>>();
+            assembly.add(board.next_wall(opponent_square, false, true));
+            assembly.add(board.next_wall(opponent_square, true, false));
+            assembly.add(board.next_wall(opponent_square, true, false));
+            for (Optional<Wall> obj : assembly) {
+                if(obj.isPresent()){
+                    var ob = obj.get();
+                    if(ob.enabled) continue;
+                    var assembly2 = new ArrayList<Optional<Wall>>();
+                    assembly2.add(board.adjacent_wall(ob, false));
+                    assembly2.add(board.adjacent_wall(ob, true));
+                    for(Optional<Wall> obj2 : assembly2){
+                        if(obj2.isPresent()){
+                            var ob2 = obj2.get();
+                            if(ob2.enabled) continue;
+                            ob.enable();
+                            ob2.enable();
+                            turn = !turn;
+                            return;
+                        }
+                    }
+                }
+            }
         }
+        turn = !turn;
     }
 
 
@@ -371,7 +395,8 @@ public class GamePanel extends JPanel implements Runnable {
     public static int[] shortestPathWithFirstMove(Board board, Player player, int goalRow) {
         Queue<int[]> queue = new LinkedList<>();
         boolean[][] visited = new boolean[9][9];
-        int[][][] parent = new int[9][9][2]; // Stores parent direction
+        ///Parent direciton.
+        int[][][] parent = new int[9][9][2];
 
         var start = player.associated_square(board);
         int sr = start.row(), sc = start.col();
@@ -383,14 +408,15 @@ public class GamePanel extends JPanel implements Runnable {
             int r = current[0], c = current[1];
 
             if (r == goalRow) {
-                // Reconstruct path by backtracking from goal to start
+                ///Backtracking.
                 while (parent[r][c][0] != sr || parent[r][c][1] != sc) {
                     int pr = parent[r][c][0];
                     int pc = parent[r][c][1];
                     r = pr;
                     c = pc;
                 }
-                return new int[]{r - sr, c - sc}; // First move direction (dy, dx)
+                ///First move direction.
+                return new int[]{r - sr, c - sc}; 
             }
 
             for (int dir = 0; dir < 4; dir++) {
@@ -407,7 +433,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
 
-        return null; // No path found
+        return null; 
     }
 
 
@@ -466,99 +492,6 @@ public class GamePanel extends JPanel implements Runnable {
     public static boolean in_bounds(int row, int col){
         return !(row < 0 || row >= 9 || col < 0 || col >= 9);
     }
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-    
-    // private static final int MAX_DEPTH = 3;
-
-    // public Move findBestMove(Board board, Player main, Player op) {
-    //     Move bestMove = null;
-    //     int bestScore = Integer.MIN_VALUE;
-
-    //     for (Move move : generateLegalMoves(board, main)) {
-    //         applyMove(board, move);
-    //         int score = alphaBeta(board, main, op, MAX_DEPTH - 1, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
-    //         undoMove(board, move);
-
-    //         if (score > bestScore) {
-    //             bestScore = score;
-    //             bestMove = move;
-    //         }
-    //     }
-
-    //     return bestMove;
-    // }
-
-    // private int alphaBeta(Board board, Player main, Player op, int depth, int alpha, int beta, boolean maximizingPlayer) {
-    //     if (depth == 0) {
-    //         return evaluate(board, main, op);
-    //     }
-
-    //     Player current = maximizingPlayer ? main : op;
-    //     List<Move> moves = generateLegalMoves(board, current);
-
-    //     if (maximizingPlayer) {
-    //         int maxEval = Integer.MIN_VALUE;
-    //         for (Move move : moves) {
-    //             applyMove(board, move);
-    //             int eval = alphaBeta(board, main, op, depth - 1, alpha, beta, false);
-    //             undoMove(board, move);
-    //             maxEval = Math.max(maxEval, eval);
-    //             alpha = Math.max(alpha, eval);
-    //             if (beta <= alpha) break; // Beta cut-off
-    //         }
-    //         return maxEval;
-    //     } else {
-    //         int minEval = Integer.MAX_VALUE;
-    //         for (Move move : moves) {
-    //             applyMove(board, move);
-    //             int eval = alphaBeta(board, main, op, depth - 1, alpha, beta, true);
-    //             undoMove(board, move);
-    //             minEval = Math.min(minEval, eval);
-    //             beta = Math.min(beta, eval);
-    //             if (beta <= alpha) break; // Alpha cut-off
-    //         }
-    //         return minEval;
-    //     }
-    // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
 
     //#endregion AI
 }
