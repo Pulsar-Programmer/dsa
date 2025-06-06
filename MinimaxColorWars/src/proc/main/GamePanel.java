@@ -146,11 +146,12 @@ public class GamePanel extends JPanel implements Runnable {
         g2.dispose();
     }
 
-    /**Updates the game called once per frame. */
+    /** Updates the game called once per frame. */
     public void update(){
         var won = has_won();
         if(won.isPresent()){
-            message("Player " + (won.get() ? 1 : 2) + "has won!");
+            message("Player " + (won.get() ? 1 : 2) + " has won!");
+            return;
         }
         
         if(ai && !turn){
@@ -186,6 +187,11 @@ public class GamePanel extends JPanel implements Runnable {
                         message("Wall must be next to the previous one!");
                         return;
                     }
+
+                    // if(shortestPathLength(board, !turn ? main : op, !turn ? 0 : 8) == Integer.MAX_VALUE){
+                    //     message("This move will trap the player!");
+                    //     return;
+                    // }
 
                     wall.enable();
                     selecting = Optional.empty();
@@ -240,9 +246,17 @@ public class GamePanel extends JPanel implements Runnable {
                     message("Wall already enabled.");
                     return;
                 }
-                //TODO cannot place to box in the boi
-                //TODO you can cause a softlock by clicking certain vrick
+
                 wall.enable();
+
+                if(!hasPathToGoal(board, !turn ? main : op, !turn ? 0 : 8)){
+                    message("This move will trap the player!");
+                    wall.disable();
+                    return;
+                }
+
+                //TODO you can cause a softlock by clicking certain vrick
+
                 selecting = Optional.of(wall);
                 message("Select another wall.");
             }
@@ -253,6 +267,34 @@ public class GamePanel extends JPanel implements Runnable {
 
 
 
+    
+    public static boolean hasPathToGoal(Board board, Player player, int goalRow) {
+        Queue<int[]> queue = new LinkedList<>();
+        boolean[][] visited = new boolean[9][9];
+
+        var start = player.associated_square(board);
+        queue.add(new int[]{start.row(), start.col()});
+        visited[start.row()][start.col()] = true;
+
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll();
+            int r = current[0], c = current[1];
+
+            if (r == goalRow) return true; // Early exit: goal reached
+
+            for (int dir = 0; dir < 4; dir++) {
+                int[] d = DIRECTIONS[dir];
+                int nr = r + d[0], nc = c + d[1];
+                if (in_bounds(nr, nc) && !visited[nr][nc] &&
+                    !board.isMoveBlocked(r, c, dir >= 2, dir == 1 || dir == 3)) {
+                    visited[nr][nc] = true;
+                    queue.add(new int[]{nr, nc});
+                }
+            }
+        }
+
+        return false; // No path found
+    }
 
 
 
@@ -265,7 +307,7 @@ public class GamePanel extends JPanel implements Runnable {
         if(p == 0){
             return Optional.of(true);
         }
-        if(p2 == 9){
+        if(p2 == 8){
             return Optional.of(false);
         }
 
@@ -331,39 +373,39 @@ public class GamePanel extends JPanel implements Runnable {
     // Direction vectors: up, down, left, right
     private static final int[][] DIRECTIONS = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
-    // /** Finds the shortest path length in the board. */
-    // private static int shortestPathLength(Board board, Player player, int goalRow) {
-    //     Queue<int[]> queue = new LinkedList<>();
-    //     boolean[][] visited = new boolean[9][9];
-    //     var psquare = player.associated_square(board);
-    //     queue.add(new int[]{psquare.row(), psquare.col(), 0});
-    //     visited[psquare.row()][psquare.col()] = true;
+    /** Finds the shortest path length in the board. */
+    private static int shortestPathLength(Board board, Player player, int goalRow) {
+        Queue<int[]> queue = new LinkedList<>();
+        boolean[][] visited = new boolean[9][9];
+        var psquare = player.associated_square(board);
+        queue.add(new int[]{psquare.row(), psquare.col(), 0});
+        visited[psquare.row()][psquare.col()] = true;
 
-    //     while (!queue.isEmpty()) {
-    //         int[] current = queue.poll();
-    //         int r = current[0], c = current[1], dist = current[2];
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll();
+            int r = current[0], c = current[1], dist = current[2];
 
-    //         if (r == goalRow) return dist;
+            if (r == goalRow) return dist;
 
-    //         for (int dir = 0; dir < 4; dir++) {
-    //             int[] d = DIRECTIONS[dir];
-    //             //new row and column based on direction
-    //             int nr = r + d[0], nc = c + d[1];
-    //             if (in_bounds(nr, nc) && !visited[nr][nc] && !board.isMoveBlocked(r, c, dir)) {
-    //                 visited[nr][nc] = true;
-    //                 queue.add(new int[]{nr, nc, dist + 1});
-    //             }
-    //         }
-    //     }
+            for (int dir = 0; dir < 4; dir++) {
+                int[] d = DIRECTIONS[dir];
+                //new row and column based on direction
+                int nr = r + d[0], nc = c + d[1];
+                if (in_bounds(nr, nc) && !visited[nr][nc] && !board.isMoveBlocked(r, c, dir >= 2, dir == 0 || dir == 3)) {
+                    visited[nr][nc] = true;
+                    queue.add(new int[]{nr, nc, dist + 1});
+                }
+            }
+        }
 
-    //     // If no path is found (which shouldn't happen in valid Quoridor games), return a large value
-    //     return Integer.MAX_VALUE;
-    // }
+        // If no path is found (which shouldn't happen in valid Quoridor games), return a large value
+        return Integer.MAX_VALUE;
+    }
 
-    // /** Checks if the given row and column are within the bounds of the board. */
-    // public static boolean in_bounds(int row, int col){
-    //     return !(row < 0 || row >= 9 || col < 0 || col >= 9);
-    // }
+    /** Checks if the given row and column are within the bounds of the board. */
+    public static boolean in_bounds(int row, int col){
+        return !(row < 0 || row >= 9 || col < 0 || col >= 9);
+    }
 
 
 

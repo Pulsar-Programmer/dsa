@@ -36,6 +36,12 @@ public class Wall implements Selectable {
         object.color = App.mantle;
     }
 
+    /** Disables the wall. For sus purposes only. */
+    public void disable(){
+        enabled = false;
+        object.color = Color.black;
+    }
+
     @Override
     public boolean cmp(int mouse_x, int mouse_y) {
         return mouse_x < object.shape.width + object.shape.x 
