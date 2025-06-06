@@ -249,13 +249,11 @@ public class GamePanel extends JPanel implements Runnable {
 
                 wall.enable();
 
-                if(!hasPathToGoal(board, !turn ? main : op, !turn ? 0 : 8)){
+                if(!hasPathToGoal(board, main, 0) || !hasPathToGoal(board, op, 8)){
                     message("This move will trap the player!");
                     wall.disable();
                     return;
                 }
-
-                //TODO you can cause a softlock by clicking certain vrick
 
                 selecting = Optional.of(wall);
                 message("Select another wall.");
@@ -267,7 +265,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 
 
-    
+
     public static boolean hasPathToGoal(Board board, Player player, int goalRow) {
         Queue<int[]> queue = new LinkedList<>();
         boolean[][] visited = new boolean[9][9];
@@ -354,32 +352,50 @@ public class GamePanel extends JPanel implements Runnable {
 
     /** Updates the ai - called every frame for the ai. */
     public void ai_update(){
-        //TODO
+        // if (!aiHasChosenMove) {
+        //     // 1. Compute best move (once per turn)
+        //     Move bestMove = ai_findBestMove(); // could use alpha-beta pruning, minimax, etc.
+        //     aiPlannedMove = bestMove;
+        //     aiHasChosenMove = true;
+        //     aiDecisionCooldown = 20; // Add delay for realism/animation
+        // }
+
+        // if (aiHasChosenMove && aiDecisionCooldown > 0) {
+        //     aiDecisionCooldown--; // Wait a few frames
+        //     return;
+        // }
+
+        // if (aiHasChosenMove && aiDecisionCooldown == 0) {
+        //     // 2. Execute the move
+        //     applyMove(aiPlannedMove);
+        //     aiHasChosenMove = false;
+        //     endTurn(); // Hand control to the human
+        // }
     }
 
     /** Evaluates the board state for the AI. 
      * Returns a score where a lower score is better for player 1.
      * Player 1 wants to reach row 8, and player 2 wants to reach row 0.
      */
-    // public static int evaluate(Board board, Player p1, Player p2) {
-    //     int pathP1 = shortestPathLength(board, p1, 8); // P1 wants to reach row 8
-    //     int pathP2 = shortestPathLength(board, p2, 0); // P2 wants to reach row 0
+    public static int evaluate(Board board, Player p1, Player p2) {
+        int pathP1 = shortestPathLength(board, p1, 8);
+        int pathP2 = shortestPathLength(board, p2, 0);
 
-    //     // A lower score is better for player 1
-    //     return pathP2 - pathP1;
-    // }
+        return pathP2 - pathP1;
+    }
 
 
     // Direction vectors: up, down, left, right
     private static final int[][] DIRECTIONS = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
     /** Finds the shortest path length in the board. */
-    private static int shortestPathLength(Board board, Player player, int goalRow) {
+    public static int shortestPathLength(Board board, Player player, int goalRow) {
         Queue<int[]> queue = new LinkedList<>();
         boolean[][] visited = new boolean[9][9];
-        var psquare = player.associated_square(board);
-        queue.add(new int[]{psquare.row(), psquare.col(), 0});
-        visited[psquare.row()][psquare.col()] = true;
+
+        var start = player.associated_square(board);
+        queue.add(new int[]{start.row(), start.col(), 0});
+        visited[start.row()][start.col()] = true;
 
         while (!queue.isEmpty()) {
             int[] current = queue.poll();
@@ -389,18 +405,20 @@ public class GamePanel extends JPanel implements Runnable {
 
             for (int dir = 0; dir < 4; dir++) {
                 int[] d = DIRECTIONS[dir];
-                //new row and column based on direction
                 int nr = r + d[0], nc = c + d[1];
-                if (in_bounds(nr, nc) && !visited[nr][nc] && !board.isMoveBlocked(r, c, dir >= 2, dir == 0 || dir == 3)) {
+
+                if (in_bounds(nr, nc) && !visited[nr][nc] &&
+                    !board.isMoveBlocked(r, c, dir >= 2, dir == 1 || dir == 3)) {
                     visited[nr][nc] = true;
                     queue.add(new int[]{nr, nc, dist + 1});
                 }
             }
         }
 
-        // If no path is found (which shouldn't happen in valid Quoridor games), return a large value
+        ///No path found.
         return Integer.MAX_VALUE;
     }
+
 
     /** Checks if the given row and column are within the bounds of the board. */
     public static boolean in_bounds(int row, int col){
@@ -415,45 +433,88 @@ public class GamePanel extends JPanel implements Runnable {
 
 
 
-    // class Move {
-    //     enum Type { MOVE, WALL }
-    //     Type type;
-    //     int row, col, dir; // For wall placement
-    //     int newRow, newCol; // For pawn move
-    // }
+
+    
+    
 
 
-    // public static int alphaBeta(Board board, Player p1, Player p2, int depth, int alpha, int beta, boolean maximizingPlayer) {
-    //     if (depth == 0 || isGameOver(p1, p2)) {
-    //         return evaluate(board, p1, p2);
-    //     }
 
-    //     List<Move> legalMoves = generateLegalMoves(board, maximizingPlayer ? p1 : p2);
+    private static final int MAX_DEPTH = 3;
 
-    //     if (maximizingPlayer) {
-    //         int maxEval = Integer.MIN_VALUE;
-    //         for (Move move : legalMoves) {
-    //             applyMove(board, move, p1, p2);
-    //             int eval = alphaBeta(board, p1, p2, depth - 1, alpha, beta, false);
-    //             undoMove(board, move, p1, p2);
-    //             maxEval = Math.max(maxEval, eval);
-    //             alpha = Math.max(alpha, eval);
-    //             if (beta <= alpha) break; // β cut-off
-    //         }
-    //         return maxEval;
-    //     } else {
-    //         int minEval = Integer.MAX_VALUE;
-    //         for (Move move : legalMoves) {
-    //             applyMove(board, move, p1, p2);
-    //             int eval = alphaBeta(board, p1, p2, depth - 1, alpha, beta, true);
-    //             undoMove(board, move, p1, p2);
-    //             minEval = Math.min(minEval, eval);
-    //             beta = Math.min(beta, eval);
-    //             if (beta <= alpha) break; // α cut-off
-    //         }
-    //         return minEval;
-    //     }
-    // }
+    public Move findBestMove(Board board, Player main, Player op) {
+        Move bestMove = null;
+        int bestScore = Integer.MIN_VALUE;
+
+        for (Move move : generateLegalMoves(board, main)) {
+            applyMove(board, move);
+            int score = alphaBeta(board, main, op, MAX_DEPTH - 1, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
+            undoMove(board, move);
+
+            if (score > bestScore) {
+                bestScore = score;
+                bestMove = move;
+            }
+        }
+
+        return bestMove;
+    }
+
+    private int alphaBeta(Board board, Player main, Player op, int depth, int alpha, int beta, boolean maximizingPlayer) {
+        if (depth == 0) {
+            return evaluate(board, main, op);
+        }
+
+        Player current = maximizingPlayer ? main : op;
+        List<Move> moves = generateLegalMoves(board, current);
+
+        if (maximizingPlayer) {
+            int maxEval = Integer.MIN_VALUE;
+            for (Move move : moves) {
+                applyMove(board, move);
+                int eval = alphaBeta(board, main, op, depth - 1, alpha, beta, false);
+                undoMove(board, move);
+                maxEval = Math.max(maxEval, eval);
+                alpha = Math.max(alpha, eval);
+                if (beta <= alpha) break; // Beta cut-off
+            }
+            return maxEval;
+        } else {
+            int minEval = Integer.MAX_VALUE;
+            for (Move move : moves) {
+                applyMove(board, move);
+                int eval = alphaBeta(board, main, op, depth - 1, alpha, beta, true);
+                undoMove(board, move);
+                minEval = Math.min(minEval, eval);
+                beta = Math.min(beta, eval);
+                if (beta <= alpha) break; // Alpha cut-off
+            }
+            return minEval;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
 
 
 

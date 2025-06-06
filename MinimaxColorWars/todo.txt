@@ -14,3 +14,7 @@ USE MODERN TOOLING - GITHUB ISSUES + AI
 
 1h | Implement the depth and alpha beta pruning optimizing the board
 
+
+I'M NOT FIXING:
+You can cause a softlock by clicking on the first valid move and then after that there are no more valid moves for the second peg.
+You can trap the player on the side of the board by using one of the edges as a wall.
