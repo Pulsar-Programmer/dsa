@@ -53,6 +53,11 @@ public class Player {
     public void translate(int x, int y){
         object.shape.translate(x * 108, y * 108);
     }
+
+    /** Associated square. */
+    public Square associated_square(Board board){
+        return board.associated_square(object.shape.getBounds().getLocation()).get();
+    }
     
     
 

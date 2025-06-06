@@ -156,6 +156,7 @@ public class GamePanel extends JPanel implements Runnable {
         if(selecting.isPresent()){
             if(handler.mouseClicked.isPresent()){
                 var p = handler.mouseClicked.get();
+                handler.mouseClicked = Optional.empty();
 
                 var walls = board.walls.select(p.x, p.y);
                 if(!walls.isEmpty()){
@@ -179,40 +180,47 @@ public class GamePanel extends JPanel implements Runnable {
                     selecting = Optional.empty();
                     turn = !turn;
                 }
-                handler.mouseClicked = Optional.empty();
             }
         }
         if(handler.mouseClicked.isPresent()){
             var p = handler.mouseClicked.get();
+            handler.mouseClicked = Optional.empty();
 
             var squares = board.squares.select(p.x, p.y);
             if(!squares.isEmpty()){
                 var square = squares.get(0);
                 var player = (turn ? main : op);
-                var player_square = board.associated_square(player.object.shape.getBounds().getLocation()).get();
+                var player_square = player.associated_square(board);
 
                 var dif = square.map() - player_square.map();
                 message("" + square.map() + " " + player_square.map());
                 if(Math.abs(dif) != 9 && Math.abs(dif) != 1){
                     message("Player cannot move to that square!");
-                    handler.mouseClicked = Optional.empty(); //TODO fix this
                     return;
                     //TODO also cannot move if wall is in the way
                 }
 
+                var op_square = (!turn ? main : op).associated_square(board);
+                if(op_square.map() == square.map()){
+                    message("Player cannot move to that square!");
+                    return;
+                }
+
                 //TODO check for wrap-around squares
-                //TODO cannot move where other player is
+                
                 //TODO win conditions
 
                 var y = Math.abs(dif) == 9;
                 var positive = dif > 0;
+
+                // if(positive)
+                // square.map() / 9 != player_square.map() / 9
                 
                 //translate player to square
                 //TODO
                 player.translate((y ? 0 : 1) * (positive ? 1 : -1), (y ? 1 : 0) * (positive ? 1 : -1));
 
                 turn = !turn;
-                handler.mouseClicked = Optional.empty();
                 return;
             }
             var walls = board.walls.select(p.x, p.y);
@@ -222,11 +230,11 @@ public class GamePanel extends JPanel implements Runnable {
                     message("Wall already enabled.");
                     return;
                 }
+                //TODO cannot place to box in the boi
                 wall.enable();
                 selecting = Optional.of(wall);
                 message("Select another wall.");
             }
-            handler.mouseClicked = Optional.empty();
         }
         
 
