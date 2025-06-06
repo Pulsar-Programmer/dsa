@@ -187,8 +187,32 @@ public class GamePanel extends JPanel implements Runnable {
 
             var squares = board.squares.select(p.x, p.y);
             if(!squares.isEmpty()){
-                // var square = squares.get(0);
+                var square = squares.get(0);
+                var player = (turn ? main : op);
+                var player_square = board.associated_square(player.object.shape.getBounds().getLocation()).get();
+
+                var dif = square.map() - player_square.map();
+                message("" + square.map() + " " + player_square.map());
+                if(Math.abs(dif) != 9 && Math.abs(dif) != 1){
+                    message("Player cannot move to that square!");
+                    handler.mouseClicked = Optional.empty(); //TODO fix this
+                    return;
+                    //TODO also cannot move if wall is in the way
+                }
+
+                //TODO check for wrap-around squares
+                //TODO cannot move where other player is
+                //TODO win conditions
+
+                var y = Math.abs(dif) == 9;
+                var positive = dif > 0;
+                
+                //translate player to square
+                //TODO
+                player.translate((y ? 0 : 1) * (positive ? 1 : -1), (y ? 1 : 0) * (positive ? 1 : -1));
+
                 turn = !turn;
+                handler.mouseClicked = Optional.empty();
                 return;
             }
             var walls = board.walls.select(p.x, p.y);

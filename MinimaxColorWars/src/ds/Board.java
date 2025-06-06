@@ -39,7 +39,7 @@ public class Board {
         // var x_offset = right ? 1 : -1;
         // var y_offset = up ? 9 : -9;
 
-
+        //TODO this is broken
         var x_offset = right ? 90 + 1 : -1;
         var y_offset = up ? -1 : 90 + 1;
         var pos = new Point(square.object.shape.x + x_offset, square.object.shape.y + y_offset);
@@ -92,6 +92,7 @@ public class Board {
     }
     /** Gets the next square from the current square. */
     public Optional<Square> next_square(Square square, boolean up, boolean right){
+        //TODO this is broken
         var x_offset = right ? 90 + 1 + 18 : -1 - 18;
         var y_offset = up ? -1 - 18 : 90 + 1 + 18;
         var pos = new Point(square.object.shape.x + x_offset, square.object.shape.y + y_offset);
