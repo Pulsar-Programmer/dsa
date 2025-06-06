@@ -25,7 +25,7 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        mouseClicked = Optional.empty();
+        // mouseClicked = Optional.empty();
     }
 
     @Override

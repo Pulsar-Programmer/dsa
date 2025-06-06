@@ -24,14 +24,36 @@ public class Board {
 
 
 
-
+    //right, left, down, up
     
     /** Checks if the move is blocked by a wall. */
-    // public boolean isMoveBlocked(int r, int c, int dir) {
-    //     var idx = 9 * r + c;
-    //     // next_wall(null, false, false);
-    //     // return walls[r][c][dir];
-    // }
+    public boolean isMoveBlocked(int r, int c, boolean axis, boolean positive) {
+        var x_type = c;
+        var y_type = r;
+        var b_type = axis;
+
+        var idx = 0;
+
+        if (b_type) {
+            // Vertical wall (placed to the left or right of square)
+            if (positive) {
+                x_type += 1; // place to the right
+            }
+            idx = x_type + y_type * 10 + 99;
+        } else {
+            // Horizontal wall (placed above or below square)
+            if (!positive) {
+                y_type += 1; // place below
+            }
+            idx = x_type + y_type * 10;
+        }
+
+        var wall = walls.try_get(idx);
+        if(wall.isPresent()){
+            return wall.get().enabled;
+        }
+        return false;
+    }
 
     /** Gets the associated square at the given point. */
     public Optional<Square> associated_square(Point square) {
@@ -55,21 +77,13 @@ public class Board {
             // Vertical wall (placed to the left or right of square)
             if (positive) {
                 x_type += 1; // place to the right
-            } else {
-                // x_type -= 1; // place to the left
             }
-            if (x_type < 0 || x_type > 9) return Optional.empty(); // invalid wall position
-            if (y_type < 0 || y_type > 9) return Optional.empty();
             idx = x_type + y_type * 10 + 99;
         } else {
             // Horizontal wall (placed above or below square)
-            if (positive) {
-                // y_type -= 1; // place above
-            } else {
+            if (!positive) {
                 y_type += 1; // place below
             }
-            if (x_type < 0 || x_type > 9) return Optional.empty();
-            if (y_type < 0 || y_type > 9) return Optional.empty(); // must be within board
             idx = x_type + y_type * 10;
         }
 
@@ -101,6 +115,7 @@ public class Board {
 
         return next;
     }
+
     /** Finds the parent square given the wall. */
     public Optional<Square> parent_square(Wall wall, boolean positive){
 

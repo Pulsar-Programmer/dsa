@@ -16,16 +16,16 @@ public class Player {
     /** Main player default. */
     public static Player main(){
         var p = new Player();
-        p.object.color = App.sunglo;
-        p.translate(4, 0);
+        p.object.color = App.dodgerblue;
+        p.translate(4, 8);
         return p;
     }
 
     /** Opponent player default. */
     public static Player opponent(){
         var p = new Player();
-        p.object.color = App.dodgerblue;
-        p.translate(4, 8);
+        p.object.color = App.sunglo;
+        p.translate(4, 0);
         return p;
     }
 

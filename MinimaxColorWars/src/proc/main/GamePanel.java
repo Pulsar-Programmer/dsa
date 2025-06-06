@@ -23,7 +23,7 @@ import proc.MouseHandler;
 public class GamePanel extends JPanel implements Runnable {
     
     public Thread gameThread;
-    Board board;
+    Board board = new Board();
     Player main;
     Player op;
     MouseHandler handler;
@@ -134,10 +134,10 @@ public class GamePanel extends JPanel implements Runnable {
 
         for (var square : board.squares.select(handler.mouseX, handler.mouseY)) {
             drawer.draw_selection(turn ? App.sunglo : App.cornflowerblue, square.object.shape);
-            drawer.draw_selection(App.mantle, board.next_wall(square, false, false).orElse(board.walls.try_get(0).get()).object.shape);
-            drawer.draw_selection(App.mantle, board.next_wall(square, true, false).orElse(board.walls.try_get(0).get()).object.shape);
-            drawer.draw_selection(App.mantle, board.next_wall(square, false, true).orElse(board.walls.try_get(0).get()).object.shape);
-            drawer.draw_selection(App.mantle, board.next_wall(square, true, true).orElse(board.walls.try_get(0).get()).object.shape);
+            // drawer.draw_selection(App.mantle, board.next_wall(square, false, false).orElse(board.walls.try_get(0).get()).object.shape);
+            // drawer.draw_selection(App.mantle, board.next_wall(square, true, false).orElse(board.walls.try_get(0).get()).object.shape);
+            // drawer.draw_selection(App.mantle, board.next_wall(square, false, true).orElse(board.walls.try_get(0).get()).object.shape);
+            // drawer.draw_selection(App.mantle, board.next_wall(square, true, true).orElse(board.walls.try_get(0).get()).object.shape);
         }
         for (var wall : board.walls.select(handler.mouseX, handler.mouseY)) {
             drawer.draw_selection(turn ? App.chestnut : App.dodgerblue, wall.object.shape);
@@ -148,6 +148,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     /**Updates the game called once per frame. */
     public void update(){
+        var won = has_won();
+        if(won.isPresent()){
+            message("Player " + (won.get() ? 1 : 2) + "has won!");
+        }
         
         if(ai && !turn){
             ai_update();
@@ -180,7 +184,6 @@ public class GamePanel extends JPanel implements Runnable {
                     arr.add( board.adjacent_wall(wall, true));
                     if(!check_among(arr, selecting.get())){
                         message("Wall must be next to the previous one!");
-                        handler.mouseClicked = Optional.empty();
                         return;
                     }
 
@@ -197,35 +200,34 @@ public class GamePanel extends JPanel implements Runnable {
             var squares = board.squares.select(p.x, p.y);
             if(!squares.isEmpty()){
                 var square = squares.get(0);
-                var player = (turn ? main : op);
+                var player = (!turn ? main : op);
                 var player_square = player.associated_square(board);
 
                 var dif = square.map() - player_square.map();
-                message("" + square.map() + " " + player_square.map());
+                // message("" + square.map() + " " + player_square.map());
                 if(Math.abs(dif) != 9 && Math.abs(dif) != 1){
                     message("Player cannot move to that square!");
                     return;
-                    //TODO also cannot move if wall is in the way
                 }
 
-                var op_square = (!turn ? main : op).associated_square(board);
+                var op_square = (turn ? main : op).associated_square(board);
                 if(op_square.map() == square.map()){
                     message("Player cannot move to that square!");
                     return;
                 }
 
-                //TODO check for wrap-around squares
-                
-                //TODO win conditions
+                if(!areSquaresAdjacent(square.map(), player_square.map())){
+                    message("Player cannot move to that square!");
+                    return;
+                }
 
                 var y = Math.abs(dif) == 9;
                 var positive = dif > 0;
-
-                // if(positive)
-                // square.map() / 9 != player_square.map() / 9
+                if(board.next_wall(player_square, !y, y ? !positive : positive).map(x -> x.enabled).orElse(false)){
+                    message("Player is blocked!");
+                    return;
+                }
                 
-                //translate player to square
-                //TODO
                 player.translate((y ? 0 : 1) * (positive ? 1 : -1), (y ? 1 : 0) * (positive ? 1 : -1));
 
                 turn = !turn;
@@ -239,6 +241,7 @@ public class GamePanel extends JPanel implements Runnable {
                     return;
                 }
                 //TODO cannot place to box in the boi
+                //TODO you can cause a softlock by clicking certain vrick
                 wall.enable();
                 selecting = Optional.of(wall);
                 message("Select another wall.");
@@ -246,6 +249,27 @@ public class GamePanel extends JPanel implements Runnable {
         }
         
 
+    }
+
+
+
+
+
+
+
+
+    /** Checks who has won. */
+    public Optional<Boolean> has_won(){
+        var p = main.associated_square(board).row();
+        var p2 = op.associated_square(board).row();
+        if(p == 0){
+            return Optional.of(true);
+        }
+        if(p2 == 9){
+            return Optional.of(false);
+        }
+
+        return Optional.empty();
     }
 
     /** Helper function to check the squares or selectables around the area. */
@@ -266,9 +290,16 @@ public class GamePanel extends JPanel implements Runnable {
         System.out.println("\n" + msg);
     }
 
+    /** Checks if squares are adjacent. */
+    public static boolean areSquaresAdjacent(int index1, int index2) {
+        int x1 = index1 % 9, y1 = index1 / 9;
+        int x2 = index2 % 9, y2 = index2 / 9;
 
+        int dx = Math.abs(x1 - x2);
+        int dy = Math.abs(y1 - y2);
 
-
+        return (dx + dy == 1);
+    }
 
 
 
