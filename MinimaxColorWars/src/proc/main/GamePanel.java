@@ -352,7 +352,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     /** Updates the ai - called every frame for the ai. */
     public void ai_update(){
-        if(evaluate(board, main, op) > 0){
+        if(evaluate(board, op, main) > -2){
             var translation = shortestPathWithFirstMove(board, op, 8);
             op.translate(translation[0], translation[1]);
             
@@ -388,52 +388,53 @@ public class GamePanel extends JPanel implements Runnable {
 
 
 
-    /**
-     * Finds the shortest path to the goal and returns the first move towards it.
-     * Returns null if no path exists.
-     */
     public static int[] shortestPathWithFirstMove(Board board, Player player, int goalRow) {
         Queue<int[]> queue = new LinkedList<>();
         boolean[][] visited = new boolean[9][9];
-        ///Parent direciton.
-        int[][][] parent = new int[9][9][2];
 
         var start = player.associated_square(board);
         int sr = start.row(), sc = start.col();
         visited[sr][sc] = true;
-        queue.add(new int[]{sr, sc});
+        
+        queue.add(new int[]{sr, sc, 0, 0});
+
+        for (int dir = 0; dir < 4; dir++) {
+            int[] d = DIRECTIONS[dir];
+            int nr = sr + d[0], nc = sc + d[1];
+
+            if (in_bounds(nr, nc) &&
+                !visited[nr][nc] &&
+                !board.isMoveBlocked(sr, sc, dir >= 2, dir == 1 || dir == 3)) {
+                
+                visited[nr][nc] = true;
+                queue.add(new int[]{nr, nc, d[0], d[1]});
+            }
+        }
 
         while (!queue.isEmpty()) {
             int[] current = queue.poll();
             int r = current[0], c = current[1];
+            int dr = current[2], dc = current[3];
 
             if (r == goalRow) {
-                ///Backtracking.
-                while (parent[r][c][0] != sr || parent[r][c][1] != sc) {
-                    int pr = parent[r][c][0];
-                    int pc = parent[r][c][1];
-                    r = pr;
-                    c = pc;
-                }
-                ///First move direction.
-                return new int[]{r - sr, c - sc}; 
+                return new int[]{dr, dc}; // Return first direction taken to reach goal
             }
 
             for (int dir = 0; dir < 4; dir++) {
                 int[] d = DIRECTIONS[dir];
                 int nr = r + d[0], nc = c + d[1];
 
-                if (in_bounds(nr, nc) && !visited[nr][nc] &&
+                if (in_bounds(nr, nc) &&
+                    !visited[nr][nc] &&
                     !board.isMoveBlocked(r, c, dir >= 2, dir == 1 || dir == 3)) {
+
                     visited[nr][nc] = true;
-                    parent[nr][nc][0] = r;
-                    parent[nr][nc][1] = c;
-                    queue.add(new int[]{nr, nc});
+                    queue.add(new int[]{nr, nc, dr, dc}); // Propagate first move
                 }
             }
         }
 
-        return null; 
+        return null; // No path found
     }
 
 
