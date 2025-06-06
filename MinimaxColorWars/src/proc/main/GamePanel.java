@@ -1,6 +1,7 @@
 package proc.main;
 import ds.Board;
 import ds.Player;
+import ds.Selectable;
 import ds.Square;
 import ds.Wall;
 import java.awt.Color;
@@ -8,6 +9,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Optional;
 import javax.swing.JPanel;
 import proc.Drawing;
@@ -20,9 +23,10 @@ public class GamePanel extends JPanel implements Runnable {
     Player player;
     MouseHandler handler;
     boolean turn = false;
-    boolean selecting = false;
+    Optional<Wall> selecting = Optional.empty();
+    boolean ai;
     
-
+    
     public GamePanel() {
         setPreferredSize(new Dimension(1000, 1000));
         setBackground(Color.black);
@@ -33,6 +37,7 @@ public class GamePanel extends JPanel implements Runnable {
         setFocusable(true);
     }
 
+    /** Starts running the game thread. */
     public void startGameThread() {
         // sounds.clear();
         // sounds.addFile(12);
@@ -42,11 +47,14 @@ public class GamePanel extends JPanel implements Runnable {
         gameThread.start();
     }
 
+    /** Gets the game ready. */
     public void setupGame(){
+        ai = false;
         setupBoard();
         // setupPlayers();
     }
 
+    /** Sets up the board to get ready the game. */
     public void setupBoard(){
         board = new Board();
         var def_xy = 5 + 18;
@@ -68,7 +76,6 @@ public class GamePanel extends JPanel implements Runnable {
 
                 color = !color;
             }
-            // color = !color;
         }
 
         for(var i = 0; i < 9; i++){
@@ -82,6 +89,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
+    /** Runs the game thread. */
     @Override
     public void run() {
 
@@ -135,7 +143,7 @@ public class GamePanel extends JPanel implements Runnable {
         //         message(wall.map() + "");
         //     }
         // }
-        if(selecting){
+        if(selecting.isPresent()){
             if(handler.mouseClicked.isPresent()){
                 var p = handler.mouseClicked.get();
 
@@ -144,10 +152,21 @@ public class GamePanel extends JPanel implements Runnable {
                     Wall wall = walls.get(0);
                     if(wall.enabled){
                         message("Wall already enabled");
+                        handler.mouseClicked = Optional.empty();
                         return;
                     }
+
+                    ArrayList<Optional<Wall>> arr = new ArrayList<>();
+                    arr.add(board.adjacent_wall(wall, false));
+                    arr.add( board.adjacent_wall(wall, true));
+                    if(!check_among(arr, selecting.get())){
+                        message("Wall must be next to the previous one!");
+                        handler.mouseClicked = Optional.empty();
+                        return;
+                    }
+
                     wall.enable();
-                    selecting = false;
+                    selecting = Optional.empty();
                     turn = !turn;
                 }
                 handler.mouseClicked = Optional.empty();
@@ -170,7 +189,7 @@ public class GamePanel extends JPanel implements Runnable {
                     return;
                 }
                 wall.enable();
-                selecting = true;
+                selecting = Optional.of(wall);
                 message("Select another wall.");
             }
             handler.mouseClicked = Optional.empty();
@@ -181,7 +200,17 @@ public class GamePanel extends JPanel implements Runnable {
 
 
     
-
+    public <T extends Selectable> boolean check_among(ArrayList<Optional<T>> a, T ctn){
+        var arr = new ArrayList<Integer>();
+        for (Optional<T> t : a) {
+            if(t.isPresent()) {
+                var val = t.get().map();
+                // message("" + val);
+                arr.add(val);
+            }
+        }
+        return arr.contains(ctn.map());
+    }
 
     public void message(String msg){
         System.out.println("\n" + msg);
