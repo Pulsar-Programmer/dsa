@@ -9,8 +9,8 @@ public class SelectPool<T extends Selectable> {
     //represents a pool of objects
     //a specific method is called on the object when the mouse meets this condition
 
-    /**Contents of the pool. */
-    ArrayList<T> pool;
+    /**Encapsulated contents of the pool. */
+    private ArrayList<T> pool;
 
     private SelectPool(ArrayList<T> pool) {
         this.pool = pool;
@@ -25,9 +25,11 @@ public class SelectPool<T extends Selectable> {
     //     return new SelectPool<T>(list);
     // }
 
+    /** Attempts to obtain the object at the index. */
     public Optional<T> try_get(int idx){
         try {
-            return Optional.of(pool.get(idx));
+            var obj = pool.get(idx);
+            return obj == null ? Optional.empty() : Optional.of(obj);
         } catch (Exception e) {
             return Optional.empty();
         }
@@ -42,6 +44,7 @@ public class SelectPool<T extends Selectable> {
         pool.set(idx, item);
     }
 
+    /** Iterates over each item in the pool (excluding null ones). */
     public void forEach(Consumer<T> action) {
         var iterator = pool.iterator();
         while (iterator.hasNext()) {

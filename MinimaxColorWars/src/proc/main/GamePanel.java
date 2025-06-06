@@ -20,7 +20,8 @@ public class GamePanel extends JPanel implements Runnable {
     
     public Thread gameThread;
     Board board;
-    Player player;
+    Player main;
+    Player op;
     MouseHandler handler;
     boolean turn = false;
     Optional<Wall> selecting = Optional.empty();
@@ -49,6 +50,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     /** Gets the game ready. */
     public void setupGame(){
+        main = Player.main();
+        op = Player.opponent();
+        // main.translate(5, 0);
         ai = false;
         setupBoard();
         // setupPlayers();
@@ -121,6 +125,8 @@ public class GamePanel extends JPanel implements Runnable {
 
         drawer.draw_bg();
         drawer.draw_board(board);
+        drawer.draw_object(main.object);
+        drawer.draw_object(op.object);
 
         for (var square : board.squares.select(handler.mouseX, handler.mouseY)) {
             drawer.draw_selection(turn ? App.sunglo : App.cornflowerblue, square.object.shape);
@@ -128,14 +134,13 @@ public class GamePanel extends JPanel implements Runnable {
         for (var wall : board.walls.select(handler.mouseX, handler.mouseY)) {
             drawer.draw_selection(turn ? App.chestnut : App.dodgerblue, wall.object.shape);
         }
-
-        // drawer.drawPawn(g2);
         
         g2.dispose();
     }
 
     /**Updates the game called once per frame. */
     public void update(){
+        
         if(ai && !turn){
             ai_update();
             return;

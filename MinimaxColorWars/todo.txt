@@ -8,6 +8,9 @@ USE MODERN TOOLING - GITHUB ISSUES + AI
 
 1h | Add the Player character & Allow moves to work -> the two ways of moving
 1h | Implement AI v. Friend
+1h spent
+> Focus: Add the Player character
+
 
 1h | Implement the depth and alpha beta pruning optimizing the board
 

@@ -26,8 +26,13 @@ public class Board {
 
 
 
-
-
+    /** Gets the associated square at the given point. */
+    public Optional<Square> associated_square(Point square) {
+        var x_type = (square.x - 5 - 18) / (90 + 18);
+        var y_type = (square.y - 5 - 18) / (90 + 18);
+        var idx = x_type + y_type * 9;
+        return squares.try_get(idx);
+    }
 
     /** Gets the next wall from the current square. */
     public Optional<Wall> next_wall(Square square, boolean up, boolean right){
