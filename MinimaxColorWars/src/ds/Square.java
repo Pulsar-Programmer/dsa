@@ -23,6 +23,15 @@ public class Square implements Selectable {
         return new Square(new GraphicsObject<Rectangle>(App.muddy_waters, new Rectangle(pos.x, pos.y, 90, 90)));
     }
 
+    /** Row of the Square. */
+    public int row(){
+        return map() / 9;
+    }
+    /** Column of the Square. */
+    public int col(){
+        return map() % 9;
+    }
+
     @Override
     public boolean cmp(int mouse_x, int mouse_y) {
         return mouse_x < object.shape.width + object.shape.x 

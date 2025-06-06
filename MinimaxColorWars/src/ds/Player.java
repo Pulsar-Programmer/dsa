@@ -58,8 +58,5 @@ public class Player {
     public Square associated_square(Board board){
         return board.associated_square(object.shape.getBounds().getLocation()).get();
     }
-    
-    
-
 
 }

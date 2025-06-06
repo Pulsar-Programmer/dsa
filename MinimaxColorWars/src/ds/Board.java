@@ -25,6 +25,13 @@ public class Board {
 
 
 
+    
+    /** Checks if the move is blocked by a wall. */
+    // public boolean isMoveBlocked(int r, int c, int dir) {
+    //     var idx = 9 * r + c;
+    //     // next_wall(null, false, false);
+    //     // return walls[r][c][dir];
+    // }
 
     /** Gets the associated square at the given point. */
     public Optional<Square> associated_square(Point square) {
@@ -35,19 +42,38 @@ public class Board {
     }
 
     /** Gets the next wall from the current square. */
-    public Optional<Wall> next_wall(Square square, boolean up, boolean right){
-        // var x_offset = right ? 1 : -1;
-        // var y_offset = up ? 9 : -9;
+    public Optional<Wall> next_wall(Square square, boolean axis, boolean positive){
 
-        //TODO this is broken
-        var x_offset = right ? 90 + 1 : -1;
-        var y_offset = up ? -1 : 90 + 1;
-        var pos = new Point(square.object.shape.x + x_offset, square.object.shape.y + y_offset);
-        var walls = this.walls.select(pos.x, pos.y);
-        if(walls.isEmpty()){
-            return Optional.empty();
+        var x_type = square.col();
+        var y_type = square.row();
+
+        var b_type = axis; // true for vertical, false for horizontal
+
+        var idx = 0;
+
+        if (b_type) {
+            // Vertical wall (placed to the left or right of square)
+            if (positive) {
+                x_type += 1; // place to the right
+            } else {
+                // x_type -= 1; // place to the left
+            }
+            if (x_type < 0 || x_type > 9) return Optional.empty(); // invalid wall position
+            if (y_type < 0 || y_type > 9) return Optional.empty();
+            idx = x_type + y_type * 10 + 99;
+        } else {
+            // Horizontal wall (placed above or below square)
+            if (positive) {
+                // y_type -= 1; // place above
+            } else {
+                y_type += 1; // place below
+            }
+            if (x_type < 0 || x_type > 9) return Optional.empty();
+            if (y_type < 0 || y_type > 9) return Optional.empty(); // must be within board
+            idx = x_type + y_type * 10;
         }
-        return Optional.of(walls.get(0));
+
+        return walls.try_get(idx);
     }
     /** Finds the wall adjacent to the current wall. */
     public Optional<Wall> adjacent_wall(Wall wall, boolean positive){
