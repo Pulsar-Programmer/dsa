@@ -1,5 +1,5 @@
 // use petgrap
-use petgraph::{graph::UnGraph, Graph};
+use petgraph::{adj::NodeIndex, graph::{NodeIndex as NI, UnGraph}, Graph};
 
 
 
